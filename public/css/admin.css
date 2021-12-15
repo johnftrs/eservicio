@@ -1,0 +1,96 @@
+.switch {position: relative;display: inline-block;width: 30px;height: 18px;
+}
+.switch input {display:none;}
+.slider {position: absolute;cursor: pointer;top: 0;left: 0;right: 0;bottom: 0;background-color: #ccc;-webkit-transition: .4s;transition: .4s;
+}
+.slider:before {position: absolute;content: "";height: 11px;width: 11px;left: 4px;bottom: 4px;background-color: white;-webkit-transition: .4s;transition: .4s;
+}
+input:checked + .slider {background-color: #2196F3;}
+input:focus + .slider {box-shadow: 0 0 1px #2196F3;}
+input:checked + .slider:before {
+	-webkit-transform: translateX(11px);
+	-ms-transform: translateX(11px);
+	transform: translateX(11px);
+}
+.PAGADO{ background-color: #D0FFD4; }
+.FINALIZADO{ background-color: #FFD0D0; }
+.EN.PROCESO{ background-color: #D1FFD0; }
+#map, #map2 { height:100%;cursor:pointer; }
+.check{ width: 30px;height: 30px; }
+.flotantes{
+	height: 40px;
+	display: flex;
+	padding: 0 10px 10px 0;
+	justify-content: space-between;
+}
+#filtro{
+	height: 30px;
+	display: block;
+	float: right;
+	margin: 5px 0 15px 0;
+}
+#filtro>input{
+	height: 30px;
+	padding: 2px;
+	border: 0;
+	border-bottom: 1px solid #32CB9E;
+	font-size: 16px;
+	margin-left: 7px;
+	width: 300px;
+	max-width: 300px;
+	outline: none;
+}
+/*cards que entran en la pantalla principal*/
+.reset_datatable{ opacity:0.5;top:10px;left:10px;padding: 12px 15px; }
+.reset_datatable:hover{ opacity:1; background-color:#32CB9E; }
+.reset_datatable:hover:focus{ box-shadow: none !important; }
+.flex{display:flex;}
+.direccion{white-space:pre-wrap;font-size:12px !important;min-width:200px;padding: 3px 0 3px 8px;}
+.direccion-min{white-space:pre-wrap;font-size:13px;min-width:150px;padding: 3px 0 3px 8px;}
+.direccion-max{white-space:inherit;font-size:13px;width:500px;max-width:500px;padding: 3px 0 3px 8px;}
+.direccion-100{white-space:pre-wrap;font-size:13px;min-width:100px;padding: 3px 0 3px 8px;}
+.f12{font-size:12px;}
+.f24{font-size:24px;}
+.cont_info_image{
+	display: flex;
+	align-content: flex-start;
+	flex-wrap: wrap;
+}
+.info_imagen{
+	width: calc(50% - 20px);
+	margin: 10px;
+}
+input.cantidad{
+	width: 80px;
+	border: 1px solid #5D5D5D;
+}
+input.descuento{
+	width: 50px;
+	border: 1px solid #5D5D5D;
+	border-radius: 1px;
+}
+div.precio_venta{
+	font-weight: bolder;
+}
+div.precio_venta_d{
+	color: red;
+	text-decoration: line-through;
+}
+input.item_nombre{
+	width: 90%;
+	border: 1px solid #5D5D5D;
+}
+input.t_descuento{
+	width: 50px;
+	border: 1px solid #5D5D5D;
+	border-radius: 1px;
+}
+div.total_d{
+	font-weight: bolder;
+}
+div.total{
+	font-weight: bold;
+}
+.PEDIDO{
+	background-color: #066100;
+}

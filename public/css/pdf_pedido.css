@@ -1,0 +1,46 @@
+html,body{margin:0;padding:0;font-family:calibri;}
+.page-break{page-break-after:always;}
+/*width:816px;*/
+/*height:1056px;*/
+.page{width:816px;margin:0;padding:0;border:none;}
+.contenido{width:645px;height:950px;margin-top:30px;margin-left:85px;padding-bottom:40px;}
+.membretado{font-size:12px;position:relative;height:80px;text-align:left;}
+.membretado>img{position:absolute;height:50px;top:0px;left:595px;}
+table{width:100%;font-size:13px;border-collapse:collapse;z-index:1;}
+table>tbody>tr>td{vertical-align:top;height:18px;min-height:18px;}
+table>*>*>*{padding:1px 4px;}
+
+.flotantes{position:relative;width:645px;height:0;}
+.flotantes>.pagina{top:950px;right:0;font-size:11px;position:absolute;}
+.flotantes>.marcadeagua{top:250px;left:1px;position:absolute;width: 644px;z-index: -1;}
+.tabla2 .n{color:#AFAFAF;width:16px;}
+.tabla2 .cant{width:31px;}
+.tabla2 .codigo{width:105px;}
+.tabla2 .detalle{width:320px;}
+.tabla2 .uu{width:20px;padding-left:10px;}
+.tabla2 .sub{padding-right:4px;}
+.bb{
+	margin:4px 0;
+	border:2px solid black;
+	line-height:18px;
+	vertical-align: middle;
+}
+.bold{font-weight: bold;}
+.tabla0{margin-top:10px;}
+.tabla0 .client{ width: 70px; }
+.tabla0 .client2{ width: 80px; }
+.tabla0 .nomb{ width: 380px; }
+.tabla2 *{padding: 0;margin: 0;}
+.tabla2{margin-top:10px;}
+.tabla2>thead{border-top: 2px solid black;border-bottom: 2px solid black;}
+
+.centrado{text-align:center;}
+.derecha{text-align:right;}
+.izquierda{text-align:left;}
+.fs-20{font-size:20px;}
+.fs-18{font-size:18px;}
+.fs-16{font-size:16px;}
+.fs-14{font-size:14px;}
+.col-4{width:100%;}
+.mt-20{margin-top:20px!important;}
+.pt-10{padding-top:10px!important;}
