@@ -1,16 +1,34 @@
 <div class="form-group">
 	{!! Form::label('Code*') !!}
-	{!! Form::text('code',$menu->code ?? null,['class'=>'form-control','placeholder'=>'Insert Code','required', 'maxlength'=>10]) !!}
+	<input wire:model="code" type="text" name="code" placeholder="Inserte Codigo" class="form-control" required>
+	@error ('code') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="form-group">
 	{!! Form::label('Label*') !!}
-	{!! Form::text('label',$menu->label ?? null,['class'=>'form-control','placeholder'=>'Insert Label','required', 'maxlength'=>20]) !!}
+	<input wire:model="label" type="text" name="label" placeholder="Inserte Nombre" class="form-control" required>
+	@error ('label') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="form-group">
 	{!! Form::label('Icon') !!}
-	{!! Form::text('icon',$menu->icon ?? null,['class'=>'form-control','placeholder'=>'Insert Icon','maxlength'=>50]) !!}
+	<input wire:model="icon" type="text" name="icon" placeholder="Inserte Icono" class="form-control" required>
+	@error ('icon') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="form-group">
 	{!! Form::label('Orden*') !!}
-	{!! Form::number('orden',$menu->orden ?? null,['class'=>'form-control','placeholder'=>'Insert Orden','required','autocomplete'=>'off']) !!}
+	<input wire:model="orden" type="number" name="orden" placeholder="Inserte Orden" class="form-control" required>
+	@error ('orden') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
+<div class="form-group">
+	{!! Form::label('Tamaño') !!}
+	<input wire:model="tamanyo" type="number" name="tamanyo" placeholder="Inserte Tamaño" class="form-control" required>
+	@error ('tamanyo') <span class="validacion">*Campo Obligatorio*</span> @enderror
+</div>
+
+<div id="fuentes"></div>
+<div class="cont_fonts_svg"></div>
+<div class="cont_fonts_svg"><?php include('../public/fonts/materialdesignicons-webfont.svg'); ?></div>
+<script>
+	$('document').ready(function(){
+		fuentes();
+	});
+</script>

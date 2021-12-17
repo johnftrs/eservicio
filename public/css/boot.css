@@ -173,14 +173,13 @@ input:-webkit-autofill {
 /*cortina*/
 #cortina{
 	width: 100%;
-	height: 0;
+	height: 100%;
 	position: fixed;
-	background-color: rgba(100,100,100,0.2);
+	top: 0;
+	left: 0;
+	background-color: rgba(100,100,100,0.5);
 	z-index: 20;
 	transition: height 0.1s ease-in-out;
-}
-#cortina.cortina{
-	height: 100%;
 }
 /*paneles*/
 .panel {
@@ -194,6 +193,7 @@ input:-webkit-autofill {
 	width: -webkit-fill-available; width: -moz-available; width: -ms-available;
 }
 .panel-body {
+	overflow-y: scroll;
 	background-color: #FFFFFF;
 	padding: 15px;
 	display: inline-block;
@@ -291,7 +291,7 @@ input:-webkit-autofill {
 }
 .modal-dialog{
 	display: none;
-	width: 1200px;
+	width: 80%;
 	top: 0;left: calc(50% - 600px);
 	position: fixed;
 	z-index: 23;
@@ -303,6 +303,7 @@ input:-webkit-autofill {
 }
 
 .modal-dialog.visible{
+	left: 10%;
 	display: block;
 	border: all;
 	height: calc(100% - 40px);

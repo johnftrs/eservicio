@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 @section('content')
 <?php $editar=false; $eliminar=false;
 foreach (Auth::user()->role->functionalities as $func) {

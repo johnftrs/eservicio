@@ -17,12 +17,12 @@ class CreateDriversTable extends Migration
             $table->id();
             $table->string('ci',20)->nullable();
             $table->string('nombre');
-            $table->string('paterno');
+            $table->string('paterno')->nullable();
             $table->string('materno')->nullable();
             $table->string('licencia')->nullable();
             $table->string('estado',20)->nullable();
-            $table->unsignedBigInteger('cliente_id')->nullable();
-            $table->foreign('cliente_id')->references('id')->on('clients')->onDelete('cascade');
+            $table->unsignedBigInteger('client_id')->nullable();
+            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
             $table->timestamps();
         });
     }

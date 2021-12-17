@@ -38,7 +38,7 @@ class UserController extends Controller
         $roles = Role::pluck('name', 'id');
         $locations = Location::pluck('nombre', 'id');
         $cities = City::pluck('nombre', 'id');
-        $offices = Office::pluck('razon_social', 'id');
+        $offices = Office::pluck('nombre', 'id');
         return view('user/create',['roles'=>$roles,'locations'=>$locations,'cities'=>$cities,'offices'=>$offices,'me'=>'MUSE','po'=>'CUSE']);
     }
 
@@ -79,7 +79,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $locations = Location::pluck('nombre', 'id');
         $cities = City::pluck('nombre', 'id');
-        $offices = Office::pluck('razon_social', 'id');
+        $offices = Office::pluck('nombre', 'id');
         return view('user/edit',compact('user'),['roles'=>$roles,'locations'=>$locations,'cities'=>$cities,'offices'=>$offices,'me'=>'MUSE']);
     }
 

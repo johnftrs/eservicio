@@ -1,14 +1,13 @@
-@extends('layouts.admin')
-@section('content')
-<?php $editar=false; $eliminar=false;
-foreach (Auth::user()->role->functionalities as $func) {
-	if ($func->code=='ECLI'){ $editar=true; }
-	if ($func->code=='DCLI'){ $eliminar=true; }
-}
-?>
 <div class="card">
+	<?php $editar=false; $eliminar=false;
+	foreach (Auth::user()->role->functionalities as $func) {
+		if ($func->code=='ECLI'){ $editar=true; }
+		if ($func->code=='DCLI'){ $eliminar=true; }
+	}
+	?>
 	<div class="card-header primary-low">
-		<h5 class="card-title">Clientes - Solicitantes</h5>
+		<h5 class="card-title">Clientes</h5>
+		<button class="btn btn-min default" wire:click="create"><i class="mdi mdi-plus-circle-outline"></i>agregar</button>
 	</div>
 	<div class="card-body">
 		<div class="table-responsive">
@@ -16,17 +15,11 @@ foreach (Auth::user()->role->functionalities as $func) {
 				<thead>
 					<th>Nombre</th>
 					<th>Nit</th>
-					<th>Correo</th>
 					<th>Dirección</th>
-					<th>Categoría</th>
 					<th class="centrado">Telefono</th>
 					<th class="centrado">Telefono 2</th>
-					<th class="centrado">Registrado</th>
-					<th class="centrado">Ciudad</th>
 					<th class="centrado">Localidad</th>
-					<th class="centrado">Officina</th>
-					<th class="centrado">Usuario</th>
-					<th class="centrado">Coordenadas</th>
+					<th class="centrado">Cardex</th>
 					@if ($editar)<th class="centrado">Editar</th>@endif
 					@if ($eliminar)<th class="centrado">Borrar</th>@endif
 				</thead>
@@ -35,29 +28,21 @@ foreach (Auth::user()->role->functionalities as $func) {
 					<tr>
 						<td>{{$client->nombre}}</td>
 						<td>{{$client->nit}}</td>
-						<td>{{$client->correo}}</td>
 						<td>{{$client->direccion}}</td>
-						<td>{{$client->categoria}}</td>
 						<td class="centrado">{{$client->telefono}}</td>
 						<td class="centrado">{{$client->telefono2}}</td>
-						<td class="centrado">{{$client->fecha_registro}}</td>
-						<td class="centrado">{{$client->city->nombre}}</td>
 						<td class="centrado">{{$client->location->nombre}}</td>
-						<td class="centrado">{{$client->office->nombre}}</td>
-						<td class="centrado">{{$client->user->name}}</td>
-						<td class="centrado">{{$client->coordenada}}</td>
+						<td class="centrado">
+							<button class="btn btn-min info" wire:click.escape="openPage({{$client->id}})"><i class="mdi mdi-clipboard-text"></i>Cardex</button>
+						</td>
 						@if ($editar)
 						<td class="centrado">
-							<a class="btn primary" href="{{url('/admin/client/'.$client->id.'/edit')}}">Editar</a>
+							<button class="btn btn-min warning" wire:click="edit({{$client->id}})"><i class="mdi mdi-pencil"></i>Editar</button>
 						</td>
 						@endif
 						@if ($eliminar)
 						<td class="centrado">
-							<form action="{{url('/admin/client/'.$client->id)}}" method="post">
-								{{ csrf_field() }}
-								{{ method_field('DELETE') }}
-								<button type="submit" class="btn-min danger" onclick="return confirm('Delete?');">Borrar</button>
-							</form>
+							<button type="button" wire:click="select({{$client->id}})" class="btn btn-min danger"><i class="mdi mdi-trash-can-outline"></i>Borrar</button>
 						</td>
 						@endif
 					</tr>
@@ -66,5 +51,67 @@ foreach (Auth::user()->role->functionalities as $func) {
 			</table>
 		</div>
 	</div>
+	@if( $modal )
+	<div class="modal-dialog panel primary visible">
+		<div class="panel-heading">
+			<h4 class="panel-title">
+				@if($clase == 'driver')
+				<b style="color: white;">Registro de Choferes</b>
+				@elseif($clase == 'vehicle')
+				<b style="color: white;">Registro de Vehículos</b>
+				@else
+				<b style="color: white;">Registro de Clientes</b>
+				@endif
+			</h4>
+			<a class="btn-close btn danger" wire:click="limpiar">&times;</a>
+		</div>
+		<div class="panel-body" >
+			@if($clase == 'driver')
+			@include('admin.client.forms.driver')
+			@elseif($clase == 'vehicle')
+			@include('admin.client.forms.vehicle')
+			@else
+			@include('admin.client.forms.form')
+			@endif
+		</div>
+		<div class="panel-footer col-4 default-soft">
+			@if($accion=='store')
+			@if($clase == 'driver')
+			<button wire:click="d_store()" type="submit" class="btn btn-min primary col-1">Registrar</button>
+			@elseif($clase == 'vehicle')
+			<button wire:click="v_store()" type="submit" class="btn btn-min primary col-1">Registrar</button>
+			@else
+			<button wire:click="store()" type="submit" class="btn btn-min primary col-1">Registrar</button>
+			@endif
+			@else
+			@if($clase == 'driver')
+			<button wire:click="d_update()" type="submit" class="btn btn-min warning col-1">Guardar</button>
+			@elseif($clase == 'vehicle')
+			<button wire:click="v_update()" type="submit" class="btn btn-min warning col-1">Guardar</button>
+			@else
+			<button wire:click="update()" type="submit" class="btn btn-min warning col-1">Guardar</button>
+			@endif
+			@endif
+		</div>
+	</div>
+	<div id="cortina" wire:click="limpiar"></div>
+	@endif
+	@if( $delete )
+	<div class="modal-alert">
+		<div>
+			<span>Seguro que desea eliminar este registro?</span>
+			@if($clase == 'driver')
+			<button type="button" wire:click="d_destroy()" class="btn danger">Eliminar</button>
+			@elseif($clase == 'vehicle')
+			<button type="button" wire:click="v_destroy()" class="btn danger">Eliminar</button>
+			@else
+			<button type="button" wire:click="destroy()" class="btn danger">Eliminar</button>
+			@endif
+		</div>
+	</div>
+	<div id="cortina" wire:click="limpiar"></div>
+	@endif
+	@if( $page )
+	@include('admin.client.forms.kardex')
+	@endif
 </div>
-@endsection

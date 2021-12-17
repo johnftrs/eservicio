@@ -15,7 +15,7 @@ class CreateOfficesTable extends Migration
     {
         Schema::create('offices', function (Blueprint $table) {
             $table->id();
-            $table->string('razon_social');
+            $table->string('nombre');
             $table->string('nit')->nullable();
             $table->string('direccion')->nullable();
             $table->string('coordenada')->nullable();

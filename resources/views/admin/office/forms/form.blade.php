@@ -1,13 +1,29 @@
 <div class="form-group">
 	{!! Form::label('Nombre') !!}
-	{!! Form::text('razon_social',$office->razon_social ?? null,['class'=>'form-control upper','placeholder'=>'Inserte Nombre','required', 'maxlength'=>100]) !!}
+	<input wire:model="nombre" type="text" name="nombre" placeholder="Inserte Nombre" class="form-control" required>
+	@error ('nombre') <span class="validacion">*Campo Obligatorio*</span> @enderror
+</div>
+<div class="form-group">
+	{!! Form::label('NIT') !!}
+	<input wire:model="nit" type="text" name="nit" placeholder="Inserte Nombre" class="form-control">
+	@error ('nit') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="form-group">
 	{!! Form::label('Dirección') !!}
-	{!! Form::text('direccion',$office->direccion ?? null,['class'=>'form-control upper','placeholder'=>'Inserte Dirección','required', 'maxlength'=>191]) !!}
+	<input wire:model="direccion" type="text" name="direccion" placeholder="Inserte Nombre" class="form-control">
+</div>
+<div class="form-group">
+	{!! Form::label('Localidad') !!}
+	<select wire:model="location_id" name="location_id" class="form-control">
+		<option value="">-- Seleccione una opción --</option>
+		@foreach ($locations as $location)
+		<option value="{{$location->id}}">{{$location->nombre}}</option>
+		@endforeach
+	</select>
+	@error ('location_id') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="form-group">
 	{!! Form::label('Coordenada GPS') !!}
-	{!! Form::text('coordenada',$office->coordenada ?? null,['class'=>'form-control', 'maxlength'=>191,'autocomplete'=>'off']) !!}
+	<input wire:model="coordenada" type="text" name="coordenada" placeholder="Inserte Nombre" class="form-control">
 	<button type="button" input="coordenada" class="btn btn-min ancho default mapsbtn">Mapa</button>
 </div>

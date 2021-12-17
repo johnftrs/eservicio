@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <link rel="apple-touch-icon" sizes="76x76" href="{!!URL::to('icons/logo.png')!!}" />
-  <link rel="icon" type="image/png" href="{!!URL::to('icons/logo.png')!!}" />
+  <link rel="apple-touch-icon" sizes="76x76" href="{!!URL::to('icons/icono.png')!!}" />
+  <link rel="icon" type="image/png" href="{!!URL::to('icons/icono.png')!!}" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>Lotus</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  @livewireStyles
   {!!Html::style('css/materialdesignicons.min.css')!!}
   {!!Html::style('css/jquery-ui.min.css')!!}
   {!!Html::style('css/datatables.css')!!}
@@ -18,7 +19,6 @@
 </head>
 <?php if(!isset($me)){$me='';} if(!isset($po)){$po='';} ?>
 <body>
-  <div id="cortina" onclick="ocultar_cortina();"></div>
   @include('alerts.success')
   @include('alerts.alert')
   @include('alerts.error')
@@ -95,6 +95,7 @@
   {!!Html::script('js/datatables.min.js')!!}
   {!!Html::script('js/boot.js')!!}
   {!!Html::script('js/admin.js')!!}
+  @livewireScripts
   @yield('adminjs')
   @yield('adminjs2')
 </body>

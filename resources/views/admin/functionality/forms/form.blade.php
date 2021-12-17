@@ -1,20 +1,29 @@
 <div class="form-group">
 	{!! Form::label('Code*') !!}
-	{!! Form::text('code',$functionality->code ?? null,['class'=>'form-control','placeholder'=>'Insert Code','required', 'maxlength'=>10]) !!}
+	<input wire:model="code" type="text" name="code" placeholder="Inserte Nombre" class="form-control">
+	@error ('code') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="form-group">
 	{!! Form::label('Label*') !!}
-	{!! Form::text('label',$functionality->label ?? null,['class'=>'form-control','placeholder'=>'Insert Label','required', 'maxlength'=>20]) !!}
+	<input wire:model="label" type="text" name="label" placeholder="Inserte Nombre" class="form-control">
+	@error ('label') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="form-group">
 	{!! Form::label('Path*') !!}
-	{!! Form::text('path',$functionality->path ?? null,['class'=>'form-control','placeholder'=>'admin/function/create','required', 'maxlength'=>50]) !!}
+	<input wire:model="path" type="text" name="path" placeholder="Inserte Nombre" class="form-control">
+	@error ('path') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="form-group">
 	{!! Form::label('mostrar_id','Mostrar en Menu') !!}
-	<input type="checkbox" class="check" id="mostrar_id" name="mostrar" @if(isset($functionality->mostrar))  {{$functionality->mostrar?'checked':''}} @endif value="{{true}}" style="width:70px;height:35px;">
+	<input wire:model="mostrar" type="checkbox" class="check" id="mostrar_id" name="mostrar" @if(isset($functionality->mostrar))  {{$functionality->mostrar?'checked':''}} @endif value="{{true}}" style="width:70px;height:35px;">
 </div>
 <div class="form-group">
 	{!! Form::label('Menu*') !!}
-	{!! Form::select('menu_id', $menus, $functionality->menu_id ?? null, ['class'=>'form-control','required','data-live-search'=>"true" ]) !!}
+	<select wire:model="menu_id" class="form-control">
+		<option value="">-- Seleccione una opción --</option>
+		@foreach ($menus as $menu)
+		<option value="{{$menu->id}}">{{$menu->label}}</option>
+		@endforeach
+	</select>
+	@error ('menu_id') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
