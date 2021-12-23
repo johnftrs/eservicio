@@ -34,7 +34,7 @@
 						<td class="centrado">{{$ticket->estado}}</td>
 						<td>{{$ticket->fecha_uso}}</td>
 						<td>{{$ticket->driver_id ? $ticket->driver->nombre : null}}</td>
-						<td>{{$ticket->vehicle_id ? $ticket->vehicle->nombre : null}}</td>
+						<td class="centrado">{{isset($ticket->vehicle_id)? $ticket->vehicle->placa : null}} - {{isset($ticket->vehicle_id)? $ticket->vehicle->marca : null}}</td>
 						<td>{{$ticket->hosepipe_id ? $ticket->hosepipe->nombre : null}}</td>
 						<td>{{$ticket->turn_id ? $ticket->turn->nombre : null}}</td>
 						<td class="centrado">{{$ticket->user->name}}</td>

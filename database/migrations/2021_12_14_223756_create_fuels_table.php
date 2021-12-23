@@ -17,7 +17,7 @@ class CreateFuelsTable extends Migration
             $table->id();
             $table->string('nombre');
             $table->double('precio', 15, 2);
-            $table->string('unidad',10)->nullable();
+            $table->string('unidad',20)->nullable();
         });
     }
 

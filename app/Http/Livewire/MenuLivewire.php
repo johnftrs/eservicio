@@ -10,6 +10,7 @@ class MenuLivewire extends Component
 	public $modal = false;
 	public $delete = false;
 	public $accion = 'store';
+	public $mensaje = '';
 	public $me = 'MMEN';
 	public $modelo_id, $code, $label, $icon, $orden, $tamanyo;
 	public function render() {
@@ -36,6 +37,7 @@ class MenuLivewire extends Component
 			'tamanyo' => $this->tamanyo,
 		]);
 		$this->limpiar();
+		$this->mensaje='Menu creado exitosamente';
 	}
 	public function edit($id) {
 		$menu = Menu::find($id);
@@ -60,6 +62,7 @@ class MenuLivewire extends Component
 			'tamanyo' => $this->tamanyo,
 		]);
 		$this->limpiar();
+		$this->mensaje='Menu creado exitosamente';
 	}
 	public function select($id) {
 		$this->modelo_id = $id;
@@ -69,6 +72,7 @@ class MenuLivewire extends Component
 		Menu::destroy($this->modelo_id);
 		$this->delete_id = null;
 		$this->delete = false;
+		$this->mensaje='Menu creado exitosamente';
 	}
 	public function limpiar() {
 		$this->code = '';

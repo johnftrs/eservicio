@@ -8,6 +8,7 @@ use App\Models\Driver;
 use App\Models\Vehicle;
 use App\Models\Hosepipe;
 use App\Models\Location;
+use Carbon\Carbon;
 use Auth;
 
 class TicketLivewire extends Component
@@ -16,6 +17,7 @@ class TicketLivewire extends Component
 	public $delete = false;
 	public $actiModal = false;
 	public $accion = 'store';
+	public $mensaje = '';
 	public $me = 'MTIC';
 	public $modelo_id, $codigo, $codigo_fin, $monto, $estado, $tipo, $fecha_uso, $driver_id, $vehicle_id, $hosepipe_id, $turn_id;
 	public function render() {
@@ -52,20 +54,39 @@ class TicketLivewire extends Component
 			]); 
 		}
 		$this->limpiar();
+		$this->mensaje='Ticket creado exitosamente';
 	}
 	public function activar() {
 		$this->actiModal = true;
 	}
 	public function usar() {
-
-		$this->validate();
-		Ticket::create([
-			'codigo' => $this->codigo,
-			'estado' => 'Usado',
-			'tipo' => '',
-			'user_id' => Auth::id(),
+		$this->validate([
+			'codigo' => 'required',
+			'driver_id' => 'required',
+			'vehicle_id' => 'required',
+			'hosepipe_id' => 'required',
 		]);
+		$ticket = Ticket::find($this->codigo);
+		if (isset($ticket->id)) {
+			if ($ticket->estado == 'Activo') {
+				$ticket->update([
+					'codigo' => $this->codigo,
+					'estado' => 'Usado',
+					'fecha_uso' => Carbon::now(),
+					'driver_id' => $this->driver_id,
+					'vehicle_id' => $this->vehicle_id,
+					'hosepipe_id' => $this->hosepipe_id,
+					'user_id' => Auth::id(),
+				]);
+				$this->mensaje = 'Ticket '.$this->codigo.' Activado Exitosamente';
+			} else {
+				$this->mensaje = 'El ticket '.$this->codigo.' no está habilitado';
+			}
+		} else {
+			$this->mensaje = 'El ticket '.$this->codigo.' no existe';
+		}
 		$this->limpiar();
+		$this->mensaje='Ticket recibido exitosamente';
 	}
 	public function edit($id) {
 		$ticket = Ticket::find($id);
@@ -89,6 +110,7 @@ class TicketLivewire extends Component
 			'user_id' => Auth::id(),
 		]);
 		$this->limpiar();
+		$this->mensaje='Ticket editado exitosamente';
 	}
 	public function select($id) {
 		$this->modelo_id = $id;
@@ -98,6 +120,7 @@ class TicketLivewire extends Component
 		Ticket::destroy($this->modelo_id);
 		$this->delete_id = null;
 		$this->delete = false;
+		$this->mensaje='Ticket eliminado exitosamente';
 	}
 	public function limpiar() {
 		$this->nombre = '';

@@ -16,7 +16,7 @@ class CreateHumansTable extends Migration
         Schema::create('humans', function (Blueprint $table) {
             $table->id();
             $table->string('ci',20)->nullable();
-            $table->string('nombre');
+            $table->string('nombre')->nullable();
             $table->string('paterno')->nullable();
             $table->string('materno')->nullable();
             $table->string('direccion')->nullable();

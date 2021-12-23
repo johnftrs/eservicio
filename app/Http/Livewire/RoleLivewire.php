@@ -6,12 +6,14 @@ use Livewire\Component;
 use App\Models\Role;
 use App\Models\Menu;
 use App\Models\Functionality;
+use App\Models\Privilege;
 
 class RoleLivewire extends Component
 {
 	public $modal = false;
 	public $delete = false;
 	public $accion = 'store';
+	public $mensaje = '';
 	public $funciones;
 	public $me = 'MROL';
 	public $modelo_id, $code, $name;
@@ -23,39 +25,62 @@ class RoleLivewire extends Component
 				'menus' => Menu::get(),
 			])->layout('layouts.app',['me'=>$this->me]);
 	}
-	protected $rules = [
-        'code' => 'required',
-        'name' => 'required',
-    ];
 	public function create() {
 		$this->accion = 'store';
 		$this->modal = true;
 	}
 	public function store() {
-		$this->validate();
-		Role::create([
+		$this->validate([
+			'code' => 'required|unique:roles',
+		]);
+		$role = Role::create([
 			'code' => $this->code,
 			'name' => $this->name,
 		]);
+		if ($this->funciones!=null) {
+			foreach ($this->funciones as $key => $function) {
+				if ($function) {
+					Privilege::create([
+						'functionality_id' => $function,
+						'role_id' => $role->id,
+					]);
+				}
+			}
+		}
 		$this->limpiar();
+		$this->mensaje='Rol creado exitosamente';
 	}
 	public function edit($id) {
 		$role = Role::find($id);
+		foreach (Privilege::where('role_id',$id)->get() as $key => $privilege) {
+			$this->funciones[$privilege->functionality_id] = $privilege->functionality_id;
+		}
 		$this->modelo_id = $role->id;
 		$this->code = $role->code;
 		$this->name = $role->name;
-
 		$this->accion = 'edit';
 		$this->modal = true;
 	}
 	public function update() {
 		$role = Role::find($this->modelo_id);
-		$this->validate();
+		$this->validate([
+			'code' => 'required',
+		]);
 		$role->update([
 			'code' => $this->code,
 			'name' => $this->name,
 		]);
+		$role->functionalities()->detach();
+		foreach ($this->funciones as $key => $function) {
+			if ($function) {
+				Privilege::create([
+					'functionality_id' => $function,
+					'role_id' => $role->id,
+				]);
+			}
+		}
 		$this->limpiar();
+		$this->mensaje='Rol editado exitosamente';
 	}
 	public function select($id) {
 		$this->modelo_id = $id;
@@ -65,10 +90,12 @@ class RoleLivewire extends Component
 		Role::destroy($this->modelo_id);
 		$this->delete_id = null;
 		$this->delete = false;
+		$this->mensaje='Rol eliminado exitosamente';
 	}
 	public function limpiar() {
 		$this->code = '';
 		$this->name = '';
+		$this->funciones = null;
 
 		$this->modal = false;
 		$this->delete = false;

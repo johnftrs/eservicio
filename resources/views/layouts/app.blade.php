@@ -18,12 +18,10 @@
 </head>
 <?php if(!isset($me)){$me='';} if(!isset($po)){$po='';} ?>
 <body>
-  @include('alerts.success')
-  @include('alerts.alert')
-  @include('alerts.error')
+  <div id="cortinafull" onclick="ocultar_cortina();"></div>
   <aside>
     <div class="logo">
-      <a href="{{url::to('admin')}}">
+      <a href="{{url::to('home')}}">
         <img src="{!!URL::to('icons/icono.png')!!}" > GRUPO LOTUS
       </a>
     </div>
@@ -61,14 +59,11 @@
           <i class="mdi mdi-magnify"></i>
         </button>
         <ul id="ul_est">
-          {{--@foreach (\App\Order::orderBy('id','DESC')->get() as $order)
-            <li>
-              <a href="{!!url('admin/order/'.$order->id.'/edit')!!}" class="ver_est">&nbsp;&nbsp;&nbsp; [{{$order->id}}] - </a>
-              <a href="{!!url('admin/order/'.$order->id.'/edit')!!}" class="edit_est">
-                <i class="mdi mdi-pencil"></i>
-              </a>
+          @foreach (\App\Models\Ticket::get() as $ticket)
+            <li class="{{$ticket->estado=='Inactivo'?'rojo':($ticket->estado=='Usado'?'verde':'')}}">
+              <a href="{!!url('admin/activar/ticket/'.$ticket->id)!!}" class="{{$ticket->codigo}}">Vale: {{$ticket->codigo}}<span>{{$ticket->estado}}</span></a>
             </li>
-            @endforeach--}}
+            @endforeach
         </ul>
       </div>
       <div class="nav-log">

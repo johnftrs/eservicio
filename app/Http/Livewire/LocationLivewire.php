@@ -12,6 +12,7 @@ class LocationLivewire extends Component
 	public $modal = false;
 	public $delete = false;
 	public $accion = 'store';
+	public $mensaje = '';
 	public $me = 'MLOC';
 	public $modelo_id, $nombre, $coordenada, $city_id;
 	public function render() {
@@ -37,6 +38,7 @@ class LocationLivewire extends Component
 			'city_id' => $this->city_id,
 		]);
 		$this->limpiar();
+		$this->mensaje='Localidad creada exitosamente';
 	}
 	public function edit($id) {
 		$location = Location::find($id);
@@ -57,6 +59,7 @@ class LocationLivewire extends Component
 			'city_id' => $this->city_id,
 		]);
 		$this->limpiar();
+		$this->mensaje='Localidad creada exitosamente';
 	}
 	public function select($id) {
 		$this->modelo_id = $id;
@@ -66,6 +69,7 @@ class LocationLivewire extends Component
 		Location::destroy($this->modelo_id);
 		$this->delete_id = null;
 		$this->delete = false;
+		$this->mensaje='Localidad creada exitosamente';
 	}
 	public function limpiar() {
 		$this->nombre = '';

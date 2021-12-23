@@ -16,6 +16,7 @@ class UserLivewire extends Component
 	public $modal = false;
 	public $delete = false;
 	public $accion = 'store';
+	public $mensaje = '';
 	public $me = 'MUSE';
 	public $modelo_id, $name, $email, $password, $role_id, $ci ,$nombre ,$paterno ,$materno ,$direccion ,$telefono ,$fecha_nacimiento ,$fecha_ingreso ,$nivel_estudio ,$biometrico ,$estado_civil ,$afp ,$foto ,$nombre_garante ,$relacion_garante ,$telefono_garante ,$trabajo_garante ,$direccion_garante ,$nombre_referencia_personal ,$relacion_referencia_personal ,$telefono_referencia_personal ,$trabajo_referencia_personal ,$direccion_referencia_personal ,$location_id ,$city_id ,$office_id;
 	public function render() {
@@ -31,11 +32,10 @@ class UserLivewire extends Component
 	}
 	protected $rules = [
 		'name' => 'required',
-		'email' => 'required',
 		'password' => 'required',
+		/*'email' => 'required',*/
 		'role_id' => 'required',
-		'nombre' => 'required',
-		'paterno' => 'required',
+		/*'nombre' => 'required',*/
 		'location_id' => 'required',
 		'city_id' => 'required',
 		'office_id' => 'required',
@@ -81,6 +81,7 @@ class UserLivewire extends Component
 			'office_id' => $this->office_id,
 		]);
 		$this->limpiar();
+		$this->mensaje='Usuario creado exitosamente';
 	}
 	public function edit($id) {
 		$user = User::find($id);
@@ -160,6 +161,7 @@ class UserLivewire extends Component
 			'office_id' => $this->office_id,
 		]);
 		$this->limpiar();
+		$this->mensaje='Usuario editado exitosamente';
 	}
 	public function select($id) {
 		$this->modelo_id = $id;
@@ -169,6 +171,7 @@ class UserLivewire extends Component
 		User::destroy($this->modelo_id);
 		$this->delete_id = null;
 		$this->delete = false;
+		$this->mensaje='Usuario eliminado exitosamente';
 	}
 	public function limpiar() {
 		$this->name = '';

@@ -1,7 +1,7 @@
 <div class="form-group">
 	{!! Form::label('Código*') !!}
 	<input wire:model="code" type="text" name="code" placeholder="Inserte Nombre" class="form-control" required>
-	@error ('code') <span class="validacion">*Campo Obligatorio*</span> @enderror
+	@error ('code') <span class="validacion">*Campo Vacio o Repetido*</span> @enderror
 </div>
 <div class="form-group">
 	{!! Form::label('Name*') !!}
@@ -18,7 +18,7 @@
 				<div class="panel-body">
 					@foreach($functionalities = $menu->functionalities()->orderBy('id','asc')->get() as $functionality)
 					<div class="form-group">
-						<input wire:model="funciones.{{$functionality->code}}" type="checkbox" class="{{$menu->code}}" id="{{ $functionality->code }}" value="{{ $functionality->id }}">
+						<input wire:model="funciones.{{$functionality->id}}" type="checkbox" class="{{$menu->code}}" id="{{ $functionality->code }}" value="{{ $functionality->id }}">
 						
 						{!! Form::label($functionality->code,$functionality->label) !!}
 					</div>

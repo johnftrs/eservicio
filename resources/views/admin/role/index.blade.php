@@ -1,12 +1,14 @@
 <div class="card">
-<?php $editar=false; $eliminar=false;
-foreach (Auth::user()->role->functionalities as $func) {
-	if ($func->code=='EROL'){ $editar=true; }
-	if ($func->code=='DROL'){ $eliminar=true; }
-}
-?>
+	@include('alerts.error')
+	<?php $editar=false; $eliminar=false;
+	foreach (Auth::user()->role->functionalities as $func) {
+		if ($func->code=='EROL'){ $editar=true; }
+		if ($func->code=='DROL'){ $eliminar=true; }
+	}
+	?>
 	<div class="card-header primary-low">
 		<h5 class="card-title">Roles</h5>
+		<button class="btn btn-min default" wire:click="create"><i class="mdi mdi-plus-circle-outline"></i>agregar</button>
 	</div>
 	<div class="card-body">
 		<div class="table-responsive">

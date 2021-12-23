@@ -8,10 +8,10 @@
 	<select wire:model="driver_id" class="form-control">
 		<option value="">-- Seleccione una opción --</option>
 		@foreach ($drivers as $driver)
-		<option value="{{$driver->id}}">{{$driver->nombre}} {{$driver->paterno}} - {{$driver->client->nombre}}</option>
+		<option value="{{$driver->id}}">{{$driver->client->nombre}} - {{$driver->nombre}} {{$driver->paterno}}</option>
 		@endforeach
 	</select>
-	@error ('office_id') <span class="validacion">*Campo Obligatorio*</span> @enderror
+	@error ('driver_id') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="form-group">
 	{!! Form::label('Vehículo') !!}
@@ -21,7 +21,7 @@
 		<option value="{{$vehicle->id}}">{{$vehicle->marca}} - {{$vehicle->placa}}</option>
 		@endforeach
 	</select>
-	@error ('office_id') <span class="validacion">*Campo Obligatorio*</span> @enderror
+	@error ('vehicle_id') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="form-group">
 	{!! Form::label('Manguera') !!}
@@ -31,5 +31,5 @@
 		<option value="{{$hosepipe->id}}">{{$hosepipe->nombre}} - {{$hosepipe->fuel->nombre}}</option>
 		@endforeach
 	</select>
-	@error ('office_id') <span class="validacion">*Campo Obligatorio*</span> @enderror
+	@error ('hosepipe_id') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>

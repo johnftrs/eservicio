@@ -1,6 +1,6 @@
 $('document').ready(function(){
-	setTimeout(function() {$(".alert").fadeOut(1000);},4000);
-	$('.close_alert').click(function() {$(this).parent('.alert').fadeOut(500);});
+	/*setTimeout(function() {$(".alert").fadeOut(1000);},4000);*/
+	/*$('.close_alert').click(function() {$(this).parent('.alert').fadeOut(500);});*/
 	$('.upper').keyup(function() { this.value = this.value.toUpperCase(); });
 });
 $(window).load(function () {
@@ -8,15 +8,6 @@ $(window).load(function () {
 	if ($('.card').hasClass('totop')) {
 		$('.cont_head_under').animate({ scrollTop: $(".cont_head_under tbody>tr:last-child").offset().top - $( window ).height() + 51 },1000);
 	}
-	/*$('#filtro>input').keyup(function(e) {
-		if (e.keyCode == 8) {
-			$('.table-responsive tbody>tr').removeAttr('style');
-			filtro($(this).val());
-		} else { filtro($(this).val()); }
-	});
-	$('#filtro>input').on('search', function (e) {
-		$('.table-responsive tbody>tr').removeAttr('style');
-	});*/
 });
 function toUpper(texto) {
 	var palabra = texto.toUpperCase();

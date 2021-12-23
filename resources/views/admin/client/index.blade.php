@@ -1,4 +1,5 @@
 <div class="card">
+	@include('alerts.error')
 	<?php $editar=false; $eliminar=false;
 	foreach (Auth::user()->role->functionalities as $func) {
 		if ($func->code=='ECLI'){ $editar=true; }
@@ -33,7 +34,7 @@
 						<td class="centrado">{{$client->telefono2}}</td>
 						<td class="centrado">{{$client->location->nombre}}</td>
 						<td class="centrado">
-							<button class="btn btn-min info" wire:click.escape="openPage({{$client->id}})"><i class="mdi mdi-clipboard-text"></i>Cardex</button>
+							<button class="btn btn-min info" wire:click.escape="kardex({{$client->id}})"><i class="mdi mdi-clipboard-text"></i>Cardex</button>
 						</td>
 						@if ($editar)
 						<td class="centrado">

@@ -10,6 +10,9 @@ class Hosepipe extends Model {
 	protected $fillable = [ 'nombre', 'fuel_id', 'tank_id', 'dispenser_id'];
 	public $timestamps = false;
 
+    public function fuel() {
+        return $this->belongsTo(Fuel::class);
+    }
     public function tank() {
         return $this->belongsTo(Tank::class);
     }

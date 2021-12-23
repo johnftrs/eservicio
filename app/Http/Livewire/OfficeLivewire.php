@@ -11,6 +11,7 @@ class OfficeLivewire extends Component
 	public $modal = false;
 	public $delete = false;
 	public $accion = 'store';
+	public $mensaje = '';
 	public $me = 'MOFF';
 	public $office_id, $nombre, $nit, $direccion, $coordenada, $location_id;
 	public function render() {
@@ -38,6 +39,7 @@ class OfficeLivewire extends Component
 			'location_id' => $this->location_id
 		]);
 		$this->limpiar();
+		$this->mensaje='Sucursal creada exitosamente';
 	}
 	public function edit($id) {
 		$office = Office::find($id);
@@ -62,6 +64,7 @@ class OfficeLivewire extends Component
 			'location_id' => $this->location_id
 		]);
 		$this->limpiar();
+		$this->mensaje='Sucursal creada exitosamente';
 	}
 	public function select($id) {
 		$this->office_id = $id;
@@ -71,6 +74,7 @@ class OfficeLivewire extends Component
 		Office::destroy($this->office_id);
 		$this->delete_id = null;
 		$this->delete = false;
+		$this->mensaje='Sucursal creada exitosamente';
 	}
 	public function limpiar() {
 		$this->nombre = '';

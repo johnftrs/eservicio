@@ -12,6 +12,7 @@ class FunctionalityLivewire extends Component
 	public $modal = false;
 	public $delete = false;
 	public $accion = 'store';
+	public $mensaje = '';
 	public $me = 'MFUN';
 	public $modelo_id, $code, $label, $path, $mostrar, $menu_id;
 	public function render() {
@@ -41,6 +42,7 @@ class FunctionalityLivewire extends Component
 			'menu_id' => $this->menu_id,
 		]);
 		$this->limpiar();
+		$this->mensaje='Funcionalidad creada exitosamente';
 	}
 	public function edit($id) {
 		$functionality = Functionality::find($id);
@@ -65,6 +67,7 @@ class FunctionalityLivewire extends Component
 			'menu_id' => $this->menu_id,
 		]);
 		$this->limpiar();
+		$this->mensaje='Funcionalidad editada exitosamente';
 	}
 	public function select($id) {
 		$this->modelo_id = $id;
@@ -74,6 +77,7 @@ class FunctionalityLivewire extends Component
 		Functionality::destroy($this->modelo_id);
 		$this->delete_id = null;
 		$this->delete = false;
+		$this->mensaje='Funcionalidad eliminada exitosamente';
 	}
 	public function limpiar() {
 		$this->code = '';

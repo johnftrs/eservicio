@@ -2,7 +2,7 @@
 	<div class="card">
 		<div class="card-header primary-low">
 			<button class="btn btn-min danger" wire:click="$set('page',false)"><i class="mdi mdi-arrow-left-bold"></i>Atrás</button>
-			<h5 class="card-title">Cardex: {{$nombre}}</h5>
+			<h5 class="card-title">Cardex: {{$clients->find($modelo_id)->nombre}}</h5>
 			<button class="btn btn-min warning" wire:click="edit({{$modelo_id}})"><i class="mdi mdi-pencil"></i>Editar</button>
 		</div>
 		<div class="card-body">

@@ -10,6 +10,7 @@ class CityLivewire extends Component
 	public $modal = false;
 	public $delete = false;
 	public $accion = 'store';
+	public $mensaje = '';
 	public $me = 'MCIT';
 	public $modelo_id, $code, $nombre, $coordenada;
 	public function render() {
@@ -34,6 +35,7 @@ class CityLivewire extends Component
 			'coordenada' => $this->coordenada,
 		]);
 		$this->limpiar();
+		$this->mensaje='Ciudad creado exitosamente';
 	}
 	public function edit($id) {
 		$city = City::find($id);
@@ -54,6 +56,7 @@ class CityLivewire extends Component
 			'coordenada' => $this->coordenada,
 		]);
 		$this->limpiar();
+		$this->mensaje='Ciudad editado exitosamente';
 	}
 	public function select($id) {
 		$this->modelo_id = $id;
@@ -63,6 +66,7 @@ class CityLivewire extends Component
 		City::destroy($this->modelo_id);
 		$this->delete_id = null;
 		$this->delete = false;
+		$this->mensaje='Ciudad eliminado exitosamente';
 	}
 	public function limpiar() {
 		$this->code = '';

@@ -17,6 +17,7 @@ class ClientLivewire extends Component
 	public $delete = false;
 	public $page = false;
 	public $accion = 'store';
+	public $mensaje = '';
 	public $clase = 'client';
 	public $me = 'MCLI';
 	public $modelo_id, $nombre, $nit, $correo, $direccion, $telefono, $telefono2, $estado, $representante_legal, $representante_ci, $representante_telefono, $representante_telefono2, $representante_email, $representante_detalles;
@@ -63,6 +64,7 @@ class ClientLivewire extends Component
 			'user_id' => Auth::id(),
 		]);
 		$this->limpiar();
+		$this->mensaje='Cliente editado exitosamente';
 	}
 	public function edit($id) {
 		$client = Client::find($id);
@@ -111,6 +113,7 @@ class ClientLivewire extends Component
 			'user_id' => Auth::id(),
 		]);
 		$this->limpiar();
+		$this->mensaje='Cliente editado exitosamente';
 	}
 	public function select($id) {
 		$this->modelo_id = $id;
@@ -120,6 +123,7 @@ class ClientLivewire extends Component
 	public function destroy() {
 		Client::destroy($this->modelo_id);
 		$this->delete = false;
+		$this->mensaje='Cliente eliminado exitosamente';
 	}
 	public function limpiar() {
 		$this->nombre = '';
@@ -151,7 +155,7 @@ class ClientLivewire extends Component
 		$this->modal = false;
 		$this->delete = false;
 	}
-	public function openPage($id) {
+	public function kardex($id) {
 		$this->modelo_id = $id;
 		
 		$this->page = true;
@@ -176,6 +180,7 @@ class ClientLivewire extends Component
 			'client_id' => $this->modelo_id,
 		]);
 		$this->limpiar();
+		$this->mensaje='Chofer creado exitosamente';
 	}
 	public function d_edit($id) {
 		$driver = Driver::find($id);
@@ -206,6 +211,7 @@ class ClientLivewire extends Component
 			'estado' => $this->d_estado,
 		]);
 		$this->limpiar();
+		$this->mensaje='Chofer editado exitosamente';
 	}
 	public function d_select($id) {
 		$this->d_modelo_id = $id;
@@ -215,6 +221,7 @@ class ClientLivewire extends Component
 	public function d_destroy() {
 		Driver::destroy($this->d_modelo_id);
 		$this->delete = false;
+		$this->mensaje='Chofer eliminado exitosamente';
 	}
 	public function v_create() {
 		$this->accion = 'store';
@@ -236,6 +243,7 @@ class ClientLivewire extends Component
 			'client_id' => $this->modelo_id,
 		]);
 		$this->limpiar();
+		$this->mensaje='Vehículo creado exitosamente';
 	}
 	public function v_edit($id) {
 		$vehicle = Vehicle::find($id);
@@ -266,6 +274,7 @@ class ClientLivewire extends Component
 			'estado' => $this->v_estado,
 		]);
 		$this->limpiar();
+		$this->mensaje='Vehículo eliminado exitosamente';
 	}
 	public function v_select($id) {
 		$this->v_modelo_id = $id;
@@ -275,5 +284,6 @@ class ClientLivewire extends Component
 	public function v_destroy() {
 		Vehicle::destroy($this->v_modelo_id);
 		$this->delete = false;
+		$this->mensaje='Vehículo eliminado exitosamente';
 	}
 }

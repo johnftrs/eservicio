@@ -12,6 +12,8 @@ use App\Http\Livewire\OfficeLivewire;
 use App\Http\Livewire\ClientLivewire;
 use App\Http\Livewire\DispenserLivewire;
 use App\Http\Livewire\TicketLivewire;
+use App\Http\Livewire\FuelLivewire;
+use App\Http\Livewire\ActivadorLivewire;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,3 +43,5 @@ Route::get('/admin/office',OfficeLivewire::class)->middleware('auth');
 Route::get('/admin/client',ClientLivewire::class)->middleware('auth');
 Route::get('/admin/dispenser',DispenserLivewire::class)->middleware('auth');
 Route::get('/admin/ticket',TicketLivewire::class)->middleware('auth');
+Route::get('/admin/fuel',FuelLivewire::class)->middleware('auth');
+Route::get('/admin/activar/ticket/{variable?}',ActivadorLivewire::class)->middleware('auth');

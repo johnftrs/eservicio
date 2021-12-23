@@ -1,4 +1,5 @@
 <div class="card">
+	@include('alerts.error')
 	<?php $editar=false; $eliminar=false;
 	foreach (Auth::user()->role->functionalities as $func) {
 		if ($func->code=='ELOC'){ $editar=true; }
