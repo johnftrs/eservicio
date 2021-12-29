@@ -15,15 +15,16 @@ class CreateReportsTable extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->double('monto', 15, 2);
-            $table->double('efectivo', 15, 2);
-            $table->double('tarjeta', 15, 2);
-            $table->string('firmado',1)->default("N");
-            $table->integer('200')->nullable();
-            $table->integer('100')->nullable();
-            $table->integer('50')->nullable();
-            $table->integer('20')->nullable();
-            $table->integer('10')->nullable();
+            $table->date('fecha')->nullable();
+            $table->double('monto_total', 15, 2)->nullable();
+            $table->double('efectivo', 15, 2)->nullable();
+            $table->double('tarjeta', 15, 2)->nullable();
+            $table->string('firmado',1)->nullable();
+            $table->integer('_200')->nullable();
+            $table->integer('_100')->nullable();
+            $table->integer('_50')->nullable();
+            $table->integer('_20')->nullable();
+            $table->integer('_10')->nullable();
             $table->integer('monedas')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

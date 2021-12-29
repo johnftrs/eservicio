@@ -106,7 +106,7 @@
 	</div>
 	<div class="card">
 		<div class="card-header primary-low">
-			<h5 class="card-title">Choferes</h5>
+			<h5 class="card-title"><i class="mdi mdi-seat-recline-extra"></i>Choferes</h5>
 			<button class="btn btn-min default" wire:click="d_create"><i class="mdi mdi-plus-circle-outline"></i>Nuevo Chofer</button>
 		</div>
 		<div class="card-body">
@@ -146,7 +146,7 @@
 	</div>
 	<div class="card">
 		<div class="card-header primary-low">
-			<h5 class="card-title">Vehículos</h5>
+			<h5 class="card-title"><i class="mdi mdi-car-hatchback"></i>Vehículos</h5>
 			<button class="btn btn-min default" wire:click="v_create"><i class="mdi mdi-plus-circle-outline"></i>Nuevo Vehículo</button>
 		</div>
 		<div class="card-body">

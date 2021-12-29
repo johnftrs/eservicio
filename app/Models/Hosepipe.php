@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hosepipe extends Model {
     use HasFactory;
-	protected $fillable = [ 'nombre', 'fuel_id', 'tank_id', 'dispenser_id'];
+	protected $fillable = [ 'nombre', 'fuel_id', 'tank_id', 'dispenser_id', 'office_id'];
 	public $timestamps = false;
 
     public function fuel() {
@@ -18,5 +18,8 @@ class Hosepipe extends Model {
     }
     public function dispenser() {
         return $this->belongsTo(Dispenser::class);
+    }
+    public function office() {
+        return $this->belongsTo(Office::class);
     }
 }

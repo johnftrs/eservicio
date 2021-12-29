@@ -22,7 +22,7 @@
   <aside>
     <div class="logo">
       <a href="{{url::to('home')}}">
-        <img src="{!!URL::to('icons/icono.png')!!}" > GRUPO LOTUS
+        <img src="{!!URL::to('icons/icono.png')!!}" >{!!'&nbsp;'.strtoupper(\Auth::user()->people->office->nombre)!!}
       </a>
     </div>
     <div class="sidebar">
@@ -61,7 +61,7 @@
         <ul id="ul_est">
           @foreach (\App\Models\Ticket::get() as $ticket)
             <li class="{{$ticket->estado=='Inactivo'?'rojo':($ticket->estado=='Usado'?'verde':'')}}">
-              <a href="{!!url('admin/activar/ticket/'.$ticket->id)!!}" class="{{$ticket->codigo}}">Vale: {{$ticket->codigo}}<span>{{$ticket->estado}}</span></a>
+              <a href="{!!url('admin/activar/ticket/'.$ticket->id)!!}" class="{{$ticket->codigo}}">Vale: {{$ticket->codigo}} {{$ticket->serie}}<span>{{$ticket->estado}}</span></a>
             </li>
             @endforeach
         </ul>

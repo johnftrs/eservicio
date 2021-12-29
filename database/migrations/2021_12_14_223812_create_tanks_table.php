@@ -20,6 +20,8 @@ class CreateTanksTable extends Migration
             $table->bigInteger('actual')->nullable();
             $table->unsignedBigInteger('fuel_id')->nullable();
             $table->foreign('fuel_id')->references('id')->on('fuels')->onDelete('set null');
+            $table->unsignedBigInteger('office_id')->nullable();
+            $table->foreign('office_id')->references('id')->on('offices')->onDelete('set null');
             $table->timestamps();
         });
     }

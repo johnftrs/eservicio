@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Office extends Model
 {
     use HasFactory;
-	protected $fillable = ['nombre','nit','direccion','coordenada','location_id'];
+	protected $fillable = ['nombre','nit','direccion'];
 	public $timestamps = false;
 
 	public function peoples() {
@@ -19,8 +19,5 @@ class Office extends Model
 	}
 	public function orders() {
 		return $this->hasMany(Order::class);
-	}
-	public function location() {
-		return $this->belongsTo(Location::class);
 	}
 }

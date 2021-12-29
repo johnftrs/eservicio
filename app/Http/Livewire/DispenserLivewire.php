@@ -19,16 +19,14 @@ class DispenserLivewire extends Component
 	public $mensaje = '';
 	public $clase = 'dispenser';
 	public $me = 'MDIS';
-	public $modelo_id, $nombre, $office_id;
-	public $h_modelo_id, $h_nombre, /*$h_fuel_id,*/ $h_tank_id, $h_dispenser_id;
+	public $modelo_id, $nombre, $meter, $tank_id;
+	public $h_modelo_id, $h_nombre, $h_tank_id, $h_dispenser_id;
 	public function render() {
 		return view(
 			'admin.dispenser.index',[
-				'dispensers' => Dispenser::orderBy('nombre','asc')->get(),
-				'offices' => Office::get(),
+				'dispensers' => Dispenser::where('office_id',Auth::user()->people->office_id)->orderBy('nombre','asc')->get(),
 				'hosepipes' => Hosepipe::get(),
-				'fuels' => Fuel::get(),
-				'tanks' => Tank::get(),
+				'tanks' => Tank::where('office_id',Auth::user()->people->office_id)->get(),
 			])->layout('layouts.app',['me'=>$this->me]);
 	}
 	public function create() {
@@ -39,11 +37,15 @@ class DispenserLivewire extends Component
 	public function store() {
 		$this->validate([
 			'nombre' => 'required',
-			'office_id' => 'required',
+			'tank_id' => 'required',
 		]);
+		$tank = Tank::find($this->tank_id);
 		Dispenser::create([
 			'nombre' => $this->nombre,
-			'office_id' => $this->office_id,
+			'meter' => $this->meter,
+			'tank_id' => $this->tank_id,
+			'fuel_id' => $tank->fuel_id,
+			'office_id' => Auth::user()->people->office_id,
 		]);
 		$this->limpiar();
 		$this->mensaje='Dispenser creado exitosamente';
@@ -52,7 +54,8 @@ class DispenserLivewire extends Component
 		$dispenser = Dispenser::find($id);
 		$this->modelo_id = $dispenser->id;
 		$this->nombre = $dispenser->nombre;
-		$this->office_id = $dispenser->office_id;
+		$this->meter = $dispenser->meter;
+		$this->tank_id = $dispenser->tank_id;
 
 		$this->accion = 'edit';
 		$this->clase = 'dispenser';
@@ -62,11 +65,14 @@ class DispenserLivewire extends Component
 		$dispenser = Dispenser::find($this->modelo_id);
 		$this->validate([
 			'nombre' => 'required',
-			'office_id' => 'required',
+			'tank_id' => 'required',
 		]);
+		$tank = Tank::find($this->tank_id);
 		$dispenser->update([
 			'nombre' => $this->nombre,
-			'office_id' => $this->office_id,
+			'meter' => $this->meter,
+			'tank_id' => $this->tank_id,
+			'fuel_id' => $tank->fuel_id,
 		]);
 		$this->limpiar();
 		$this->mensaje='Dispenser editado exitosamente';
@@ -84,9 +90,9 @@ class DispenserLivewire extends Component
 	}
 	public function limpiar() {
 		$this->nombre = '';
-		$this->office_id = '';
+		$this->meter = '';
+		$this->tank_id = '';
 		$this->h_nombre = '';
-		/*$this->h_fuel_id = '';*/
 		$this->h_tank_id = '';
 		$this->h_dispenser_id = '';
 
@@ -105,12 +111,10 @@ class DispenserLivewire extends Component
 	public function h_store() {
 		$this->validate([
 			'h_nombre' =>'required',
-			/*'h_fuel_id' =>'required',*/
 			'h_tank_id' =>'required',
 		]);
 		Hosepipe::create([
 			'nombre' => $this->h_nombre,
-			/*'fuel_id' => $this->h_fuel_id,*/
 			'tank_id' => $this->h_tank_id,
 			'dispenser_id' => $this->modelo_id,
 		]);
@@ -121,7 +125,6 @@ class DispenserLivewire extends Component
 		$dispenser = Hosepipe::find($id);
 		$this->h_modelo_id = $dispenser->id;
 		$this->h_nombre = $dispenser->nombre;
-		/*$this->h_fuel_id = $dispenser->fuel_id;*/
 		$this->h_tank_id = $dispenser->tank_id;
 
 		$this->accion = 'edit';
@@ -131,13 +134,11 @@ class DispenserLivewire extends Component
 	public function h_update() {
 		$this->validate([
 			'h_nombre' =>'required',
-			/*'h_fuel_id' =>'required',*/
 			'h_tank_id' =>'required',
 		]);
 		$dispenser = Hosepipe::find($this->h_modelo_id);
 		$dispenser->update([
 			'nombre' => $this->h_nombre,
-			/*'fuel_id' => $this->h_fuel_id,*/
 			'tank_id' => $this->h_tank_id,
 		]);
 		$this->limpiar();

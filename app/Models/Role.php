@@ -12,6 +12,9 @@ class Role extends Model {
 	public function functionalities(){
 		return $this->belongsToMany(Functionality::class,'privileges');
 	}
+	public function functionalities_filtro_menu(){
+		return $this->belongsToMany(Functionality::class,'privileges')->get()->unique('menu_id');
+	}
 	public function functionalitiesByMenuCode($code){
 		return $this->belongsToMany(Functionality::class,'privileges')->join('menus','functionalities.menu_id','=','menus.id')->where('menus.code',$code)->get();
 	}

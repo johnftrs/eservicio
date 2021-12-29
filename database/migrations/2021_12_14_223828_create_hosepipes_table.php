@@ -22,6 +22,8 @@ class CreateHosepipesTable extends Migration
             $table->foreign('tank_id')->references('id')->on('tanks')->onDelete('set null');
             $table->unsignedBigInteger('dispenser_id')->nullable();
             $table->foreign('dispenser_id')->references('id')->on('dispensers')->onDelete('set null');
+            $table->unsignedBigInteger('office_id')->nullable();
+            $table->foreign('office_id')->references('id')->on('offices')->onDelete('set null');
         });
     }
 

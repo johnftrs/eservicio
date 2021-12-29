@@ -7,9 +7,8 @@ use App\Models\Office;
 use App\Models\User;
 use App\Models\Human;
 use App\Models\Role;
-use App\Models\Location;
-use App\Models\City;
 use Illuminate\Support\Facades\Hash;
+use Auth;
 
 class UserLivewire extends Component
 {
@@ -18,27 +17,19 @@ class UserLivewire extends Component
 	public $accion = 'store';
 	public $mensaje = '';
 	public $me = 'MUSE';
-	public $modelo_id, $name, $email, $password, $role_id, $ci ,$nombre ,$paterno ,$materno ,$direccion ,$telefono ,$fecha_nacimiento ,$fecha_ingreso ,$nivel_estudio ,$biometrico ,$estado_civil ,$afp ,$foto ,$nombre_garante ,$relacion_garante ,$telefono_garante ,$trabajo_garante ,$direccion_garante ,$nombre_referencia_personal ,$relacion_referencia_personal ,$telefono_referencia_personal ,$trabajo_referencia_personal ,$direccion_referencia_personal ,$location_id ,$city_id ,$office_id;
+	public $modelo_id, $name, $email, $password, $role_id, $ci ,$nombre_completo ,$direccion ,$telefono ,$fecha_nacimiento ,$fecha_ingreso ,$nivel_estudio ,$biometrico ,$estado_civil ,$afp ,$foto ,$nombre_garante ,$relacion_garante ,$telefono_garante ,$trabajo_garante ,$direccion_garante ,$nombre_referencia_personal ,$relacion_referencia_personal ,$telefono_referencia_personal ,$trabajo_referencia_personal ,$direccion_referencia_personal;
 	public function render() {
 		return view(
 			'user.index',[
-				'users' => User::get(),
-				'offices' => Office::get(),
+				'users' => User::where('role_id','>',1)->get(),
 				'peoples' => Human::get(),
-				'roles' => Role::get(),
-				'cities' => City::get(),
-				'locations' => Location::get(),
+				'roles' => Role::where('id','>',1)->get(),
 			])->layout('layouts.app',['me'=>$this->me]);
 	}
 	protected $rules = [
 		'name' => 'required',
 		'password' => 'required',
-		/*'email' => 'required',*/
 		'role_id' => 'required',
-		/*'nombre' => 'required',*/
-		'location_id' => 'required',
-		'city_id' => 'required',
-		'office_id' => 'required',
 	];
 	public function create() {
 		$this->accion = 'store';
@@ -54,9 +45,8 @@ class UserLivewire extends Component
 		]);
 		Human::create([
 			'ci' => $this->ci,
-			'nombre' => $this->nombre,
-			'paterno' => $this->paterno,
-			'materno' => $this->materno,
+			'nombre_completo' => $this->nombre_completo,
+			'password' => $this->password,
 			'direccion' => $this->direccion,
 			'telefono' => $this->telefono,
 			'fecha_nacimiento' => $this->fecha_nacimiento,
@@ -76,9 +66,7 @@ class UserLivewire extends Component
 			'telefono_referencia_personal' => $this->telefono_referencia_personal,
 			'trabajo_referencia_personal' => $this->trabajo_referencia_personal,
 			'direccion_referencia_personal' => $this->direccion_referencia_personal,
-			'location_id' => $this->location_id,
-			'city_id' => $this->city_id,
-			'office_id' => $this->office_id,
+			'office_id' => Auth::user()->people->office_id,
 		]);
 		$this->limpiar();
 		$this->mensaje='Usuario creado exitosamente';
@@ -93,9 +81,7 @@ class UserLivewire extends Component
 		$this->role_id = $user->role_id;
 
 		$this->ci = $human->ci;
-		$this->nombre = $human->nombre;
-		$this->paterno = $human->paterno;
-		$this->materno = $human->materno;
+		$this->nombre_completo = $human->nombre_completo;
 		$this->direccion = $human->direccion;
 		$this->telefono = $human->telefono;
 		$this->fecha_nacimiento = $human->fecha_nacimiento;
@@ -115,9 +101,6 @@ class UserLivewire extends Component
 		$this->telefono_referencia_personal = $human->telefono_referencia_personal;
 		$this->trabajo_referencia_personal = $human->trabajo_referencia_personal;
 		$this->direccion_referencia_personal = $human->direccion_referencia_personal;
-		$this->location_id = $human->location_id;
-		$this->city_id = $human->city_id;
-		$this->office_id = $human->office_id;
 
 		$this->accion = 'edit';
 		$this->modal = true;
@@ -134,9 +117,8 @@ class UserLivewire extends Component
 		]);
 		$human->update([
 			'ci' => $this->ci,
-			'nombre' => $this->nombre,
-			'paterno' => $this->paterno,
-			'materno' => $this->materno,
+			'nombre_completo' => $this->nombre_completo,
+			'password' => $this->password,
 			'direccion' => $this->direccion,
 			'telefono' => $this->telefono,
 			'fecha_nacimiento' => $this->fecha_nacimiento,
@@ -156,9 +138,6 @@ class UserLivewire extends Component
 			'telefono_referencia_personal' => $this->telefono_referencia_personal,
 			'trabajo_referencia_personal' => $this->trabajo_referencia_personal,
 			'direccion_referencia_personal' => $this->direccion_referencia_personal,
-			'location_id' => $this->location_id,
-			'city_id' => $this->city_id,
-			'office_id' => $this->office_id,
 		]);
 		$this->limpiar();
 		$this->mensaje='Usuario editado exitosamente';
@@ -179,9 +158,7 @@ class UserLivewire extends Component
 		$this->password = '';
 		$this->role_id = '';
 		$this->ci = '';
-		$this->nombre = '';
-		$this->paterno = '';
-		$this->materno = '';
+		$this->nombre_completo;
 		$this->direccion = '';
 		$this->telefono = '';
 		$this->fecha_nacimiento = '';
@@ -201,9 +178,6 @@ class UserLivewire extends Component
 		$this->telefono_referencia_personal = '';
 		$this->trabajo_referencia_personal = '';
 		$this->direccion_referencia_personal = '';
-		$this->location_id = '';
-		$this->city_id = '';
-		$this->office_id = '';
 
 		$this->modal = false;
 		$this->delete = false;

@@ -24,11 +24,9 @@
 	@error ('tamanyo') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 
-<div id="fuentes"></div>
-<div class="cont_fonts_svg"></div>
-<div class="cont_fonts_svg"><?php include('../public/fonts/materialdesignicons-webfont.svg'); ?></div>
+<div id="fuentes"><?php include('../public/fonts/materialdesignicons-webfont.blade.php'); ?></div>
 <script>
-	$('document').ready(function(){
-		fuentes();
+	$('#fuentes').on('click','.cont_svg',function() {
+		@this.set('icon',$(this).attr('name'));
 	});
 </script>

@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\Menu;
 use App\Models\Functionality;
 use App\Models\Privilege;
+use Auth;
 
 class RoleLivewire extends Component
 {
@@ -20,8 +21,8 @@ class RoleLivewire extends Component
 	public function render() {
 		return view(
 			'admin.role.index',[
-				'functionalities' => Functionality::get(),
-				'roles' => Role::get(),
+				'functionalities' => Auth::user()->role->functionalities,
+				'roles' => Role::where('id','>',1)->get(),
 				'menus' => Menu::get(),
 			])->layout('layouts.app',['me'=>$this->me]);
 	}

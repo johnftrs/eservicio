@@ -11,6 +11,11 @@
 </div>
 @endif
 <div class="form-group">
+	{!! Form::label('Serie') !!}
+	<input wire:model="serie" type="text" name="serie" placeholder="Inserte Serie" class="form-control">
+	@error ('serie') <span class="validacion">*Campo Obligatorio*</span> @enderror
+</div>
+<div class="form-group">
 	{!! Form::label('Monto') !!}
 	<input wire:model="monto" type="number" name="monto" placeholder="Inserte Monto" class="form-control">
 	@error ('monto') <span class="validacion">*Campo Obligatorio*</span> @enderror

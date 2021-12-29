@@ -4,26 +4,22 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Office;
-use App\Models\Location;
 
-class OfficeLivewire extends Component
-{
+class OfficeLivewire extends Component {
 	public $modal = false;
 	public $delete = false;
 	public $accion = 'store';
 	public $mensaje = '';
 	public $me = 'MOFF';
-	public $office_id, $nombre, $nit, $direccion, $coordenada, $location_id;
+	public $office_id, $nombre, $nit, $direccion;
 	public function render() {
 		return view(
 			'admin.office.index',[
-				'locations' => Location::get(),
 				'offices' => Office::get(),
 			])->layout('layouts.app',['me'=>$this->me]);
 	}
 	protected $rules = [
         'nombre' => 'required',
-        'location_id' => 'required',
     ];
 	public function create() {
 		$this->accion = 'store';
@@ -35,8 +31,6 @@ class OfficeLivewire extends Component
 			'nombre' => $this->nombre,
 			'nit' => $this->nit,
 			'direccion' => $this->direccion,
-			'coordenada' => $this->coordenada,
-			'location_id' => $this->location_id
 		]);
 		$this->limpiar();
 		$this->mensaje='Sucursal creada exitosamente';
@@ -47,8 +41,6 @@ class OfficeLivewire extends Component
 		$this->nombre = $office->nombre;
 		$this->nit = $office->nit;
 		$this->direccion = $office->direccion;
-		$this->coordenada = $office->coordenada;
-		$this->location_id = $office->location_id;
 
 		$this->accion = 'edit';
 		$this->modal = true;
@@ -60,11 +52,9 @@ class OfficeLivewire extends Component
 			'nombre' => $this->nombre,
 			'nit' => $this->nit,
 			'direccion' => $this->direccion,
-			'coordenada' => $this->coordenada,
-			'location_id' => $this->location_id
 		]);
 		$this->limpiar();
-		$this->mensaje='Sucursal creada exitosamente';
+		$this->mensaje='Sucursal editada exitosamente';
 	}
 	public function select($id) {
 		$this->office_id = $id;
@@ -74,14 +64,12 @@ class OfficeLivewire extends Component
 		Office::destroy($this->office_id);
 		$this->delete_id = null;
 		$this->delete = false;
-		$this->mensaje='Sucursal creada exitosamente';
+		$this->mensaje='Sucursal eliminada exitosamente';
 	}
 	public function limpiar() {
 		$this->nombre = '';
 		$this->nit = '';
 		$this->direccion = '';
-		$this->coordenada = '';
-		$this->location_id = '';
 
 		$this->modal = false;
 		$this->delete = false;

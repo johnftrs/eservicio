@@ -9,16 +9,16 @@
 	@error ('name') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="col-4">
-	@foreach($menus as $k=>$menu)
+	@foreach(\Auth::user()->role->functionalities_filtro_menu() as $k=>$func)
 	<?php $k++; ?>
 	<div class="col-1">
 		<div class="col-4 nr">
 			<div class="panel info-soft">
-				<div class="panel-heading"><label for="{{ $menu->code }}"><i class="fa fa-{{ $menu->icon }} fa-fw"></i> {{ $menu->label }}</label> <!--input type="checkbox" class="checkall" id={{ $menu->code }} --> </div>
+				<div class="panel-heading"><label for="{{ $func->menu->code }}"><i class="fa fa-{{ $func->menu->icon }} fa-fw"></i> {{ $func->menu->label }}</label> <!--input type="checkbox" class="checkall" id={{ $func->menu->code }} --> </div>
 				<div class="panel-body">
-					@foreach($functionalities = $menu->functionalities()->orderBy('id','asc')->get() as $functionality)
+					@foreach($functionalities = $func->menu->functionalities()->orderBy('id','asc')->get() as $functionality)
 					<div class="form-group">
-						<input wire:model="funciones.{{$functionality->id}}" type="checkbox" class="{{$menu->code}}" id="{{ $functionality->code }}" value="{{ $functionality->id }}">
+						<input wire:model="funciones.{{$functionality->id}}" type="checkbox" class="{{$func->menu->code}}" id="{{ $functionality->code }}" value="{{ $functionality->id }}">
 						
 						{!! Form::label($functionality->code,$functionality->label) !!}
 					</div>

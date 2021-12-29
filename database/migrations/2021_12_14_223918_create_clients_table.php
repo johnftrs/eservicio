@@ -28,10 +28,6 @@ class CreateClientsTable extends Migration
             $table->string('representante_email')->nullable();
             $table->string('representante_detalles')->nullable();
             $table->string('estado')->nullable();
-            $table->unsignedBigInteger('location_id')->nullable();
-            $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
-            $table->unsignedBigInteger('city_id')->nullable();
-            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
             $table->unsignedBigInteger('office_id')->nullable();
             $table->foreign('office_id')->references('id')->on('offices')->onDelete('cascade');
             $table->unsignedBigInteger('user_id')->nullable();

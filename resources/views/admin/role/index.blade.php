@@ -7,7 +7,7 @@
 	}
 	?>
 	<div class="card-header primary-low">
-		<h5 class="card-title">Roles</h5>
+		<h5 class="card-title"><i class="mdi mdi-key"></i>Roles</h5>
 		<button class="btn btn-min default" wire:click="create"><i class="mdi mdi-plus-circle-outline"></i>agregar</button>
 	</div>
 	<div class="card-body">
@@ -58,7 +58,7 @@
 	@if( $modal )
 	<div class="modal-dialog panel primary visible">
 		<div class="panel-heading">
-			<h4 class="panel-title"><b style="color: white;">Registro de Sucursales</b></h4>
+			<h4 class="panel-title"><b style="color: white;">Registro de Roles</b></h4>
 			<a class="btn-close btn danger" wire:click="limpiar">&times;</a>
 		</div>
 		<div class="panel-body" >

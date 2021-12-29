@@ -7,7 +7,7 @@
 	}
 	?>
 	<div class="card-header primary-low">
-		<h5 class="card-title">Sucursales</h5>
+		<h5 class="card-title"><i class="mdi mdi-city"></i>Sucursales</h5>
 		<button class="btn btn-min default" wire:click="create"><i class="mdi mdi-plus-circle-outline"></i>agregar</button>
 	</div>
 	<div class="card-body">
@@ -17,10 +17,8 @@
 					<th>Nombre</th>
 					<th>NIT</th>
 					<th>Dirección</th>
-					<th>Coordenada</th>
-					<th>Localidad</th>
-					@if ($editar)<th>Editar</th>@endif
-					@if ($eliminar)<th>Borrar</th>@endif
+					@if ($editar)<th class="centrado">Editar</th>@endif
+					@if ($eliminar)<th class="centrado">Borrar</th>@endif
 				</thead>
 				<tbody>
 					@foreach($offices as $office)
@@ -28,8 +26,6 @@
 						<td>{{$office->nombre}}</td>
 						<td>{{$office->nit}}</td>
 						<td>{{$office->direccion}}</td>
-						<td>{{$office->coordenada}}</td>
-						<td>{{$office->location->nombre}}</td>
 						@if ($editar)
 						<td class="centrado">
 							<button class="btn btn-min warning" wire:click="edit({{$office->id}})"><i class="mdi mdi-pencil"></i>Editar</button>

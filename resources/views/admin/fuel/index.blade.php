@@ -7,7 +7,7 @@
 	}
 	?>
 	<div class="card-header primary-low">
-		<h5 class="card-title">Combustibles</h5>
+		<h5 class="card-title"><i class="mdi mdi-fuel"></i>Combustibles</h5>
 		<button class="btn btn-min default" wire:click="create"><i class="mdi mdi-plus-circle-outline"></i>agregar</button>
 	</div>
 	<div class="card-body">
@@ -16,8 +16,9 @@
 				<thead>
 					<th>Nombre</th>
 					<th>Unidad</th>
-					<th>Precio</th>
-					<th class="centrado">Tanques</th>
+					<th>Precio Compra</th>
+					<th>Precio Venta</th>
+					<th class="centrado">Línea de Distribución</th>
 					@if ($editar)<th class="centrado">Editar</th>@endif
 					@if ($eliminar)<th class="centrado">Borrar</th>@endif
 				</thead>
@@ -26,9 +27,10 @@
 					<tr>
 						<td>{{$fuel->nombre}}</td>
 						<td>{{$fuel->unidad}}</td>
-						<td>Bs. {{$fuel->precio}}</td>
+						<td>Bs. {{$fuel->precio_compra}}</td>
+						<td>Bs. {{$fuel->precio_venta}}</td>
 						<td class="centrado">
-							<button class="btn btn-min info" wire:click="tanques({{$fuel->id}})"><i class="mdi mdi-fuel"></i>Tanques</button>
+							<button class="btn btn-min info" wire:click="tanques({{$fuel->id}})"><i class="mdi mdi-pipe"></i>Línea</button>
 						</td>
 						@if ($editar)
 						<td class="centrado">

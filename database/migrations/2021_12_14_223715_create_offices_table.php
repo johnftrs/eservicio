@@ -18,9 +18,6 @@ class CreateOfficesTable extends Migration
             $table->string('nombre');
             $table->string('nit')->nullable();
             $table->string('direccion')->nullable();
-            $table->string('coordenada')->nullable();
-            $table->unsignedBigInteger('location_id')->nullable();
-            $table->foreign('location_id')->references('id')->on('locations')->onDelete('set null');
         });
     }
 

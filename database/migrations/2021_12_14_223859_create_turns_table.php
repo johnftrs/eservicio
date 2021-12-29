@@ -15,12 +15,12 @@ class CreateTurnsTable extends Migration
     {
         Schema::create('turns', function (Blueprint $table) {
             $table->id();
-            $table->date('dia_inicio')->nullable();
-            $table->date('dia_fin')->nullable();
-            $table->unsignedBigInteger('hour_id')->nullable();
-            $table->foreign('hour_id')->references('id')->on('hours')->onDelete('set null');
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->string('nombre',20)->nullable();
+            $table->string('estado',20)->nullable();
+            $table->time('hora_inicio', $precision = 0);
+            $table->time('hora_fin', $precision = 0);
+            $table->unsignedBigInteger('office_id')->nullable();
+            $table->foreign('office_id')->references('id')->on('offices')->onDelete('set null');
         });
     }
 

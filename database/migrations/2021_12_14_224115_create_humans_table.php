@@ -16,11 +16,11 @@ class CreateHumansTable extends Migration
         Schema::create('humans', function (Blueprint $table) {
             $table->id();
             $table->string('ci',20)->nullable();
-            $table->string('nombre')->nullable();
-            $table->string('paterno')->nullable();
-            $table->string('materno')->nullable();
+            $table->string('nombre_completo')->nullable();
+            $table->string('password')->nullable();
             $table->string('direccion')->nullable();
             $table->string('telefono',100)->nullable();
+            $table->string('telefono2',100)->nullable();
             $table->date('fecha_nacimiento')->nullable();
             $table->date('fecha_ingreso')->nullable();
             $table->string('nivel_estudio')->nullable();
@@ -38,10 +38,6 @@ class CreateHumansTable extends Migration
             $table->string('telefono_referencia_personal')->nullable();
             $table->string('trabajo_referencia_personal')->nullable();
             $table->string('direccion_referencia_personal')->nullable();
-            $table->unsignedBigInteger('location_id')->nullable();
-            $table->foreign('location_id')->references('id')->on('locations')->onDelete('cascade');
-            $table->unsignedBigInteger('city_id')->nullable();
-            $table->foreign('city_id')->references('id')->on('cities')->onDelete('cascade');
             $table->unsignedBigInteger('office_id')->nullable();
             $table->foreign('office_id')->references('id')->on('offices')->onDelete('cascade');
             $table->timestamps();

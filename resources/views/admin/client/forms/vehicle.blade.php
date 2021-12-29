@@ -1,5 +1,5 @@
 <div class="form-group">
-	{!! Form::label('Placa*') !!}
+	{!! Form::label('Placa*','',['class'=>'naranja']) !!}
 	<input wire:model="v_placa" type="text" name="v_placa" placeholder="Inserte Placa" class="form-control">
 	@error ('v_placa') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
@@ -24,8 +24,8 @@
 	@error ('v_color') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="form-group">
-	{!! Form::label('Estado') !!}
-	<select wire:model="v_estado" class="form-control">
+	{!! Form::label('Estado*','',['class'=>'naranja']) !!}
+	<select wire:model="v_estado" name="v_estado" class="form-control">
 		<option value="">-- Seleccione una opción --</option>
 		<option value="Activo">Activo</option>
 		<option value="Inactivo">Inactivo</option>

@@ -16,12 +16,12 @@ class FuelLivewire extends Component
 	public $mensaje = '';
 	public $clase = 'fuel';
 	public $me = 'MFUE';
-	public $modelo_id, $nombre, $precio, $unidad;
+	public $modelo_id, $nombre, $precio_compra, $precio_venta, $unidad;
 	public $h_modelo_id, $h_nombre, $h_total, $h_actual;
 	public function render() {
 		return view(
 			'admin.fuel.index',[
-				'fuels' => Fuel::get(),
+				'fuels' => Fuel::where('office_id',Auth::user()->people->office_id)->get(),
 				'tanks' => Tank::get(),
 			])->layout('layouts.app',['me'=>$this->me]);
 	}
@@ -33,12 +33,14 @@ class FuelLivewire extends Component
 	public function store() {
 		$this->validate([
 			'nombre' => 'required',
-			'precio' => 'required',
+			'precio_venta' => 'required',
 		]);
 		Fuel::create([
 			'nombre' => $this->nombre,
-			'precio' => $this->precio,
+			'precio_compra' => $this->precio_compra,
+			'precio_venta' => $this->precio_venta,
 			'unidad' => $this->unidad,
+			'office_id' => Auth::user()->people->office_id,
 		]);
 		$this->limpiar();
 		$this->mensaje='Combustible creado exitosamente';
@@ -47,7 +49,8 @@ class FuelLivewire extends Component
 		$fuel = Fuel::find($id);
 		$this->modelo_id = $fuel->id;
 		$this->nombre = $fuel->nombre;
-		$this->precio = number_format($fuel->precio, 2, '.', '');
+		$this->precio_compra = number_format($fuel->precio_compra, 2, '.', '');
+		$this->precio_venta = number_format($fuel->precio_venta, 2, '.', '');
 		$this->unidad = $fuel->unidad;
 
 		$this->accion = 'edit';
@@ -58,11 +61,11 @@ class FuelLivewire extends Component
 		$fuel = Fuel::find($this->modelo_id);
 		$this->validate([
 			'nombre' => 'required',
-			'precio' => 'required',
+			'precio_venta' => 'required',
 		]);
 		$fuel->update([
 			'nombre' => $this->nombre,
-			'precio' => $this->precio,
+			'precio_venta' => $this->precio_venta,
 			'unidad' => $this->unidad,
 		]);
 		$this->limpiar();
@@ -81,7 +84,8 @@ class FuelLivewire extends Component
 	}
 	public function limpiar() {
 		$this->nombre = '';
-		$this->precio = '';
+		$this->precio_compra = '';
+		$this->precio_venta = '';
 		$this->unidad = '';
 		$this->h_nombre = '';
 		$this->h_total = '';
@@ -108,6 +112,7 @@ class FuelLivewire extends Component
 			'total' => $this->h_total,
 			'actual' => $this->h_actual,
 			'fuel_id' => $this->modelo_id,
+			'office_id' => Auth::user()->people->office_id,
 		]);
 		$this->limpiar();
 		$this->mensaje='Tanque creado exitosamente';

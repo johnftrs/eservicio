@@ -7,7 +7,7 @@
 	}
 	?>
 	<div class="card-header primary-low">
-		<h5 class="card-title">Clientes</h5>
+		<h5 class="card-title"><i class="mdi mdi-human-handsup"></i>Clientes</h5>
 		<button class="btn btn-min default" wire:click="create"><i class="mdi mdi-plus-circle-outline"></i>agregar</button>
 	</div>
 	<div class="card-body">
@@ -19,7 +19,6 @@
 					<th>Dirección</th>
 					<th class="centrado">Telefono</th>
 					<th class="centrado">Telefono 2</th>
-					<th class="centrado">Localidad</th>
 					<th class="centrado">Cardex</th>
 					@if ($editar)<th class="centrado">Editar</th>@endif
 					@if ($eliminar)<th class="centrado">Borrar</th>@endif
@@ -32,7 +31,6 @@
 						<td>{{$client->direccion}}</td>
 						<td class="centrado">{{$client->telefono}}</td>
 						<td class="centrado">{{$client->telefono2}}</td>
-						<td class="centrado">{{$client->location->nombre}}</td>
 						<td class="centrado">
 							<button class="btn btn-min info" wire:click.escape="kardex({{$client->id}})"><i class="mdi mdi-clipboard-text"></i>Cardex</button>
 						</td>

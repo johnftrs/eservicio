@@ -173,8 +173,11 @@ $('#input_buscador').keyup(function(e){
 	}
 });
 function desplegar_log(i){
-	$(i).parent().addClass('visible');
-	cortina();
+	if ($(i).parent().hasClass('visible')) {
+		$(i).parent().removeClass('visible');
+	} else {
+		$(i).parent().addClass('visible');
+	}
 }
 $('body').on('click','li.nav_menu>a',function (e) {
 	if (e.target == this) {

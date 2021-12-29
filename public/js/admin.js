@@ -20,14 +20,12 @@ function toUpper(texto) {
 		});
 	}
 }
-function fuentes() {
+/*function fuentes() {
 	$('glyph').each(function(index, glyph) {
 		$('#fuentes').append('<div class="cont_svg" name="'+$(glyph).attr('glyph-name')+'"><svg class="svg_menu" width="512" height="512" viewBox="0 -60 512 512"><path d="'+$(glyph).attr('d')+'"></path></svg><span>'+$(glyph).attr('glyph-name')+'</span></div>');
 	});
-}
-$('#fuentes').on('click','.cont_svg',function() {
-	$('input[name="icon"]').val($(this).attr('name'));
-});
+}*/
+
 $.datepicker.regional['es'] = {
 	closeText: 'Cerrar',
 	prevText: '< Ant',
@@ -39,7 +37,7 @@ $.datepicker.regional['es'] = {
 	dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
 	dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
 	weekHeader: 'Sm',
-	dateFormat: 'yy/mm/dd',
+	dateFormat: 'dd/mm/y',
 	yearRange: parseInt((new Date).getFullYear()-70)+':'+parseInt((new Date).getFullYear()+1),
 	firstDay: 1,
 	isRTL: false,
@@ -65,7 +63,7 @@ function justAlfa(e){
 }
 $('body').on('focus','input.datepicker',function () {
 	$(this).datepicker({
-		dateFormat: 'yy/mm/dd',
+		dateFormat: 'dd/mm/y',
 		changeMonth: true,
 		changeYear: true
 	}).focus();

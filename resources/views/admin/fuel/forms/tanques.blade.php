@@ -34,8 +34,8 @@
 	</div>
 	<div class="card">
 		<div class="card-header primary-low">
-			<h5 class="card-title">Tanques</h5>
-			<button class="btn btn-min default" wire:click="h_create"><i class="mdi mdi-plus-circle-outline"></i>Nuevo Tanque</button>
+			<h5 class="card-title"><i class="mdi mdi-pipe"></i>Líneas de Distribución</h5>
+			<button class="btn btn-min default" wire:click="h_create"><i class="mdi mdi-plus-circle-outline"></i>Nueva Línea</button>
 		</div>
 		<div class="card-body">
 			<div class="table-responsive">

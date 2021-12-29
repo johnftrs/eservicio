@@ -1,7 +1,7 @@
 <div class="col-4">
 	<div class="col-2">
 		<div class="form-group">
-			{!! Form::label('Razón Social') !!}
+			{!! Form::label('Razón Social*','',['class'=>'naranja']) !!}
 			<input wire:model="nombre" type="text" name="nombre" placeholder="Inserte Nombre" class="form-control">
 			@error ('nombre') <span class="validacion">*Campo Obligatorio*</span> @enderror
 		</div>
@@ -35,8 +35,8 @@
 	</div>
 </div>
 <div class="form-group">
-	{!! Form::label('Estado') !!}
-	<select wire:model="estado" class="form-control">
+	{!! Form::label('Estado*','',['class'=>'naranja']) !!}
+	<select wire:model="estado" name="estado" class="form-control">
 		<option value="">-- Seleccione una opción --</option>
 		<option value="Activo">Activo</option>
 		<option value="Inactivo">Inactivo</option>

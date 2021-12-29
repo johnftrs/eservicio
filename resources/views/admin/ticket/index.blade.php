@@ -1,14 +1,15 @@
 <div class="card">
-	<?php $editar=false; $eliminar=false;
+	<?php $crear=false; $editar=false; $eliminar=false;
 	foreach (Auth::user()->role->functionalities as $func) {
-		if ($func->code=='EOFF'){ $editar=true; }
-		if ($func->code=='DOFF'){ $eliminar=true; }
+		if ($func->code=='CTIC'){ $crear=true; }
+		if ($func->code=='ETIC'){ $editar=true; }
+		if ($func->code=='DTIC'){ $eliminar=true; }
 	}
 	?>
 	<div class="card-header primary-low">
-		<h5 class="card-title">Vales</h5>
-		<button class="btn btn-min default" wire:click="activar"><i class="mdi mdi-check"></i>Activar Vale</button>
-		<button class="btn btn-min default" wire:click="create"><i class="mdi mdi-plus-circle-outline"></i>agregar</button>
+		<h5 class="card-title"><i class="mdi mdi-ticket-confirmation"></i>Vales</h5>
+		{{--<button class="btn btn-min default" wire:click="activar"><i class="mdi mdi-check"></i>Usar Vale</button>--}}
+		@if ($crear)<button class="btn btn-min default" wire:click="create"><i class="mdi mdi-plus-circle-outline"></i>agregar</button>@endif
 	</div>
 	<div class="card-body">
 		<div class="table-responsive">
@@ -29,7 +30,7 @@
 				<tbody>
 					@foreach($tickets as $ticket)
 					<tr class="{{$ticket->estado=='Inactivo'?'rojo':( $ticket->estado=='Usado'?'verde':'' )}}">
-						<td class="centrado">{{$ticket->codigo}}</td>
+						<td class="centrado">{{$ticket->codigo}} {{$ticket->serie}}</td>
 						<td class="centrado">{{$ticket->monto}}</td>
 						<td class="centrado">{{$ticket->estado}}</td>
 						<td>{{$ticket->fecha_uso}}</td>
@@ -85,7 +86,7 @@
 	@if( $actiModal )
 	<div class="modal-dialog panel primary visible">
 		<div class="panel-heading">
-			<h4 class="panel-title"><b style="color: white;">Activar Vale</b></h4>
+			<h4 class="panel-title"><b style="color: white;">Usar Vale</b></h4>
 			<a class="btn-close btn danger" wire:click="limpiar">&times;</a>
 		</div>
 		<div class="panel-body" >

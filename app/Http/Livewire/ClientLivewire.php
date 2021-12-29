@@ -4,8 +4,6 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Client;
-use App\Models\City;
-use App\Models\Location;
 use App\Models\Office;
 use App\Models\Driver;
 use App\Models\Vehicle;
@@ -20,16 +18,13 @@ class ClientLivewire extends Component
 	public $mensaje = '';
 	public $clase = 'client';
 	public $me = 'MCLI';
-	public $modelo_id, $nombre, $nit, $correo, $direccion, $telefono, $telefono2, $estado, $representante_legal, $representante_ci, $representante_telefono, $representante_telefono2, $representante_email, $representante_detalles;
-	public $d_modelo_id, $d_ci, $d_nombre, $d_paterno, $d_materno, $d_licencia, $d_estado;
-	public $v_modelo_id, $v_placa, $v_marca, $v_modelo, $v_anyo, $v_color, $v_estado;
+	public $modelo_id, $nombre, $nit, $correo, $direccion, $telefono, $telefono2, $estado='Activo', $representante_legal, $representante_ci, $representante_telefono, $representante_telefono2, $representante_email, $representante_detalles;
+	public $d_modelo_id, $d_ci, $d_nombre, $d_paterno, $d_materno, $d_licencia, $d_estado='Activo';
+	public $v_modelo_id, $v_placa, $v_marca, $v_modelo, $v_anyo, $v_color, $v_estado='Activo';
 	public function render() {
 		return view(
 			'admin.client.index',[
-				'clients' => Client::orderBy('nombre','asc')->get(),
-				'cities' => City::get(),
-				'locations' => Location::get(),
-				'offices' => Office::get(),
+				'clients' => Client::where('office_id',Auth::user()->people->office_id)->orderBy('nombre','asc')->get(),
 				'drivers' => Driver::get(),
 				'vehicles' => Vehicle::get(),
 			])->layout('layouts.app',['me'=>$this->me]);
@@ -58,8 +53,6 @@ class ClientLivewire extends Component
 			'representante_telefono2' => $this->representante_telefono2,
 			'representante_email' => $this->representante_email,
 			'representante_detalles' => $this->representante_detalles,
-			'city_id' => Auth::user()->people->city_id,
-			'location_id' => Auth::user()->people->location_id,
 			'office_id' => Auth::user()->people->office_id,
 			'user_id' => Auth::id(),
 		]);
@@ -107,8 +100,6 @@ class ClientLivewire extends Component
 			'representante_telefono2' => $this->representante_telefono2,
 			'representante_email' => $this->representante_email,
 			'representante_detalles' => $this->representante_detalles,
-			'city_id' => Auth::user()->people->city_id,
-			'location_id' => Auth::user()->people->location_id,
 			'office_id' => Auth::user()->people->office_id,
 			'user_id' => Auth::id(),
 		]);

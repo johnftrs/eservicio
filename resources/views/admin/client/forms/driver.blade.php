@@ -1,5 +1,5 @@
 <div class="form-group">
-	{!! Form::label('Nombre*') !!}
+	{!! Form::label('Nombre*','',['class'=>'naranja']) !!}
 	<input wire:model="d_nombre" type="text" name="d_nombre" placeholder="Inserte Nombre" class="form-control">
 	@error ('d_nombre') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
@@ -24,8 +24,8 @@
 	@error ('d_licencia') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="form-group">
-	{!! Form::label('Estado') !!}
-	<select wire:model="d_estado" class="form-control">
+	{!! Form::label('Estado*','',['class'=>'naranja']) !!}
+	<select wire:model="d_estado" name="d_estado" class="form-control">
 		<option value="">-- Seleccione una opción --</option>
 		<option value="Activo">Activo</option>
 		<option value="Inactivo">Inactivo</option>

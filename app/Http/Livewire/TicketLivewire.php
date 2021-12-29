@@ -6,8 +6,7 @@ use Livewire\Component;
 use App\Models\Ticket;
 use App\Models\Driver;
 use App\Models\Vehicle;
-use App\Models\Hosepipe;
-use App\Models\Location;
+use App\Models\Dispenser;
 use Carbon\Carbon;
 use Auth;
 
@@ -19,22 +18,16 @@ class TicketLivewire extends Component
 	public $accion = 'store';
 	public $mensaje = '';
 	public $me = 'MTIC';
-	public $modelo_id, $codigo, $codigo_fin, $monto, $estado, $tipo, $fecha_uso, $driver_id, $vehicle_id, $hosepipe_id, $turn_id;
+	public $modelo_id, $codigo, $serie, $codigo_fin, $monto, $estado, $fecha_uso, $driver_id, $vehicle_id, $dispenser_id, $turn_id;
 	public function render() {
 		return view(
 			'admin.ticket.index',[
-				'locations' => Location::get(),
-				'tickets' => Ticket::get(),
-				'drivers' => Driver::get(),
-				'vehicles' => Vehicle::get(),
-				'hosepipes' => Hosepipe::get(),
+				'tickets' => Ticket::where('office_id',Auth::user()->people->office_id)->get(),
+				'drivers' => Driver::join('clients', 'clients.id', '=', 'drivers.client_id')->select('drivers.*')->where('clients.office_id',Auth::user()->people->office_id)->get(),
+				'vehicles' => Vehicle::join('clients', 'clients.id', '=', 'vehicles.client_id')->select('vehicles.*')->where('clients.office_id',Auth::user()->people->office_id)->get(),
+				'dispensers' => Dispenser::where('office_id',Auth::user()->people->office_id)->get(),
 			])->layout('layouts.app',['me'=>$this->me]);
 	}
-	protected $rules = [
-		'codigo' => 'required',
-		'monto' => 'required',
-		'estado' => 'required',
-	];
 	public function create() {
 		$this->accion = 'store';
 		$this->modal = true;
@@ -43,14 +36,18 @@ class TicketLivewire extends Component
 		if ($this->codigo_fin == null) {
 			$this->codigo_fin = $this->codigo;
 		}
-		$this->validate();
+		$this->validate([
+			'codigo' => 'required',
+			'estado' => 'required',
+		]);
 		for ($i=intval($this->codigo); $i <= intval($this->codigo_fin); $i++) {
 			Ticket::create([
 				'codigo' => $i,
+				'serie' => $this->serie,
 				'monto' => $this->monto,
 				'estado' => $this->estado,
-				'tipo' => '',
 				'user_id' => Auth::id(),
+				'office_id' => Auth::user()->people->office_id,
 			]); 
 		}
 		$this->limpiar();
@@ -64,18 +61,20 @@ class TicketLivewire extends Component
 			'codigo' => 'required',
 			'driver_id' => 'required',
 			'vehicle_id' => 'required',
-			'hosepipe_id' => 'required',
+			'dispenser_id' => 'required',
 		]);
 		$ticket = Ticket::find($this->codigo);
 		if (isset($ticket->id)) {
 			if ($ticket->estado == 'Activo') {
 				$ticket->update([
 					'codigo' => $this->codigo,
+					'serie' => $this->serie,
+					'monto' => $this->monto,
 					'estado' => 'Usado',
 					'fecha_uso' => Carbon::now(),
 					'driver_id' => $this->driver_id,
 					'vehicle_id' => $this->vehicle_id,
-					'hosepipe_id' => $this->hosepipe_id,
+					'dispenser_id' => $this->dispenser_id,
 					'user_id' => Auth::id(),
 				]);
 				$this->mensaje = 'Ticket '.$this->codigo.' Activado Exitosamente';
@@ -92,21 +91,24 @@ class TicketLivewire extends Component
 		$ticket = Ticket::find($id);
 		$this->modelo_id = $ticket->id;
 		$this->codigo = $ticket->codigo;
+		$this->serie = $ticket->serie;
 		$this->monto = $ticket->monto;
 		$this->estado = $ticket->estado;
-		$this->tipo = $ticket->tipo;
 
 		$this->accion = 'edit';
 		$this->modal = true;
 	}
 	public function update() {
 		$ticket = Ticket::find($this->modelo_id);
-		$this->validate();
+		$this->validate([
+			'codigo' => 'required',
+			'estado' => 'required',
+		]);
 		$ticket->update([
 			'codigo' => $this->codigo,
+			'serie' => $this->serie,
 			'monto' => $this->monto,
 			'estado' => $this->estado,
-			'tipo' => $this->tipo,
 			'user_id' => Auth::id(),
 		]);
 		$this->limpiar();
@@ -126,13 +128,13 @@ class TicketLivewire extends Component
 		$this->nombre = '';
 		$this->codigo = '';
 		$this->codigo_fin = '';
+		$this->serie = '';
 		$this->monto = '';
 		$this->estado = '';
-		$this->tipo = '';
 		$this->fecha_uso = '';
 		$this->driver_id = '';
 		$this->vehicle_id = '';
-		$this->hosepipe_id = '';
+		$this->dispenser_id = '';
 		$this->turn_id = '';
 
 		$this->modal = false;
