@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Office extends Model
 {
     use HasFactory;
-	protected $fillable = ['nombre','nit','direccion'];
+	protected $fillable = ['nombre','nit','telefono','ciudad','direccion'];
 	public $timestamps = false;
 
 	public function peoples() {

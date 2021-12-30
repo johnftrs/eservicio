@@ -7,13 +7,18 @@ use App\Models\Dispenser;
 use App\Models\Report;
 use App\Models\Accounting;
 use App\Models\Turn;
+use App\Models\Ticket;
+use Carbon\Carbon;
 use Auth;
+use PDF;
 
 class ReportLivewire extends Component {
     public $modal = false;
     public $delete = false;
     public $accion = 'store';
+    public $url_pdf;
     public $dispensers;
+    public $tickets;
     public $meters;
     public $suma;
     public $mensaje = '';
@@ -24,8 +29,9 @@ class ReportLivewire extends Component {
         return view(
             'admin.report.index',[
                 'dispensers_list' => Dispenser::where('office_id',Auth::user()->people->office_id)->orderBy('id','asc')->get(),
-                'turns' => Turn::where('office_id',Auth::user()->people->office_id)->orderBy('nombre','asc')->get(),
-                'reports' => Report::get(),
+                'turns' => Turn::where('office_id',Auth::user()->people->office_id)->orderBy('id','asc')->get(),
+                'tickets_list' => Ticket::where('office_id',Auth::user()->people->office_id)->where('user_id',Auth::id())->where('estado','Usado')->orderBy('id','asc')->get(),
+                'reports' => Report::where('user_id',Auth::id())->orderBy('id','desc')->get(),
             ])->layout('layouts.app',['me'=>$this->me]);
     }
     public function create() {
@@ -41,7 +47,7 @@ class ReportLivewire extends Component {
         if ($this->suma==null) { $this->suma = 0; }
         if ($this->tarjeta==null) { $this->tarjeta = 0; }
         $report = Report::create([
-            'fecha' => $this->fecha,
+            'fecha' => Carbon::createFromFormat('d/m/y', $this->fecha)->format('Y-m-d'),
             'monto_total' => $this->suma + $this->tarjeta,
             'efectivo' => $this->suma,
             'tarjeta' => $this->tarjeta,
@@ -54,6 +60,7 @@ class ReportLivewire extends Component {
             'monedas' => ($this->monedas==null)?0:$this->monedas,
             'user_id' => Auth::id(),
             'turn_id' => $this->turn_id,
+            'office_id' => Auth::user()->people->office_id,
         ]);
         if ($this->dispensers!=null) {
             foreach ($this->dispensers as $key => $dis) {
@@ -67,14 +74,27 @@ class ReportLivewire extends Component {
                         'user_id' => Auth::id(),
                         'report_id' => $report->id,
                         'dispenser_id' => $dispenser->id,
+                        'office_id' => Auth::user()->people->office_id,
                     ]);
                     $dispenser->meter = $this->meters[$dis];
                     $dispenser->update();
                 }
             }
         }
+        if ($this->tickets!=null) {
+            foreach ($this->tickets as $key => $tick) {
+                if ($tick) {
+                    $ticket = Ticket::find($tick);
+                    $ticket->update([
+                        'estado' => 'Registrado',
+                        'report_id' => $report->id,
+                    ]);
+                }
+            }
+        }
         $this->limpiar();
         $this->mensaje='Arqueo creado exitosamente';
+        $this->openModalPDF($report->id);
     }
     public function edit($id) {
         $report = Report::find($id);
@@ -146,5 +166,19 @@ class ReportLivewire extends Component {
 
         $this->modal = false;
         $this->delete = false;
+    }
+    public function openModalPDF($report_id) {
+        $report = Report::find($report_id);
+        $this->url_pdf = 'admin/ARQUEO-PDF/'.$report_id;
+        $pdf = PDF::loadView('pdf.arqueo', compact('report'));
+        //return view('pdf.arqueo',['report'=>$report]);
+        return $pdf->setPaper('letter', 'portrait')->stream('Arqueo.pdf');
+        //return "pdf";
+    }
+    public function test_openModalPDF($report_id) {
+        $report = Report::find($report_id);
+        $this->url_pdf = 'admin/ARQUEO-PDF/'.$report_id;
+        $pdf = PDF::loadView('pdf.arqueo', compact('report'));
+        return view('pdf.arqueo',['report'=>$report]);
     }
 }

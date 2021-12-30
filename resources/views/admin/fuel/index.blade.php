@@ -4,8 +4,7 @@
 	foreach (Auth::user()->role->functionalities as $func) {
 		if ($func->code=='ECLI'){ $editar=true; }
 		if ($func->code=='DCLI'){ $eliminar=true; }
-	}
-	?>
+	} ?>
 	<div class="card-header primary-low">
 		<h5 class="card-title"><i class="mdi mdi-fuel"></i>Combustibles</h5>
 		<button class="btn btn-min default" wire:click="create"><i class="mdi mdi-plus-circle-outline"></i>agregar</button>

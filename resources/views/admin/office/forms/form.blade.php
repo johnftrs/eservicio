@@ -4,9 +4,19 @@
 	@error ('nombre') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="form-group">
+	{!! Form::label('Teléfono') !!}
+	<input wire:model="telefono" type="text" name="telefono" placeholder="Inserte Nombre" class="form-control">
+	@error ('telefono') <span class="validacion">*Campo Obligatorio*</span> @enderror
+</div>
+<div class="form-group">
 	{!! Form::label('NIT') !!}
 	<input wire:model="nit" type="text" name="nit" placeholder="Inserte Nombre" class="form-control">
 	@error ('nit') <span class="validacion">*Campo Obligatorio*</span> @enderror
+</div>
+<div class="form-group">
+	{!! Form::label('Ciudad') !!}
+	<input wire:model="ciudad" type="text" name="ciudad" placeholder="Inserte Nombre" class="form-control">
+	@error ('ciudad') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="form-group">
 	{!! Form::label('Dirección') !!}

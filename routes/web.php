@@ -45,3 +45,5 @@ Route::get('/admin/fuel',FuelLivewire::class)->middleware('auth');
 Route::get('/admin/arching',ReportLivewire::class)->middleware('auth');
 Route::get('/admin/turn',TurnLivewire::class)->middleware('auth');
 Route::get('/admin/activar/ticket/{variable?}',ActivadorLivewire::class)->middleware('auth');
+Route::get('/admin/ARQUEO-PDF/{report_id?}', [ReportLivewire::class, 'openModalPDF'])->middleware('auth');
+Route::get('/admin/TEST-ARQUEO-PDF/{report_id?}', [ReportLivewire::class, 'test_openModalPDF'])->middleware('auth');

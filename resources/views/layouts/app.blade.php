@@ -60,7 +60,7 @@
         </button>
         <ul id="ul_est">
           @foreach (\App\Models\Ticket::get() as $ticket)
-            <li class="{{$ticket->estado=='Inactivo'?'rojo':($ticket->estado=='Usado'?'verde':'')}}">
+            <li class="{{$ticket->estado}}">
               <a href="{!!url('admin/activar/ticket/'.$ticket->id)!!}" class="{{$ticket->codigo}}">Vale: {{$ticket->codigo}} {{$ticket->serie}}<span>{{$ticket->estado}}</span></a>
             </li>
             @endforeach

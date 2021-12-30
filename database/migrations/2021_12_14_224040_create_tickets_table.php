@@ -30,6 +30,8 @@ class CreateTicketsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('office_id')->nullable();
             $table->foreign('office_id')->references('id')->on('offices')->onDelete('set null');
+            $table->unsignedBigInteger('report_id')->nullable();
+            $table->foreign('report_id')->references('id')->on('reports')->onDelete('set null');
             $table->timestamps();
         });
     }

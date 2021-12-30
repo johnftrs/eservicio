@@ -11,7 +11,7 @@ class OfficeLivewire extends Component {
 	public $accion = 'store';
 	public $mensaje = '';
 	public $me = 'MOFF';
-	public $office_id, $nombre, $nit, $direccion;
+	public $office_id, $nombre, $nit, $telefono, $ciudad, $direccion;
 	public function render() {
 		return view(
 			'admin.office.index',[
@@ -30,6 +30,8 @@ class OfficeLivewire extends Component {
 		Office::create([
 			'nombre' => $this->nombre,
 			'nit' => $this->nit,
+			'telefono' => $this->telefono,
+			'ciudad' => $this->ciudad,
 			'direccion' => $this->direccion,
 		]);
 		$this->limpiar();
@@ -40,6 +42,8 @@ class OfficeLivewire extends Component {
 		$this->office_id = $office->id;
 		$this->nombre = $office->nombre;
 		$this->nit = $office->nit;
+		$this->telefono = $office->telefono;
+		$this->ciudad = $office->ciudad;
 		$this->direccion = $office->direccion;
 
 		$this->accion = 'edit';
@@ -51,6 +55,8 @@ class OfficeLivewire extends Component {
 		$office->update([
 			'nombre' => $this->nombre,
 			'nit' => $this->nit,
+			'telefono' => $this->telefono,
+			'ciudad' => $this->ciudad,
 			'direccion' => $this->direccion,
 		]);
 		$this->limpiar();
@@ -69,6 +75,8 @@ class OfficeLivewire extends Component {
 	public function limpiar() {
 		$this->nombre = '';
 		$this->nit = '';
+		$this->telefono = '';
+		$this->ciudad = '';
 		$this->direccion = '';
 
 		$this->modal = false;

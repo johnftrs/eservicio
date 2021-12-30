@@ -14,18 +14,30 @@
 	</select>
 	@error ('turn_id') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
+<div class="separadorNota"><span>VALES</span></div>
+<div class="col-4">
+	@foreach($tickets_list as $k=>$ticket)
+	<div class="dispensers_list">
+		<label for="ticket_{{ $ticket->id }}">Vale {{$ticket->codigo}}{{$ticket->serie}}</label>
+		<input wire:model="tickets.{{$ticket->id}}" type="checkbox" id="ticket_{{ $ticket->id }}" value="{{ $ticket->id }}">
+		<label for="ticket_{{ $ticket->id }}">:${{$ticket->monto}}</label>
+	</div>
+	@endforeach
+</div>
+<br><br>
 <div class="separadorNota"><span>DISPENSERS</span></div>
 <div class="col-4">
 	@foreach($dispensers_list as $k=>$dispenser)
 	<div class="dispensers_list">
-		<label for="{{ $dispenser->id }}">{{ $dispenser->nombre }}</label>
-		<input wire:model="dispensers.{{$dispenser->id}}" type="checkbox" id="{{ $dispenser->id }}" value="{{ $dispenser->id }}">
+		<label for="dispenser_{{ $dispenser->id }}">{{ $dispenser->nombre }}</label>
+		<input wire:model="dispensers.{{$dispenser->id}}" type="checkbox" id="dispenser_{{ $dispenser->id }}" value="{{ $dispenser->id }}">
 	</div>
 	@endforeach
 </div>
 <br>
 <br>
 @if($dispensers)
+<?php $suma_sub=0; ?>
 @foreach($dispensers_list as $k=>$dispenser)
 @if(isset($dispensers[$dispenser->id]))
 @if($dispensers[$dispenser->id])
@@ -38,15 +50,34 @@
 		</div>
 	</div>
 	<div class="col-2">
-		<div class="form-group">
-			<input wire:model="meters.{{$dispenser->id}}" type="text" name="meters.{{$dispenser->id}}" placeholder="Meter Final" class="form-control" required>
-			@error ('meters') <span class="validacion">*Campo Obligatorio*</span> @enderror
+		<div class="col-2-3">
+			<div class="form-group">
+				<input wire:model="meters.{{$dispenser->id}}" type="number" name="meters.{{$dispenser->id}}" placeholder="Meter Final" class="form-control" required>
+				@error ('meters') <span class="validacion">*Campo Obligatorio*</span> @enderror
+			</div>
+		</div>
+		<div class="col-1-3">
+			@if(isset($meters[$dispenser->id]))
+			@if($meters[$dispenser->id]!='')
+			<?php $sub_total = ($meters[$dispenser->id]-$dispenser->meter)*$dispenser->fuel->precio_venta; $suma_sub += $sub_total; ?>
+			Bs. {{ number_format($sub_total, 2, ',', '.') }}
+			@endif
+			@endif
 		</div>
 	</div>
 </div>
 @endif
 @endif
 @endforeach
+<div class="col-4">
+	<div class="col-2"></div>
+	<div class="col-2">
+		<div class="col-2-3"></div>
+		<div class="col-1-3">
+			<b>Bs. {{number_format($suma_sub, 2, ',', '.')}}</b>
+		</div>
+	</div>
+</div>
 @endif
 <div class="separadorNota"><span>BILLETAJE</span></div>
 <div class="col-4">
@@ -95,7 +126,7 @@
 	{!! Form::label('Monto en Tarjeta') !!}
 	<input wire:model="tarjeta" type="number" name="tarjeta" class="form-control">
 </div>
-
+<br><br>
 <script>
 	$('body').on('change','input.datepicker',function() {
 		@this.set('fecha',$(this).val());

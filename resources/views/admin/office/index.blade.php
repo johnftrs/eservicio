@@ -16,7 +16,9 @@
 				<thead>
 					<th>Nombre</th>
 					<th>NIT</th>
+					<th>Teléfono</th>
 					<th>Dirección</th>
+					<th>Ciudad</th>
 					@if ($editar)<th class="centrado">Editar</th>@endif
 					@if ($eliminar)<th class="centrado">Borrar</th>@endif
 				</thead>
@@ -25,7 +27,9 @@
 					<tr>
 						<td>{{$office->nombre}}</td>
 						<td>{{$office->nit}}</td>
+						<td>{{$office->telefono}}</td>
 						<td>{{$office->direccion}}</td>
+						<td>{{$office->ciudad}}</td>
 						@if ($editar)
 						<td class="centrado">
 							<button class="btn btn-min warning" wire:click="edit({{$office->id}})"><i class="mdi mdi-pencil"></i>Editar</button>
