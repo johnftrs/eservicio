@@ -13,30 +13,34 @@ use Auth;
 use PDF;
 
 class ReportLivewire extends Component {
-    public $modal = false;
+    public $modal = array('active'=>false,'title'=>'','accion'=>'store','url_pdf'=>'');
     public $delete = false;
-    public $accion = 'store';
-    public $url_pdf;
     public $dispensers;
     public $tickets;
     public $meters;
     public $suma;
     public $mensaje = '';
     public $me = 'MARQ';
-    public $modelo_id, $fecha, $monto_total, $efectivo, $tarjeta, $firmado, $_200, $_100, $_50, $_20, $_10, $monedas, $user_id, $turn_id;
+    public $modelo_id, $fecha, $monto_total, $efectivo, $tarjeta, $firmado, $calibracion, $_200, $_100, $_50, $_20, $_10, $monedas, $user_id, $turn_id;
     public function render() {
         $this->suma = (($this->_200==null)?0:$this->_200)*200 + (($this->_100==null)?0:$this->_100)*100 + (($this->_50==null)?0:$this->_50)*50 + (($this->_20==null)?0:$this->_20)*20 + (($this->_10==null)?0:$this->_10)*10 + (($this->monedas==null)?0:$this->monedas);
+        if (Auth::user()->role_id <= 3) {
+            $reports = Report::where('office_id',Auth::user()->people->office_id)->orderBy('id','desc')->paginate(15);
+        } else {
+            $reports = Report::where('office_id',Auth::user()->people->office_id)->where('user_id',Auth::id())->orderBy('id','desc')->paginate(15);
+        }
         return view(
             'admin.report.index',[
                 'dispensers_list' => Dispenser::where('office_id',Auth::user()->people->office_id)->orderBy('id','asc')->get(),
                 'turns' => Turn::where('office_id',Auth::user()->people->office_id)->orderBy('id','asc')->get(),
-                'tickets_list' => Ticket::where('office_id',Auth::user()->people->office_id)->where('user_id',Auth::id())->where('estado','Usado')->orderBy('id','asc')->get(),
-                'reports' => Report::where('user_id',Auth::id())->orderBy('id','desc')->get(),
+                'tickets_list' => Ticket::where('office_id',Auth::user()->people->office_id)->where('estado','Usado')->orderBy('id','asc')->get(),
+                'reports' => $reports,
             ])->layout('layouts.app',['me'=>$this->me]);
     }
     public function create() {
-        $this->accion = 'store';
-        $this->modal = true;
+        $this->modal['accion'] = 'store';
+        $this->modal['active'] = true;
+        $this->modal['title'] = 'Registro de Arqueo';
     }
     public function store() {
         $this->validate([
@@ -52,6 +56,7 @@ class ReportLivewire extends Component {
             'efectivo' => $this->suma,
             'tarjeta' => $this->tarjeta,
             'firmado' => $this->firmado,
+            'calibracion' => ($this->calibracion==null)?0:$this->calibracion,
             '_200' => ($this->_200==null)?0:$this->_200,
             '_100' => ($this->_100==null)?0:$this->_100,
             '_50' => ($this->_50==null)?0:$this->_50,
@@ -103,6 +108,7 @@ class ReportLivewire extends Component {
         $this->efectivo = $report->efectivo;
         $this->tarjeta = $report->tarjeta;
         $this->firmado = $report->firmado;
+        $this->calibracion = $report->calibracion;
         $this->_200 = $report->_200;
         $this->_100 = $report->_100;
         $this->_50 = $report->_50;
@@ -113,8 +119,14 @@ class ReportLivewire extends Component {
         foreach ($report->accountings as $key => $accounting) {
             $this->dispensers[$accounting->dispenser_id] = $accounting->dispenser_id;
         }
-        $this->accion = 'edit';
-        $this->modal = true;
+        foreach ($report->accountings as $key => $accounting) {
+            $this->meters[$accounting->dispenser_id] = $accounting->meter_final;
+        }
+        if (($report->id == \App\Models\Report::orderBy('id','desc')->first()->id)) {
+            $this->modal['accion'] = 'edit';
+            $this->modal['active'] = true;
+            $this->modal['title'] = 'Editar Arqueo';
+        }
     }
     public function update() {
         $report = Report::find($this->modelo_id);
@@ -128,6 +140,7 @@ class ReportLivewire extends Component {
             'efectivo' => $this->efectivo,
             'tarjeta' => $this->tarjeta,
             'firmado' => $this->firmado,
+            'calibracion' => $this->calibracion,
             '_200' => ($this->_200==null)?0:$this->_200,
             '_100' => ($this->_100==null)?0:$this->_100,
             '_50' => ($this->_50==null)?0:$this->_50,
@@ -151,34 +164,33 @@ class ReportLivewire extends Component {
         $this->mensaje='Arqueo eliminado exitosamente';
     }
     public function limpiar() {
-        $this->fecha = '';
-        $this->efectivo = '';
-        $this->tarjeta = '';
-        $this->firmado = '';
-        $this->_200 = '';
-        $this->_100 = '';
-        $this->_50 = '';
-        $this->_20 = '';
-        $this->_10 = '';
-        $this->monedas = '';
-        $this->turn_id = '';
+        $this->fecha = null;
+        $this->efectivo = null;
+        $this->tarjeta = null;
+        $this->firmado = null;
+        $this->calibracion = null;
+        $this->_200 = null;
+        $this->_100 = null;
+        $this->_50 = null;
+        $this->_20 = null;
+        $this->_10 = null;
+        $this->monedas = null;
+        $this->turn_id = null;
         $this->dispensers = null;
 
-        $this->modal = false;
+        $this->modal['active'] = false;
+        $this->modal['title'] = '';
+        $this->modal['url_pdf'] = '';
+        $this->modal['accion'] = '';
         $this->delete = false;
     }
     public function openModalPDF($report_id) {
+        $this->modal['accion'] = 'pdf';
+        $this->modal['active'] = true;
+        $this->modal['title'] = 'Imprimir Arqueo #'.$report_id;
+        $this->modal['url_pdf'] = 'admin/ARQUEO-PDF/'.$report_id;
         $report = Report::find($report_id);
-        $this->url_pdf = 'admin/ARQUEO-PDF/'.$report_id;
         $pdf = PDF::loadView('pdf.arqueo', compact('report'));
-        //return view('pdf.arqueo',['report'=>$report]);
         return $pdf->setPaper('letter', 'portrait')->stream('Arqueo.pdf');
-        //return "pdf";
-    }
-    public function test_openModalPDF($report_id) {
-        $report = Report::find($report_id);
-        $this->url_pdf = 'admin/ARQUEO-PDF/'.$report_id;
-        $pdf = PDF::loadView('pdf.arqueo', compact('report'));
-        return view('pdf.arqueo',['report'=>$report]);
     }
 }

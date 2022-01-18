@@ -94,8 +94,8 @@ class RoleLivewire extends Component
 		$this->mensaje='Rol eliminado exitosamente';
 	}
 	public function limpiar() {
-		$this->code = '';
-		$this->name = '';
+		$this->code = null;
+		$this->name = null;
 		$this->funciones = null;
 
 		$this->modal = false;

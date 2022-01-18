@@ -17,8 +17,8 @@ class CreateTurnsTable extends Migration
             $table->id();
             $table->string('nombre',20)->nullable();
             $table->string('estado',20)->nullable();
-            $table->time('hora_inicio', $precision = 0);
-            $table->time('hora_fin', $precision = 0);
+            $table->time('hora_inicio', $precision = 0)->nullable();
+            $table->time('hora_fin', $precision = 0)->nullable();
             $table->unsignedBigInteger('office_id')->nullable();
             $table->foreign('office_id')->references('id')->on('offices')->onDelete('set null');
         });

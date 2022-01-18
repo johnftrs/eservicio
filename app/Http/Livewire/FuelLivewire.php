@@ -83,13 +83,13 @@ class FuelLivewire extends Component
 		$this->mensaje='Combustible eliminado exitosamente';
 	}
 	public function limpiar() {
-		$this->nombre = '';
-		$this->precio_compra = '';
-		$this->precio_venta = '';
-		$this->unidad = '';
-		$this->h_nombre = '';
-		$this->h_total = '';
-		$this->h_actual = '';
+		$this->nombre = null;
+		$this->precio_compra = null;
+		$this->precio_venta = null;
+		$this->unidad = null;
+		$this->h_nombre = null;
+		$this->h_total = null;
+		$this->h_actual = null;
 
 		$this->modal = false;
 		$this->delete = false;

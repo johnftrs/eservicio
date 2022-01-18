@@ -19,25 +19,25 @@
 					<th>Monto</th>
 					<th>Estado</th>
 					<th>Fecha Uso</th>
-					<th>Conductor Usó</th>
-					<th>Vehículo Usó</th>
-					<th>Manguera Usó</th>
-					<th>Turno Usó</th>
+					<th>Conductor</th>
+					<th>Vehículo</th>
+					<th>Dispenser</th>
+					<th>Detalles</th>
 					<th class="centrado">Usuario</th>
 					@if ($editar)<th class="centrado">Editar</th>@endif
 					@if ($eliminar)<th class="centrado">Borrar</th>@endif
 				</thead>
 				<tbody>
 					@foreach($tickets as $ticket)
-					<tr class="{{$ticket->estado=='Inactivo'?'rojo':( $ticket->estado=='Usado'?'verde':'' )}}">
+					<tr class="{{$ticket->estado}}">
 						<td class="centrado">{{$ticket->codigo}} {{$ticket->serie}}</td>
-						<td class="centrado">{{$ticket->monto}}</td>
+						<td class="centrado">{{$ticket->monto ? number_format($ticket->monto, 2, ',', '.') : ''}}</td>
 						<td class="centrado">{{$ticket->estado}}</td>
 						<td>{{$ticket->fecha_uso}}</td>
 						<td>{{$ticket->driver_id ? $ticket->driver->nombre : null}}</td>
 						<td class="centrado">{{isset($ticket->vehicle_id)? $ticket->vehicle->placa : null}} - {{isset($ticket->vehicle_id)? $ticket->vehicle->marca : null}}</td>
-						<td>{{$ticket->hosepipe_id ? $ticket->hosepipe->nombre : null}}</td>
-						<td>{{$ticket->turn_id ? $ticket->turn->nombre : null}}</td>
+						<td>{{$ticket->dispenser_id ? $ticket->dispenser->nombre : null}}</td>
+						<td>{{$ticket->detalle}}</td>
 						<td class="centrado">{{$ticket->user->name}}</td>
 						@if ($editar)
 						<td class="centrado">

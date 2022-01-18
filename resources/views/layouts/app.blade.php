@@ -22,7 +22,7 @@
   <aside>
     <div class="logo">
       <a href="{{url::to('home')}}">
-        <img src="{!!URL::to('icons/icono.png')!!}" >{!!'&nbsp;'.strtoupper(\Auth::user()->people->office->nombre)!!}
+        <img src="{!!URL::to('icons/icono.png')!!}" alt="">{!!'&nbsp;'.strtoupper(\Auth::user()->people->office->nombre)!!}
       </a>
     </div>
     <div class="sidebar">
@@ -80,7 +80,7 @@
           </li>
         </ul>
       </div>
-      <div class="nav-user"><p>{{Auth::user()->name}}</p><p>{{Auth::user()->email}}</p></div>
+      <div class="nav-user"><p>{{Auth::user()->name}}</p><p>{{Auth::user()->role->name}}</p></div>
     </nav>
     <div class="content">
       {{ $slot }}

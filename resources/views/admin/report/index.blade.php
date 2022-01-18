@@ -17,8 +17,10 @@
 					<th class="centrado">Turno</th>
 					<th class="centrado">Ingreso Total</th>
 					<th class="centrado">Efectivo</th>
-					<th class="centrado">Tarjeta</th>
 					<th class="centrado">Dispensers</th>
+					@if (Auth::user()->role_id <= 3)
+					<th class="centrado">Usuario</th>
+					@endif
 					<th class="centrado">Imprimir</th>
 					@if ($editar)<th class="centrado">Editar</th>@endif
 					@if ($eliminar)<th class="centrado">Borrar</th>@endif
@@ -29,16 +31,18 @@
 						<td class="centrado">{{$report->id}}</td>
 						<td class="centrado">{{\Carbon\Carbon::parse($report->fecha)->format('d/m/Y')}}</td>
 						<td class="centrado">{{$report->turn->nombre}}</td>
-						<td class="centrado">Bs. {{$report->monto_total}}</td>
-						<td class="centrado">Bs. {{$report->efectivo}}</td>
-						<td class="centrado">Bs. {{$report->tarjeta}}</td>
+						<td class="centrado">Bs. {{number_format($report->monto_total, 2, ',', '.')}}</td>
+						<td class="centrado">Bs. {{number_format($report->efectivo, 2, ',', '.')}}</td>
 						<td class="centrado">
 							@foreach($report->accountings as $account)
 							<div style="font-size: 14px; font-weight: bold;">({{$account->dispenser->nombre}})</div>
 							@endforeach
 						</td>
+						@if (Auth::user()->role_id <= 3)
+						<td class="centrado">{{$report->user->name}}</td>
+						@endif
 						<td class="centrado">
-							<button class="btn btn-min info limpiar_iframe" wire:click="openModalPDF({{ $report->id }})"><i class="mdi mdi-printer"></i>Imprimir</button>
+							<button class="btn btn-min info limpiar_iframe" wire:click="openModalPDF({{ $report->id }})"><i class="mdi mdi-printer"></i>PDF</button>
 						</td>
 						@if ($editar)
 						<td class="centrado">
@@ -55,23 +59,30 @@
 				</tbody>
 			</table>
 		</div>
+		{{ $reports->links() }}
 	</div>
-	@if( $modal )
-	<div class="modal-dialog panel primary visible">
-		<div class="panel-heading">
-			<h4 class="panel-title"><b style="color: white;">Registrar Arqueo</b></h4>
+	@if( $modal['active'] )
+	<div class="modal-dialog panel visible">
+		<div class="panel-heading primary">
+			<h4 class="panel-title"><b style="color: white;">{{$modal['title']}}</b></h4>
 			<a class="btn-close btn danger" wire:click="limpiar">&times;</a>
 		</div>
 		<div class="panel-body" >
+			@if($modal['url_pdf'] != '')
+			<iframe id="iframe_id" src="{{ ($modal['url_pdf'] != '')?(url($modal['url_pdf'])):'' }}"></iframe>
+			@else
 			@include('admin.report.forms.form')
+			@endif
 		</div>
 		<div class="panel-footer col-4 default-soft">
-			@if($accion=='store')
+			@if($modal['accion']=='store')
 			<button wire:click="store()" type="submit" class="btn btn-min primary col-1">Registrar</button>
-			@else
-			<button wire:click="update()" type="submit" class="btn btn-min warning col-1">Guardar</button>
-			@endif
 			<div class="nota_footer">Efectivo Total: Bs. {{number_format($suma, 2, ',', '.')}}</div>
+			@elseif($modal['accion']=='edit')
+			<button wire:click="update()" type="submit" class="btn btn-min warning col-1">Guardar</button>
+			@elseif($modal['accion']=='pdf')
+			<button type="button" class="btn btn-min info col-1" onclick="imprimir()">Imprimir</button>
+			@endif
 		</div>
 	</div>
 	<div id="cortina" wire:click="limpiar"></div>
@@ -85,24 +96,15 @@
 	</div>
 	<div id="cortina" wire:click="limpiar"></div>
 	@endif
-	<iframe id="iframe_id" src="{{ isset($url_pdf)?(url($url_pdf)):'' }}" style="display: none;"></iframe>
+	@section('adminjs')
 	<script type="text/javascript">
-		document.getElementById('iframe_id').onload = function() {
-			if ($('#iframe_id').attr('src')!='') {
-				var myIframe = document.getElementById("iframe_id").contentWindow;
-				myIframe.focus();
-				myIframe.print();
-				return false;
-			}
-		}
-		function print() {
+		function imprimir() {
+			console.log('print');
 			var myIframe = document.getElementById("iframe_id").contentWindow;
 			myIframe.focus();
 			myIframe.print();
 			return false;
 		}
-		$('body').on('click','.limpiar_iframe',function () {
-			$('#iframe_id').attr('src','');
-		});
 	</script>
+	@endsection
 </div>

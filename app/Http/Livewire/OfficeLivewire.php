@@ -73,11 +73,11 @@ class OfficeLivewire extends Component {
 		$this->mensaje='Sucursal eliminada exitosamente';
 	}
 	public function limpiar() {
-		$this->nombre = '';
-		$this->nit = '';
-		$this->telefono = '';
-		$this->ciudad = '';
-		$this->direccion = '';
+		$this->nombre = null;
+		$this->nit = null;
+		$this->telefono = null;
+		$this->ciudad = null;
+		$this->direccion = null;
 
 		$this->modal = false;
 		$this->delete = false;

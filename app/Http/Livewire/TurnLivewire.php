@@ -73,10 +73,10 @@ class TurnLivewire extends Component {
         $this->mensaje='Turno eliminado exitosamente';
     }
     public function limpiar() {
-        $this->nombre = '';
-        $this->estado = '';
-        $this->hora_inicio = '';
-        $this->hora_fin = '';
+        $this->nombre = null;
+        $this->estado = null;
+        $this->hora_inicio = null;
+        $this->hora_fin = null;
 
         $this->modal = false;
         $this->delete = false;

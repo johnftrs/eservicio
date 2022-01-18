@@ -75,11 +75,11 @@ class MenuLivewire extends Component
 		$this->mensaje='Menu creado exitosamente';
 	}
 	public function limpiar() {
-		$this->code = '';
-		$this->label = '';
-		$this->icon = '';
-		$this->orden = '';
-		$this->tamanyo = '';
+		$this->code = null;
+		$this->label = null;
+		$this->icon = null;
+		$this->orden = null;
+		$this->tamanyo = null;
 
 		$this->modal = false;
 		$this->delete = false;

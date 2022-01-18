@@ -89,12 +89,12 @@ class DispenserLivewire extends Component
 		$this->mensaje='Dispenser eliminado exitosamente';
 	}
 	public function limpiar() {
-		$this->nombre = '';
-		$this->meter = '';
-		$this->tank_id = '';
-		$this->h_nombre = '';
-		$this->h_tank_id = '';
-		$this->h_dispenser_id = '';
+		$this->nombre = null;
+		$this->meter = null;
+		$this->tank_id = null;
+		$this->h_nombre = null;
+		$this->h_tank_id = null;
+		$this->h_dispenser_id = null;
 
 		$this->modal = false;
 		$this->delete = false;

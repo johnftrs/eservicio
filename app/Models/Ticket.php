@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Ticket extends Model
 {
 	use HasFactory;
-	protected $fillable = [ 'codigo', 'serie', 'monto', 'estado', 'fecha_uso', 'driver_id', 'vehicle_id', 'dispenser_id', 'user_id', 'office_id', 'report_id' ];
+	protected $fillable = [ 'codigo', 'serie', 'monto', 'estado', 'fecha_uso', 'detalle', 'driver_id', 'vehicle_id', 'dispenser_id', 'turn_id', 'user_id', 'office_id', 'report_id' ];
 	public $timestamps = false;
 
 	public function driver() {

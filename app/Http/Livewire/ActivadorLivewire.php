@@ -19,7 +19,7 @@ class ActivadorLivewire extends Component
 	public $accion = 'store';
 	public $mensaje = '';
 	public $me = 'MTIC';
-	public $ticket_id = null, $codigo, $serie, $monto, $driver_id, $vehicle_id, $dispenser_id;
+	public $ticket_id = null, $codigo, $serie, $monto, $detalle, $driver_id, $vehicle_id, $dispenser_id;
 	public function render() {
 		if ($this->ticket_id != null) {
 			$this->codigo = Ticket::find($this->ticket_id)->codigo;
@@ -46,6 +46,7 @@ class ActivadorLivewire extends Component
 				'estado' => 'Usado',
 				'fecha_uso' => Carbon::now(),
 				'monto' => $this->monto,
+				'detalle' => $this->detalle,
 				'driver_id' => $this->driver_id,
 				'vehicle_id' => $this->vehicle_id,
 				'dispenser_id' => $this->dispenser_id,

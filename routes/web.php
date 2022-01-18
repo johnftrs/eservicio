@@ -14,6 +14,7 @@ use App\Http\Livewire\FuelLivewire;
 use App\Http\Livewire\ReportLivewire;
 use App\Http\Livewire\TurnLivewire;
 use App\Http\Livewire\ActivadorLivewire;
+use App\Http\Livewire\MovdiarioLivewire;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,4 +47,15 @@ Route::get('/admin/arching',ReportLivewire::class)->middleware('auth');
 Route::get('/admin/turn',TurnLivewire::class)->middleware('auth');
 Route::get('/admin/activar/ticket/{variable?}',ActivadorLivewire::class)->middleware('auth');
 Route::get('/admin/ARQUEO-PDF/{report_id?}', [ReportLivewire::class, 'openModalPDF'])->middleware('auth');
-Route::get('/admin/TEST-ARQUEO-PDF/{report_id?}', [ReportLivewire::class, 'test_openModalPDF'])->middleware('auth');
+Route::get('/admin/KARDEX-PDF/{user_id?}', [UserLivewire::class, 'openModalPDF'])->middleware('auth');
+Route::get('/admin/report/movimiento_diario', MovdiarioLivewire::class)->middleware('auth');
+Route::get('/admin/pdf/movimiento_diario/{id?}/{date?}', [MovdiarioLivewire::class, 'openModalPDF'])->middleware('auth');
+
+
+/*
+Los datos son los siguientes:
+ID ANYDESK: 576372323
+Contraseña: SurdidorLotus
+Usuario Siges: ELWAR ORELLANA
+Contraseña: 7814
+*/

@@ -20,6 +20,7 @@ class CreateReportsTable extends Migration
             $table->double('efectivo', 15, 2)->nullable();
             $table->double('tarjeta', 15, 2)->nullable();
             $table->string('firmado',1)->nullable();
+            $table->double('calibracion', 15, 2)->nullable();
             $table->integer('_200')->nullable();
             $table->integer('_100')->nullable();
             $table->integer('_50')->nullable();

@@ -1,7 +1,7 @@
 <br>
 <div class="form-group">
 	{!! Form::label('Fecha*','',['class'=>'naranja']) !!}
-	<input wire:model="fecha" type="text" name="fecha" placeholder="Inserte Nombre" class="form-control datepicker" required>
+	<input wire:model="fecha" type="text" name="fecha" placeholder="Inserte Fecha" class="form-control datepicker" required>
 	@error ('fecha') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="form-group">
@@ -20,7 +20,7 @@
 	<div class="dispensers_list">
 		<label for="ticket_{{ $ticket->id }}">Vale {{$ticket->codigo}}{{$ticket->serie}}</label>
 		<input wire:model="tickets.{{$ticket->id}}" type="checkbox" id="ticket_{{ $ticket->id }}" value="{{ $ticket->id }}">
-		<label for="ticket_{{ $ticket->id }}">:${{$ticket->monto}}</label>
+		<label for="ticket_{{ $ticket->id }}">:${{number_format($ticket->monto, 2, ',', '.')}}</label>
 	</div>
 	@endforeach
 </div>
@@ -126,7 +126,16 @@
 	{!! Form::label('Monto en Tarjeta') !!}
 	<input wire:model="tarjeta" type="number" name="tarjeta" class="form-control">
 </div>
-<br><br>
+<br>
+<div class="separadorNota"><span>CALIBRACIÓN</span></div>
+<div class="col-4">
+	<div class="form-group">
+		{!! Form::label('Calibración') !!}
+		<input wire:model="calibracion" type="number" name="calibracion" placeholder="Bs." class="form-control">
+		@error ('calibracion') <span class="validacion">*Campo Obligatorio*</span> @enderror
+	</div>
+</div>
+<br><br><br>
 <script>
 	$('body').on('change','input.datepicker',function() {
 		@this.set('fecha',$(this).val());

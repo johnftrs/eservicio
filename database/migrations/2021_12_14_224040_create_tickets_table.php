@@ -20,12 +20,15 @@ class CreateTicketsTable extends Migration
             $table->double('monto', 15, 2)->nullable();
             $table->string('estado',20)->nullable();
             $table->date('fecha_uso')->nullable();
+            $table->string('detalle')->nullable();
             $table->unsignedBigInteger('driver_id')->nullable();
             $table->foreign('driver_id')->references('id')->on('drivers')->onDelete('cascade');
             $table->unsignedBigInteger('vehicle_id')->nullable();
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
             $table->unsignedBigInteger('dispenser_id')->nullable();
             $table->foreign('dispenser_id')->references('id')->on('dispensers')->onDelete('cascade');
+            $table->unsignedBigInteger('turn_id')->nullable();
+            $table->foreign('turn_id')->references('id')->on('turns')->onDelete('cascade');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('office_id')->nullable();

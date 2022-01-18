@@ -17,7 +17,7 @@ class CreateFuelsTable extends Migration
             $table->id();
             $table->string('nombre');
             $table->double('precio_compra', 15, 2)->nullable();
-            $table->double('precio_venta', 15, 2);
+            $table->double('precio_venta', 15, 2)->nullable();
             $table->string('unidad',10)->nullable();
             $table->unsignedBigInteger('office_id')->nullable();
             $table->foreign('office_id')->references('id')->on('offices')->onDelete('set null');

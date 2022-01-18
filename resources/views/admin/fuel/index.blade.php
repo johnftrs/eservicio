@@ -26,8 +26,8 @@
 					<tr>
 						<td>{{$fuel->nombre}}</td>
 						<td>{{$fuel->unidad}}</td>
-						<td>Bs. {{$fuel->precio_compra}}</td>
-						<td>Bs. {{$fuel->precio_venta}}</td>
+						<td>Bs. {{number_format($fuel->precio_compra, 2, ',', '.')}}</td>
+						<td>Bs. {{number_format($fuel->precio_venta, 2, ',', '.')}}</td>
 						<td class="centrado">
 							<button class="btn btn-min info" wire:click="tanques({{$fuel->id}})"><i class="mdi mdi-pipe"></i>Línea</button>
 						</td>

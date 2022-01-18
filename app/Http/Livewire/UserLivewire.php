@@ -8,16 +8,19 @@ use App\Models\User;
 use App\Models\Human;
 use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Livewire\WithFileUploads;
+use Carbon\Carbon;
 use Auth;
+use PDF;
 
 class UserLivewire extends Component
 {
-	public $modal = false;
+	use WithFileUploads;
+	public $modal = array('active'=>false,'title'=>'','accion'=>'store','url_pdf'=>'');
 	public $delete = false;
-	public $accion = 'store';
 	public $mensaje = '';
 	public $me = 'MUSE';
-	public $modelo_id, $name, $email, $password, $role_id, $ci ,$nombre_completo ,$direccion ,$telefono ,$fecha_nacimiento ,$fecha_ingreso ,$nivel_estudio ,$biometrico ,$estado_civil ,$afp ,$foto ,$nombre_garante ,$relacion_garante ,$telefono_garante ,$trabajo_garante ,$direccion_garante ,$nombre_referencia_personal ,$relacion_referencia_personal ,$telefono_referencia_personal ,$trabajo_referencia_personal ,$direccion_referencia_personal;
+	public $modelo_id, $name, $email, $password, $role_id, $nombre_completo, $ci, $fecha_nacimiento, $direccion, $zona, $telefono, $telefono2, $nivel_estudio, $estado_civil, $hijos, $ex_empresa, $ex_cargo, $ex_tiempo, $ex_jefe, $ex_renuncia, $ex_observaciones, $fecha_ingreso, $fecha_retiro, $casillero, $siges, $biometrico, $softcontrol, $cuenta_bmsc, $afp, $foto, $nombre_garante, $relacion_garante, $telefono_garante, $trabajo_garante, $direccion_garante, $nombre_referencia_personal, $relacion_referencia_personal, $telefono_referencia_personal, $trabajo_referencia_personal, $direccion_referencia_personal;
 	public function render() {
 		return view(
 			'user.index',[
@@ -26,36 +29,57 @@ class UserLivewire extends Component
 				'roles' => Role::where('id','>',1)->get(),
 			])->layout('layouts.app',['me'=>$this->me]);
 	}
-	protected $rules = [
-		'name' => 'required',
-		'password' => 'required',
-		'role_id' => 'required',
-	];
 	public function create() {
-		$this->accion = 'store';
-		$this->modal = true;
+		$this->modal['accion'] = 'store';
+		$this->modal['active'] = true;
+		$this->modal['title'] = 'Registro de Usuarios';
 	}
 	public function store() {
-		$this->validate();
-		User::create([
+		$this->validate([
+			'name' => 'required',
+			'password' => 'required',
+			'role_id' => 'required',
+			'foto' => 'image|max:15360',
+		]);
+		$user = User::create([
 			'name' => $this->name,
 			'email' => $this->email,
 			'password' => Hash::make($this->password),
 			'role_id' => $this->role_id,
 		]);
+		$path = null;
+		if ($this->foto != null) {
+			$this->foto->storeAs('public/photos', 'user_'.$user->id.'.JPG');
+			$path = 'storage/photos/user_'.$user->id.'.JPG';
+		}
 		Human::create([
-			'ci' => $this->ci,
-			'nombre_completo' => $this->nombre_completo,
+			'id' => $user->id,
 			'password' => $this->password,
+			'nombre_completo' => $this->nombre_completo,
+			'ci' => $this->ci,
+			'fecha_nacimiento' => $this->fecha_nacimiento ? Carbon::createFromFormat('d/m/y', $this->fecha_nacimiento)->format('Y-m-d') : null,
 			'direccion' => $this->direccion,
+			'zona' => $this->zona,
 			'telefono' => $this->telefono,
-			'fecha_nacimiento' => $this->fecha_nacimiento,
-			'fecha_ingreso' => $this->fecha_ingreso,
+			'telefono2' => $this->telefono2,
 			'nivel_estudio' => $this->nivel_estudio,
-			'biometrico' => $this->biometrico,
 			'estado_civil' => $this->estado_civil,
+			'hijos' => $this->hijos,
+			'ex_empresa' => $this->ex_empresa,
+			'ex_cargo' => $this->ex_cargo,
+			'ex_tiempo' => $this->ex_tiempo,
+			'ex_jefe' => $this->ex_jefe,
+			'ex_renuncia' => $this->ex_renuncia,
+			'ex_observaciones' => $this->ex_observaciones,
+			'fecha_ingreso' => $this->fecha_ingreso ? Carbon::createFromFormat('d/m/y', $this->fecha_ingreso)->format('Y-m-d') : null,
+			'fecha_retiro' => $this->fecha_retiro ? Carbon::createFromFormat('d/m/y', $this->fecha_retiro)->format('Y-m-d') : null,
+			'casillero' => $this->casillero,
+			'siges' => $this->siges,
+			'biometrico' => $this->biometrico,
+			'softcontrol' => $this->softcontrol,
+			'cuenta_bmsc' => $this->cuenta_bmsc,
 			'afp' => $this->afp,
-			'foto' => $this->foto,
+			'foto' => $path,
 			'nombre_garante' => $this->nombre_garante,
 			'relacion_garante' => $this->relacion_garante,
 			'telefono_garante' => $this->telefono_garante,
@@ -80,17 +104,32 @@ class UserLivewire extends Component
 		$this->password = '';
 		$this->role_id = $user->role_id;
 
-		$this->ci = $human->ci;
+		$this->password = $human->password;
 		$this->nombre_completo = $human->nombre_completo;
+		$this->ci = $human->ci;
+		$this->fecha_nacimiento = $human->fecha_nacimiento ? Carbon::parse($human->fecha_nacimiento)->format('d/m/y') : null;
 		$this->direccion = $human->direccion;
+		$this->zona = $human->zona;
 		$this->telefono = $human->telefono;
-		$this->fecha_nacimiento = $human->fecha_nacimiento;
-		$this->fecha_ingreso = $human->fecha_ingreso;
+		$this->telefono2 = $human->telefono2;
 		$this->nivel_estudio = $human->nivel_estudio;
-		$this->biometrico = $human->biometrico;
 		$this->estado_civil = $human->estado_civil;
+		$this->hijos = $human->hijos;
+		$this->ex_empresa = $human->ex_empresa;
+		$this->ex_cargo = $human->ex_cargo;
+		$this->ex_tiempo = $human->ex_tiempo;
+		$this->ex_jefe = $human->ex_jefe;
+		$this->ex_renuncia = $human->ex_renuncia;
+		$this->ex_observaciones = $human->ex_observaciones;
+		$this->fecha_ingreso = $human->fecha_ingreso ? Carbon::parse($human->fecha_ingreso)->format('d/m/y') : null;
+		$this->fecha_retiro = $human->fecha_retiro ? Carbon::parse($human->fecha_retiro)->format('d/m/y') : null;
+		$this->casillero = $human->casillero;
+		$this->siges = $human->siges;
+		$this->biometrico = $human->biometrico;
+		$this->softcontrol = $human->softcontrol;
+		$this->cuenta_bmsc = $human->cuenta_bmsc;
 		$this->afp = $human->afp;
-		$this->foto = $human->foto;
+		/*$this->foto = $human->foto;*/
 		$this->nombre_garante = $human->nombre_garante;
 		$this->relacion_garante = $human->relacion_garante;
 		$this->telefono_garante = $human->telefono_garante;
@@ -102,13 +141,23 @@ class UserLivewire extends Component
 		$this->trabajo_referencia_personal = $human->trabajo_referencia_personal;
 		$this->direccion_referencia_personal = $human->direccion_referencia_personal;
 
-		$this->accion = 'edit';
-		$this->modal = true;
+		$this->modal['accion'] = 'edit';
+		$this->modal['active'] = true;
+		$this->modal['title'] = 'Editar Arqueo';
 	}
 	public function update() {
 		$user = User::find($this->modelo_id);
+		$path = null;
+		if ($this->foto != null) {
+			$this->foto->storeAs('public/photos', 'user_'.$user->id.'.JPG');
+			$path = 'storage/photos/user_'.$user->id.'.JPG';
+		}
 		$human = Human::find($this->modelo_id);
-		$this->validate();
+		$this->validate([
+			'name' => 'required',
+			'password' => 'required',
+			'role_id' => 'required',
+		]);
 		$user->update([
 			'name' => $this->name,
 			'email' => $this->email,
@@ -116,18 +165,32 @@ class UserLivewire extends Component
 			'role_id' => $this->role_id,
 		]);
 		$human->update([
-			'ci' => $this->ci,
-			'nombre_completo' => $this->nombre_completo,
 			'password' => $this->password,
+			'nombre_completo' => $this->nombre_completo,
+			'ci' => $this->ci,
+			'fecha_nacimiento' => $this->fecha_nacimiento ? Carbon::createFromFormat('d/m/y', $this->fecha_nacimiento)->format('Y-m-d') : null,
 			'direccion' => $this->direccion,
+			'zona' => $this->zona,
 			'telefono' => $this->telefono,
-			'fecha_nacimiento' => $this->fecha_nacimiento,
-			'fecha_ingreso' => $this->fecha_ingreso,
+			'telefono2' => $this->telefono2,
 			'nivel_estudio' => $this->nivel_estudio,
-			'biometrico' => $this->biometrico,
 			'estado_civil' => $this->estado_civil,
+			'hijos' => $this->hijos,
+			'ex_empresa' => $this->ex_empresa,
+			'ex_cargo' => $this->ex_cargo,
+			'ex_tiempo' => $this->ex_tiempo,
+			'ex_jefe' => $this->ex_jefe,
+			'ex_renuncia' => $this->ex_renuncia,
+			'ex_observaciones' => $this->ex_observaciones,
+			'fecha_ingreso' => $this->fecha_ingreso ? Carbon::createFromFormat('d/m/y', $this->fecha_ingreso)->format('Y-m-d') : null,
+			'fecha_retiro' => $this->fecha_retiro ? Carbon::createFromFormat('d/m/y', $this->fecha_retiro)->format('Y-m-d') : null,
+			'casillero' => $this->casillero,
+			'siges' => $this->siges,
+			'biometrico' => $this->biometrico,
+			'softcontrol' => $this->softcontrol,
+			'cuenta_bmsc' => $this->cuenta_bmsc,
 			'afp' => $this->afp,
-			'foto' => $this->foto,
+			'foto' => $path,
 			'nombre_garante' => $this->nombre_garante,
 			'relacion_garante' => $this->relacion_garante,
 			'telefono_garante' => $this->telefono_garante,
@@ -153,33 +216,59 @@ class UserLivewire extends Component
 		$this->mensaje='Usuario eliminado exitosamente';
 	}
 	public function limpiar() {
-		$this->name = '';
-		$this->email = '';
-		$this->password = '';
-		$this->role_id = '';
-		$this->ci = '';
-		$this->nombre_completo;
-		$this->direccion = '';
-		$this->telefono = '';
-		$this->fecha_nacimiento = '';
-		$this->fecha_ingreso = '';
-		$this->nivel_estudio = '';
-		$this->biometrico = '';
-		$this->estado_civil = '';
-		$this->afp = '';
-		$this->foto = '';
-		$this->nombre_garante = '';
-		$this->relacion_garante = '';
-		$this->telefono_garante = '';
-		$this->trabajo_garante = '';
-		$this->direccion_garante = '';
-		$this->nombre_referencia_personal = '';
-		$this->relacion_referencia_personal = '';
-		$this->telefono_referencia_personal = '';
-		$this->trabajo_referencia_personal = '';
-		$this->direccion_referencia_personal = '';
+		$this->name = null;
+		$this->email = null;
+		$this->password = null;
+		$this->role_id = null;
+		$this->nombre_completo = null;
+		$this->ci = null;
+		$this->fecha_nacimiento = null;
+		$this->direccion = null;
+		$this->zona = null;
+		$this->telefono = null;
+		$this->telefono2 = null;
+		$this->nivel_estudio = null;
+		$this->estado_civil = null;
+		$this->hijos = null;
+		$this->ex_empresa = null;
+		$this->ex_cargo = null;
+		$this->ex_tiempo = null;
+		$this->ex_jefe = null;
+		$this->ex_renuncia = null;
+		$this->ex_observaciones = null;
+		$this->fecha_ingreso = null;
+		$this->fecha_retiro = null;
+		$this->casillero = null;
+		$this->siges = null;
+		$this->biometrico = null;
+		$this->softcontrol = null;
+		$this->cuenta_bmsc = null;
+		$this->afp = null;
+		$this->foto = null;
+		$this->nombre_garante = null;
+		$this->relacion_garante = null;
+		$this->telefono_garante = null;
+		$this->trabajo_garante = null;
+		$this->direccion_garante = null;
+		$this->nombre_referencia_personal = null;
+		$this->relacion_referencia_personal = null;
+		$this->telefono_referencia_personal = null;
+		$this->trabajo_referencia_personal = null;
+		$this->direccion_referencia_personal = null;
 
-		$this->modal = false;
+		$this->modal['active'] = false;
+		$this->modal['title'] = '';
+		$this->modal['url_pdf'] = '';
+		$this->modal['accion'] = '';
 		$this->delete = false;
+	}
+	public function openModalPDF($user_id) {
+		$this->modal['accion'] = 'pdf';
+		$this->modal['active'] = true;
+		$this->modal['title'] = 'Imprimir Kardex Usuario #'.$user_id;
+		$this->modal['url_pdf'] = 'admin/KARDEX-PDF/'.$user_id;
+		$user = User::find($user_id);
+		$pdf = PDF::loadView('pdf.kardex', compact('user'));
+		return $pdf->setPaper('letter', 'portrait')->stream('Arqueo.pdf');
 	}
 }

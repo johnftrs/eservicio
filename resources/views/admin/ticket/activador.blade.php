@@ -36,7 +36,7 @@
 				@error ('vehicle_id') <span class="validacion">*Campo Obligatorio*</span> @enderror
 			</div>
 			<div class="form-group">
-				{!! Form::label('Dispenser') !!}
+				{!! Form::label('Dispenser*','',['class'=>'naranja']) !!}
 				<select wire:model="dispenser_id" name="dispenser_id" class="form-control">
 					<option value="">-- Seleccione una opción --</option>
 					@foreach ($dispensers as $dispenser)
@@ -44,6 +44,21 @@
 					@endforeach
 				</select>
 				@error ('dispenser_id') <span class="validacion">*Campo Obligatorio*</span> @enderror
+			</div>
+			<div class="form-group">
+				{!! Form::label('Turno*','',['class'=>'naranja']) !!}
+				<select wire:model="turn_id" name="turn_id" class="form-control">
+					<option value="">-- Seleccione una opción --</option>
+					@foreach ($turns as $turn)
+					<option value="{{$turn->id}}">{{$turn->nombre}}</option>
+					@endforeach
+				</select>
+				@error ('turn_id') <span class="validacion">*Campo Obligatorio*</span> @enderror
+			</div>
+			<div class="form-group">
+				{!! Form::label('Detalles') !!}
+				<input wire:model="detalle" type="text" name="detalle" placeholder="Inserte Detalles" class="form-control">
+				@error ('detalle') <span class="validacion">*Campo Obligatorio*</span> @enderror
 			</div>
 		</div>
 		<div class="col-4">
@@ -64,6 +79,7 @@
 					<th class="centrado">Chofer</th>
 					<th class="centrado">Vehículo</th>
 					<th class="centrado">Dispenser</th>
+					<th class="centrado">Detalles</th>
 					<th class="centrado">Usuario</th>
 				</thead>
 				<tbody>
@@ -71,12 +87,13 @@
 					<tr class="{{$ticket->estado}}">
 						<td class="centrado">{{$ticket->codigo}}</td>
 						<td class="centrado">{{$ticket->serie}}</td>
-						<td class="centrado">Bs. {{$ticket->monto}}</td>
+						<td class="centrado">{{$ticket->monto ? 'Bs. '.number_format($ticket->monto, 2, ',', '.') : ''}}</td>
 						<td class="centrado"><b>{{$ticket->estado}}</b></td>
-						<td class="centrado">{{\Carbon\Carbon::parse($ticket->fecha_uso)->format('d/m/Y')}}</td>
+						<td class="centrado">{{$ticket->fecha_uso ? \Carbon\Carbon::parse($ticket->fecha_uso)->format('d/m/Y') : ''}}</td>
 						<td class="centrado">{{isset($ticket->driver_id)? $ticket->driver->nombre : null}}</td>
 						<td class="centrado">{{isset($ticket->vehicle_id)? $ticket->vehicle->placa : null}} - {{isset($ticket->vehicle_id)? $ticket->vehicle->marca : null}}</td>
 						<td class="centrado">{{isset($ticket->dispenser_id)? $ticket->dispenser->nombre : null}}</td>
+						<td class="centrado">{{$ticket->detalle}}</td>
 						<td class="centrado">{{isset($ticket->user_id)? $ticket->user->name : null}}</td>
 					</tr>
 					@endforeach

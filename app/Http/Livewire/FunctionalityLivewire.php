@@ -80,11 +80,11 @@ class FunctionalityLivewire extends Component
 		$this->mensaje='Funcionalidad eliminada exitosamente';
 	}
 	public function limpiar() {
-		$this->code = '';
-		$this->label = '';
-		$this->path = '';
-		$this->mostrar = '';
-		$this->menu_id = '';
+		$this->code = null;
+		$this->label = null;
+		$this->path = null;
+		$this->mostrar = null;
+		$this->menu_id = null;
 
 		$this->modal = false;
 		$this->delete = false;

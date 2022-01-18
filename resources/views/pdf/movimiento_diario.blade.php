@@ -10,9 +10,7 @@
 </head>
 <?php
 $pag=0;
-$n = 0;
-$count = $report->accountings->count();
-$paginas=intval( 1+($count/30) );
+$paginas=1;
 ?>
 <body>
 	<div class="page">
@@ -30,28 +28,22 @@ $paginas=intval( 1+($count/30) );
 			</div>
 			<div class="membretado">
 				<img src="">
-				<span class="fs-16"><b>{{$report->office->nombre}}</b></span>
+				<span class="fs-16"><b>{{\Auth::user()->people->office->nombre}}</b></span>
 				<br>
-				<span>{{$report->office->direccion}}</span>
+				<span>{{\Auth::user()->people->office->direccion}}</span>
 				<br>
-				<span>{{$report->office->telefono}}</span>
+				<span>{{\Auth::user()->people->office->telefono}}</span>
 				<br>
-				<span><u>{{$report->office->ciudad}}</u></span>
+				<span><u>{{\Auth::user()->people->office->ciudad}}</u></span>
 			</div>
-			<div class="centrado fs-16 bb"><b>ARQUEO # {{$report->id}}</b></div>
+			<div class="centrado fs-16 bb"><b>REOPORTE ARQUEO</b></div>
 			<table class="">
 				<tbody>
 					<tr>
-						<td class="bold">Usuario/Operador:</td>
-						<td class="nomb">{{$report->user->name}} - {{$report->user->role->name}}</td>
 						<td class="bold">Fecha:</td>
-						<td>{{\Carbon\Carbon::parse($report->fecha)->format('d/m/Y')}}</td>
-					</tr>
-					<tr>
+						<td class="nomb">{{$date}}</td>
 						<td class="bold">Turno:</td>
-						<td class="nomb">{{$report->turn->nombre}}</td>
-						<td class="bold">Horario:</td>
-						<td>{{$report->turn->hora_inicio}} - {{$report->turn->hora_fin}}</td>
+						<td>{{$turno}}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -68,16 +60,16 @@ $paginas=intval( 1+($count/30) );
 				</thead>
 				<tbody>
 					<?php $suma_ingresos = 0; ?>
-					@foreach ($report->accountings as $account)
+					@foreach ($dispensers as $dis)
 					<?php
-					$cantidad = $account->meter_final-$account->meter_inicial;
-					$bs = $cantidad*$account->dispenser->fuel->precio_venta; ?>
+					$cantidad = ( $accountings->where('dispenser_id',$dis->id)->first() ? $accountings->where('dispenser_id',$dis->id)->sum('cantidad') : 0 );
+					$bs = $cantidad*$dis->fuel->precio_venta; ?>
 					<tr>
-						<td class="izquierda">{{$account->dispenser->nombre}}</td>
-						<td class="izquierda">{{number_format($account->meter_inicial, 2, ',', '.')}}</td>
-						<td class="izquierda">{{number_format($account->meter_final, 2, ',', '.')}}</td>
-						<td class="centrado">{{number_format($cantidad, 2, ',', '.')}}</td>
-						<td class="centrado">{{$account->dispenser->fuel->precio_venta}}</td>
+						<td class="izquierda">{{$dis->nombre}}</td>
+						<td class="izquierda">{{number_format($accountings->where('dispenser_id',$dis->id)->first() ? $accountings->where('dispenser_id',$dis->id)->first()->meter_inicial : 0, 2, ',', '.')}}</td>
+						<td class="izquierda">{{number_format($accountings->where('dispenser_id',$dis->id)->first() ? $accountings->where('dispenser_id',$dis->id)->first()->meter_final : 0, 2, ',', '.')}}</td>
+						<td class="centrado">{{number_format($accountings->where('dispenser_id',$dis->id)->first() ? $accountings->where('dispenser_id',$dis->id)->sum('cantidad') : 0, 2, ',', '.')}}</td>
+						<td class="centrado">{{$dis->fuel->precio_venta}}</td>
 						<td class="derecha">{{number_format($bs, 2, ',', '.')}}</td>
 					</tr>
 					<?php $suma_ingresos += $bs; ?>
@@ -105,7 +97,7 @@ $paginas=intval( 1+($count/30) );
 				</thead>
 				<tbody>
 					<?php $suma_tickets = 0; ?>
-					@foreach ($report->tickets as $ticket)
+					@foreach ($tickets as $ticket)
 					<?php  ?>
 					<tr>
 						<td class="izquierda"></td>
@@ -140,14 +132,14 @@ $paginas=intval( 1+($count/30) );
 				</thead>
 				<tbody>
 					<tr>
-						<td class="derecha">{{$report->_200}}</td>
-						<td class="derecha">{{$report->_100}}</td>
-						<td class="derecha">{{$report->_50}}</td>
-						<td class="derecha">{{$report->_20}}</td>
-						<td class="derecha">{{$report->_10}}</td>
-						<td class="derecha">{{$report->monedas}}</td>
+						<td class="derecha">{{$reports->sum('_200')}}</td>
+						<td class="derecha">{{$reports->sum('_100')}}</td>
+						<td class="derecha">{{$reports->sum('_50')}}</td>
+						<td class="derecha">{{$reports->sum('_20')}}</td>
+						<td class="derecha">{{$reports->sum('_10')}}</td>
+						<td class="derecha">{{$reports->sum('monedas')}}</td>
 					</tr>
-					<?php $suma_efectivo = ($report->_200*200)+($report->_100*100)+($report->_50*50)+($report->_20*20)+($report->_10*10)+$report->monedas; ?>
+					<?php $suma_efectivo = $reports->sum('efectivo'); ?>
 					<tr>
 						<td class="izquierda"></td><td class="izquierda"></td>
 						<td class="izquierda"></td><td class="izquierda"></td>
@@ -170,11 +162,11 @@ $paginas=intval( 1+($count/30) );
 						<td class="izquierda"></td><td class="izquierda"></td>
 						<td class="izquierda"></td><td class="izquierda"></td>
 						<td class="derecha bt"><b>Sub Total</b></td>
-						<td class="derecha bt"><b>{{number_format($report->tarjeta, 2, ',', '.')}}</b></td>
+						<td class="derecha bt"><b>{{number_format($reports->sum('tarjeta'), 2, ',', '.')}}</b></td>
 					</tr>
 				</tbody>
 			</table>
-			@if($report->calibracion>0)
+			@if($reports->sum('calibracion')>0)
 			<table class="bb">
 				<thead>
 					<tr>
@@ -189,7 +181,7 @@ $paginas=intval( 1+($count/30) );
 						<td class="izquierda"></td><td class="izquierda"></td>
 						<td class="izquierda"></td><td class="izquierda"></td>
 						<td class="derecha bt"><b>Sub Total</b></td>
-						<td class="derecha bt"><b>{{number_format($report->calibracion, 2, ',', '.')}}</b></td>
+						<td class="derecha bt"><b>{{number_format($reports->sum('calibracion'), 2, ',', '.')}}</b></td>
 					</tr>
 				</tbody>
 			</table>
@@ -215,13 +207,13 @@ $paginas=intval( 1+($count/30) );
 						<td class="derecha"></td><td class="derecha"></td>
 						<td class="derecha"></td><td class="derecha"></td>
 						<td class="derecha"><b>Egresos:</b></td>
-						<td class="derecha">-{{number_format($suma_tickets+$report->tarjeta+$report->calibracion, 2, ',', '.')}}</td>
+						<td class="derecha">-{{number_format($suma_tickets+$reports->sum('tarjeta')+$reports->sum('calibracion'), 2, ',', '.')}}</td>
 					</tr>
 					<tr>
 						<td class="derecha"></td><td class="derecha"></td>
 						<td class="derecha"></td><td class="derecha"></td>
 						<td class="derecha"><b>Debe:</b></td>
-						<?php $debe=$suma_ingresos-$suma_tickets-$report->tarjeta-$report->calibracion; ?>
+						<?php $debe=$suma_ingresos-$suma_tickets-$reports->sum('tarjeta')-$reports->sum('calibracion'); ?>
 						<td class="derecha"><b>{{number_format($debe, 2, ',', '.')}}</b></td>
 					</tr>
 					<tr>
@@ -246,11 +238,7 @@ $paginas=intval( 1+($count/30) );
 					</tr>
 				</tbody>
 			</table>
-			<div class="firma">............................................................................<br>RESPONSABLE DE ARAQUEO</div>
 		</div>
 	</div>
-	@for ($i = 0; $i < $paginas-1; $i++)
-	<div class="page-break"></div>
-	@endfor
 </body>
 </html>
