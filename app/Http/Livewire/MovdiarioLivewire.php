@@ -30,7 +30,7 @@ class MovdiarioLivewire extends Component {
             $this->turn_id=$id;
             $this->fecha=$date;
         } else {
-            $date=Carbon::createFromFormat('d/m/y', $this->fecha)->format('Y-m-d');
+            $date=$this->fecha;
         }
         $this->validate([
             'fecha' => 'required',
@@ -53,7 +53,6 @@ class MovdiarioLivewire extends Component {
             $tickets = Ticket::where('turn_id',$this->turn_id)->where('office_id',$of_id)->where('fecha_uso',$date)->get();
         }
         $dispensers = Dispenser::where('office_id',$of_id)->orderBy('id','asc')->get();
-        $date = Carbon::parse($date)->format('d/m/y');
         $pdf = PDF::loadView('pdf.movimiento_diario', compact('reports','turno','date','dispensers','tickets','accountings'));
         return $pdf->setPaper('letter', 'portrait')->stream('Reporte.pdf');
     }

@@ -1,6 +1,6 @@
 /*
 SQLyog Community v13.1.8 (64 bit)
-MySQL - 10.4.21-MariaDB : Database - eservicio
+MySQL - 10.4.21-MariaDB : Database - csmmhom2_eservicio
 *********************************************************************
 */
 
@@ -12,9 +12,9 @@ MySQL - 10.4.21-MariaDB : Database - eservicio
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`eservicio` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`csmmhom2_eservicio` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 
-USE `eservicio`;
+USE `csmmhom2_eservicio`;
 
 /*Table structure for table `accountings` */
 

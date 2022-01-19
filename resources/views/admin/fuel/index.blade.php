@@ -14,9 +14,9 @@
 			<table class="table table-hover">
 				<thead>
 					<th>Nombre</th>
-					<th>Unidad</th>
-					<th>Precio Compra</th>
-					<th>Precio Venta</th>
+					<th class="centrado">Unidad</th>
+					<th class="centrado">Precio Compra</th>
+					<th class="centrado">Precio Venta</th>
 					<th class="centrado">Línea de Distribución</th>
 					@if ($editar)<th class="centrado">Editar</th>@endif
 					@if ($eliminar)<th class="centrado">Borrar</th>@endif
@@ -25,11 +25,11 @@
 					@foreach($fuels as $fuel)
 					<tr>
 						<td>{{$fuel->nombre}}</td>
-						<td>{{$fuel->unidad}}</td>
-						<td>Bs. {{number_format($fuel->precio_compra, 2, ',', '.')}}</td>
-						<td>Bs. {{number_format($fuel->precio_venta, 2, ',', '.')}}</td>
+						<td class="centrado">{{$fuel->unidad}}</td>
+						<td class="centrado">Bs. {{number_format($fuel->precio_compra, 2, ',', '.')}}</td>
+						<td class="centrado">Bs. {{number_format($fuel->precio_venta, 2, ',', '.')}}</td>
 						<td class="centrado">
-							<button class="btn btn-min info" wire:click="tanques({{$fuel->id}})"><i class="mdi mdi-pipe"></i>Línea</button>
+							<button class="btn btn-min info" wire:click="tanques({{$fuel->id}})"><i class="mdi mdi-pipe"></i>@if($fuel->unidad == 'L') Tanques @else Línea @endif</button>
 						</td>
 						@if ($editar)
 						<td class="centrado">

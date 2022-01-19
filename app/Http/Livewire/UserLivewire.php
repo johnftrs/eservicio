@@ -57,7 +57,7 @@ class UserLivewire extends Component
 			'password' => $this->password,
 			'nombre_completo' => $this->nombre_completo,
 			'ci' => $this->ci,
-			'fecha_nacimiento' => $this->fecha_nacimiento ? Carbon::createFromFormat('d/m/y', $this->fecha_nacimiento)->format('Y-m-d') : null,
+			'fecha_nacimiento' => $this->fecha_nacimiento,
 			'direccion' => $this->direccion,
 			'zona' => $this->zona,
 			'telefono' => $this->telefono,
@@ -71,8 +71,8 @@ class UserLivewire extends Component
 			'ex_jefe' => $this->ex_jefe,
 			'ex_renuncia' => $this->ex_renuncia,
 			'ex_observaciones' => $this->ex_observaciones,
-			'fecha_ingreso' => $this->fecha_ingreso ? Carbon::createFromFormat('d/m/y', $this->fecha_ingreso)->format('Y-m-d') : null,
-			'fecha_retiro' => $this->fecha_retiro ? Carbon::createFromFormat('d/m/y', $this->fecha_retiro)->format('Y-m-d') : null,
+			'fecha_ingreso' => $this->fecha_ingreso,
+			'fecha_retiro' => $this->fecha_retiro,
 			'casillero' => $this->casillero,
 			'siges' => $this->siges,
 			'biometrico' => $this->biometrico,
@@ -107,7 +107,7 @@ class UserLivewire extends Component
 		$this->password = $human->password;
 		$this->nombre_completo = $human->nombre_completo;
 		$this->ci = $human->ci;
-		$this->fecha_nacimiento = $human->fecha_nacimiento ? Carbon::parse($human->fecha_nacimiento)->format('d/m/y') : null;
+		$this->fecha_nacimiento = $human->fecha_nacimiento;
 		$this->direccion = $human->direccion;
 		$this->zona = $human->zona;
 		$this->telefono = $human->telefono;
@@ -121,8 +121,8 @@ class UserLivewire extends Component
 		$this->ex_jefe = $human->ex_jefe;
 		$this->ex_renuncia = $human->ex_renuncia;
 		$this->ex_observaciones = $human->ex_observaciones;
-		$this->fecha_ingreso = $human->fecha_ingreso ? Carbon::parse($human->fecha_ingreso)->format('d/m/y') : null;
-		$this->fecha_retiro = $human->fecha_retiro ? Carbon::parse($human->fecha_retiro)->format('d/m/y') : null;
+		$this->fecha_ingreso = $human->fecha_ingreso;
+		$this->fecha_retiro = $human->fecha_retiro;
 		$this->casillero = $human->casillero;
 		$this->siges = $human->siges;
 		$this->biometrico = $human->biometrico;
@@ -147,12 +147,13 @@ class UserLivewire extends Component
 	}
 	public function update() {
 		$user = User::find($this->modelo_id);
-		$path = null;
+		$human = Human::find($this->modelo_id);
 		if ($this->foto != null) {
 			$this->foto->storeAs('public/photos', 'user_'.$user->id.'.JPG');
 			$path = 'storage/photos/user_'.$user->id.'.JPG';
+		} else {
+			$path = $human->foto;
 		}
-		$human = Human::find($this->modelo_id);
 		$this->validate([
 			'name' => 'required',
 			'password' => 'required',
@@ -168,7 +169,7 @@ class UserLivewire extends Component
 			'password' => $this->password,
 			'nombre_completo' => $this->nombre_completo,
 			'ci' => $this->ci,
-			'fecha_nacimiento' => $this->fecha_nacimiento ? Carbon::createFromFormat('d/m/y', $this->fecha_nacimiento)->format('Y-m-d') : null,
+			'fecha_nacimiento' => $this->fecha_nacimiento,
 			'direccion' => $this->direccion,
 			'zona' => $this->zona,
 			'telefono' => $this->telefono,
@@ -182,8 +183,8 @@ class UserLivewire extends Component
 			'ex_jefe' => $this->ex_jefe,
 			'ex_renuncia' => $this->ex_renuncia,
 			'ex_observaciones' => $this->ex_observaciones,
-			'fecha_ingreso' => $this->fecha_ingreso ? Carbon::createFromFormat('d/m/y', $this->fecha_ingreso)->format('Y-m-d') : null,
-			'fecha_retiro' => $this->fecha_retiro ? Carbon::createFromFormat('d/m/y', $this->fecha_retiro)->format('Y-m-d') : null,
+			'fecha_ingreso' => $this->fecha_ingreso,
+			'fecha_retiro' => $this->fecha_retiro,
 			'casillero' => $this->casillero,
 			'siges' => $this->siges,
 			'biometrico' => $this->biometrico,

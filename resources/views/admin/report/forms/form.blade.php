@@ -1,7 +1,7 @@
 <br>
 <div class="form-group">
 	{!! Form::label('Fecha*','',['class'=>'naranja']) !!}
-	<input wire:model="fecha" type="text" name="fecha" placeholder="Inserte Fecha" class="form-control datepicker" required>
+	<input wire:model="fecha" type="date" name="fecha" placeholder="Inserte Fecha" class="form-control" required>
 	@error ('fecha') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="form-group">
@@ -136,8 +136,3 @@
 	</div>
 </div>
 <br><br><br>
-<script>
-	$('body').on('change','input.datepicker',function() {
-		@this.set('fecha',$(this).val());
-	});
-</script>

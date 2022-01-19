@@ -14,7 +14,11 @@
 	@error ('precio_venta') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="form-group">
-	{!! Form::label('Unidad de Medida Combustible') !!}
-	<input wire:model="unidad" type="text" name="unidad" placeholder="Inserte Unidad" class="form-control">
+	{!! Form::label('Unidad de Medida Combustible*','',['class'=>'naranja']) !!}
+	<select wire:model="unidad" name="unidad" class="form-control">
+		<option value="">-- Seleccione una opción --</option>
+		<option value="m3">m3</option>
+		<option value="L">L</option>
+	</select>
 	@error ('unidad') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>

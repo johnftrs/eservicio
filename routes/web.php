@@ -15,6 +15,9 @@ use App\Http\Livewire\ReportLivewire;
 use App\Http\Livewire\TurnLivewire;
 use App\Http\Livewire\ActivadorLivewire;
 use App\Http\Livewire\MovdiarioLivewire;
+use App\Http\Livewire\MovfechasLivewire;
+use App\Http\Livewire\BuySellLivewire;
+use App\Http\Livewire\BankLivewire;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,11 +48,15 @@ Route::get('/admin/ticket',TicketLivewire::class)->middleware('auth');
 Route::get('/admin/fuel',FuelLivewire::class)->middleware('auth');
 Route::get('/admin/arching',ReportLivewire::class)->middleware('auth');
 Route::get('/admin/turn',TurnLivewire::class)->middleware('auth');
+Route::get('/admin/buysell',BuySellLivewire::class)->middleware('auth');
+Route::get('/admin/bank',BankLivewire::class)->middleware('auth');
 Route::get('/admin/activar/ticket/{variable?}',ActivadorLivewire::class)->middleware('auth');
 Route::get('/admin/ARQUEO-PDF/{report_id?}', [ReportLivewire::class, 'openModalPDF'])->middleware('auth');
 Route::get('/admin/KARDEX-PDF/{user_id?}', [UserLivewire::class, 'openModalPDF'])->middleware('auth');
 Route::get('/admin/report/movimiento_diario', MovdiarioLivewire::class)->middleware('auth');
 Route::get('/admin/pdf/movimiento_diario/{id?}/{date?}', [MovdiarioLivewire::class, 'openModalPDF'])->middleware('auth');
+Route::get('/admin/report/movimiento_por_fechas', MovfechasLivewire::class)->middleware('auth');
+Route::get('/admin/pdf/movimiento_por_fechas/{id}/{date}/{date2}', [MovfechasLivewire::class, 'openModalPDF'])->middleware('auth');
 
 
 /*

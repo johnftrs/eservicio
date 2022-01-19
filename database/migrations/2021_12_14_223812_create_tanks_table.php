@@ -16,8 +16,8 @@ class CreateTanksTable extends Migration
         Schema::create('tanks', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->bigInteger('total')->nullable();
-            $table->bigInteger('actual')->nullable();
+            $table->double('total', 15, 2)->nullable();
+            $table->double('actual', 15, 2)->nullable();
             $table->unsignedBigInteger('fuel_id')->nullable();
             $table->foreign('fuel_id')->references('id')->on('fuels')->onDelete('set null');
             $table->unsignedBigInteger('office_id')->nullable();

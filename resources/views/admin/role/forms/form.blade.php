@@ -9,7 +9,7 @@
 	@error ('name') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="col-4">
-	@foreach(\Auth::user()->role->functionalities_filtro_menu() as $k=>$func)
+	@foreach($functionalities as $k=>$func)
 	<?php $k++; ?>
 	<div class="col-1">
 		<div class="col-4 nr">

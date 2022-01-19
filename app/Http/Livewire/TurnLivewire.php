@@ -11,7 +11,7 @@ class TurnLivewire extends Component {
     public $delete = false;
     public $accion = 'store';
     public $mensaje = '';
-    public $me = 'MOFF';
+    public $me = 'MTUR';
     public $modelo_id, $nombre, $estado, $hora_inicio, $hora_fin, $office_id;
     public function render() {
         return view(

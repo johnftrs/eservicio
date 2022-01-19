@@ -14,11 +14,11 @@
 </div>
 <div class="form-group">
 	{!! Form::label('Hora de inicio - [HH:mm]') !!}
-	<input wire:model="hora_inicio" type="text" name="hora_inicio" placeholder="HH:mm" class="form-control">
+	<input wire:model="hora_inicio" type="time" name="hora_inicio" placeholder="HH:mm" class="form-control">
 	@error ('hora_inicio') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="form-group">
 	{!! Form::label('Hora Fin - [HH:mm]') !!}
-	<input wire:model="hora_fin" type="text" name="hora_fin" placeholder="HH:mm" class="form-control">
+	<input wire:model="hora_fin" type="time" name="hora_fin" placeholder="HH:mm" class="form-control">
 	@error ('hora_fin') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>

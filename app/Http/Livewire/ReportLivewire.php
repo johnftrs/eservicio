@@ -8,6 +8,7 @@ use App\Models\Report;
 use App\Models\Accounting;
 use App\Models\Turn;
 use App\Models\Ticket;
+use App\Models\Tank;
 use Carbon\Carbon;
 use Auth;
 use PDF;
@@ -51,7 +52,7 @@ class ReportLivewire extends Component {
         if ($this->suma==null) { $this->suma = 0; }
         if ($this->tarjeta==null) { $this->tarjeta = 0; }
         $report = Report::create([
-            'fecha' => Carbon::createFromFormat('d/m/y', $this->fecha)->format('Y-m-d'),
+            'fecha' => $this->fecha,
             'monto_total' => $this->suma + $this->tarjeta,
             'efectivo' => $this->suma,
             'tarjeta' => $this->tarjeta,
@@ -71,7 +72,7 @@ class ReportLivewire extends Component {
             foreach ($this->dispensers as $key => $dis) {
                 if ($dis) {
                     $dispenser = Dispenser::find($dis);
-                    Accounting::create([
+                    $accounting = Accounting::create([
                         'meter_inicial' => $dispenser->meter,
                         'meter_final' => $this->meters[$dis],
                         'cantidad' => $this->meters[$dis]-Dispenser::find($dis)->meter,
@@ -83,6 +84,11 @@ class ReportLivewire extends Component {
                     ]);
                     $dispenser->meter = $this->meters[$dis];
                     $dispenser->update();
+                    if ($dispenser->tank->fuel->unidad == 'L') {
+                        $tank = Tank::find($dispenser->tank_id);
+                        $tank->actual -= $accounting->cantidad;
+                        $tank->update();
+                    }
                 }
             }
         }
@@ -100,58 +106,6 @@ class ReportLivewire extends Component {
         $this->limpiar();
         $this->mensaje='Arqueo creado exitosamente';
         $this->openModalPDF($report->id);
-    }
-    public function edit($id) {
-        $report = Report::find($id);
-        $this->modelo_id = $report->id;
-        $this->fecha = $report->fecha;
-        $this->efectivo = $report->efectivo;
-        $this->tarjeta = $report->tarjeta;
-        $this->firmado = $report->firmado;
-        $this->calibracion = $report->calibracion;
-        $this->_200 = $report->_200;
-        $this->_100 = $report->_100;
-        $this->_50 = $report->_50;
-        $this->_20 = $report->_20;
-        $this->_10 = $report->_10;
-        $this->monedas = $report->monedas;
-        $this->turn_id = $report->turn_id;
-        foreach ($report->accountings as $key => $accounting) {
-            $this->dispensers[$accounting->dispenser_id] = $accounting->dispenser_id;
-        }
-        foreach ($report->accountings as $key => $accounting) {
-            $this->meters[$accounting->dispenser_id] = $accounting->meter_final;
-        }
-        if (($report->id == \App\Models\Report::orderBy('id','desc')->first()->id)) {
-            $this->modal['accion'] = 'edit';
-            $this->modal['active'] = true;
-            $this->modal['title'] = 'Editar Arqueo';
-        }
-    }
-    public function update() {
-        $report = Report::find($this->modelo_id);
-        $this->validate([
-            'fecha' => 'required',
-            'turn_id' => 'required',
-        ]);
-        $report->update([
-            'fecha' => $this->fecha,
-            'monto_total' => $this->suma,
-            'efectivo' => $this->efectivo,
-            'tarjeta' => $this->tarjeta,
-            'firmado' => $this->firmado,
-            'calibracion' => $this->calibracion,
-            '_200' => ($this->_200==null)?0:$this->_200,
-            '_100' => ($this->_100==null)?0:$this->_100,
-            '_50' => ($this->_50==null)?0:$this->_50,
-            '_20' => ($this->_20==null)?0:$this->_20,
-            '_10' => ($this->_10==null)?0:$this->_10,
-            'monedas' => ($this->monedas==null)?0:$this->monedas,
-            'user_id' => Auth::id(),
-            'turn_id' => $this->turn_id,
-        ]);
-        $this->limpiar();
-        $this->mensaje='Arqueo editado exitosamente';
     }
     public function select($id) {
         $this->modelo_id = $id;

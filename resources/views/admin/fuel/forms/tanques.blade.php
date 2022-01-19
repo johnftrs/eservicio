@@ -9,19 +9,25 @@
 			<br>
 			<div class="table-responsive">
 				<div class="col-4">
-					<div class="col-1-3">
+					<div class="col-1">
 						<div class="form-group">
 							<span><b>Nombre:</b></span>
 							<span>{{$fuels->find($modelo_id)->nombre}}</span>
 						</div>
 					</div>
-					<div class="col-1-3">
+					<div class="col-1">
 						<div class="form-group">
-							<span><b>Precio:</b></span>
-							<span>{{$fuels->find($modelo_id)->precio}}</span>
+							<span><b>Precio Compra:</b></span>
+							<span>{{$fuels->find($modelo_id)->precio_compra}}</span>
 						</div>
 					</div>
-					<div class="col-1-3">
+					<div class="col-1">
+						<div class="form-group">
+							<span><b>Precio Venta:</b></span>
+							<span>{{$fuels->find($modelo_id)->precio_venta}}</span>
+						</div>
+					</div>
+					<div class="col-1">
 						<div class="form-group">
 							<span><b>Unidad:</b></span>
 							<span>{{$fuels->find($modelo_id)->unidad}}</span>
@@ -42,8 +48,8 @@
 				<table class="table table-hover">
 					<thead>
 						<th>Nombre</th>
-						<th>Contenido Actual</th>
-						<th>Capacidad Máxima</th>
+						<th class="centrado">Contenido Actual</th>
+						<th class="centrado">Capacidad Máxima</th>
 						@if ($editar)<th class="centrado">Editar</th>@endif
 						@if ($eliminar)<th class="centrado">Borrar</th>@endif
 					</thead>
@@ -51,8 +57,8 @@
 						@foreach($tanks->where('fuel_id',$modelo_id) as $tank)
 						<tr>
 							<td>{{$tank->nombre}}</td>
-							<td>{{$tank->actual}}</td>
-							<td>{{$tank->total}}</td>
+							<td class="centrado">{{number_format($tank->actual, 2, ',', '.')}} L</td>
+							<td class="centrado">{{number_format($tank->total, 2, ',', '.')}} L</td>
 							@if ($editar)
 							<td class="centrado">
 								<button class="btn btn-min warning" wire:click="h_edit({{$tank->id}})"><i class="mdi mdi-pencil"></i>Editar</button>

@@ -34,6 +34,7 @@ class FuelLivewire extends Component
 		$this->validate([
 			'nombre' => 'required',
 			'precio_venta' => 'required',
+			'unidad' => 'required',
 		]);
 		Fuel::create([
 			'nombre' => $this->nombre,
@@ -62,10 +63,12 @@ class FuelLivewire extends Component
 		$this->validate([
 			'nombre' => 'required',
 			'precio_venta' => 'required',
+			'unidad' => 'required',
 		]);
 		$fuel->update([
 			'nombre' => $this->nombre,
 			'precio_venta' => $this->precio_venta,
+			'precio_compra' => $this->precio_compra,
 			'unidad' => $this->unidad,
 		]);
 		$this->limpiar();
@@ -107,6 +110,8 @@ class FuelLivewire extends Component
 		$this->validate([
 			'h_nombre' =>'required',
 		]);
+		if ($this->h_total == "") { $this->h_total = null; }
+		if ($this->h_actual == "") { $this->h_actual = null; }
 		Tank::create([
 			'nombre' => $this->h_nombre,
 			'total' => $this->h_total,
@@ -133,6 +138,8 @@ class FuelLivewire extends Component
 			'h_nombre' =>'required',
 		]);
 		$fuel = Tank::find($this->h_modelo_id);
+		if ($this->h_total == "") { $this->h_total = null; }
+		if ($this->h_actual == "") { $this->h_actual = null; }
 		$fuel->update([
 			'nombre' => $this->h_nombre,
 			'total' => $this->h_total,

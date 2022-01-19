@@ -63,7 +63,7 @@
 	<div class="col-2">
 		<div class="form-group">
 			{!! Form::label('Fecha de Nacimiento') !!}
-			<input wire:model="fecha_nacimiento" type="text" name="fecha_nacimiento" placeholder="Inserte Fecha de Nacimiento" class="form-control datepicker">
+			<input wire:model="fecha_nacimiento" type="date" name="fecha_nacimiento" placeholder="Inserte Fecha de Nacimiento" class="form-control">
 			@error ('fecha_nacimiento') <span class="validacion">*Campo Obligatorio*</span> @enderror
 		</div>
 	</div>
@@ -175,14 +175,14 @@
 	<div class="col-2">
 		<div class="form-group">
 			{!! Form::label('Fecha Ingreso') !!}
-			<input wire:model="fecha_ingreso" type="text" name="fecha_ingreso" placeholder="Inserte Fecha Ingreso" class="form-control datepicker">
+			<input wire:model="fecha_ingreso" type="date" name="fecha_ingreso" placeholder="Inserte Fecha Ingreso" class="form-control">
 			@error ('fecha_ingreso') <span class="validacion">*Campo Obligatorio*</span> @enderror
 		</div>
 	</div>
 	<div class="col-2">
 		<div class="form-group">
 			{!! Form::label('Fecha Retiro') !!}
-			<input wire:model="fecha_retiro" type="text" name="fecha_retiro" placeholder="Inserte Fecha Retiro" class="form-control datepicker">
+			<input wire:model="fecha_retiro" type="date" name="fecha_retiro" placeholder="Inserte Fecha Retiro" class="form-control">
 			@error ('fecha_retiro') <span class="validacion">*Campo Obligatorio*</span> @enderror
 		</div>
 	</div>
@@ -311,8 +311,3 @@
 	<input wire:model="direccion_referencia_personal" type="text" name="direccion_referencia_personal" placeholder="Inserte Direccion" class="form-control">
 	@error ('direccion_referencia_personal') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
-<script>
-	$('body').on('change','input.datepicker',function() {
-		@this.set($(this).attr('name'),$(this).val());
-	});
-</script>

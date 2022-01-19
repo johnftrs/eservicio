@@ -1,14 +1,19 @@
 <div class="card">
 	@include('alerts.error')
 	<div class="card-header primary-low">
-		<h5 class="card-title"><i class="mdi mdi-book-open-page-variant"></i>Movimiento Diario</h5>
+		<h5 class="card-title"><i class="mdi mdi-book-open-page-variant"></i>Movimiento Por Fechas</h5>
 	</div>
 	<div class="card-body">
 		<div class="table-responsive">
 			<div class="form-group">
-				{!! Form::label('Fecha*','',['class'=>'naranja']) !!}
+				{!! Form::label('Desde*','',['class'=>'naranja']) !!}
 				<input wire:model="fecha" type="date" name="fecha" placeholder="Inserte Fecha" class="form-control" required>
 				@error ('fecha') <span class="validacion">*Campo Obligatorio*</span> @enderror
+			</div>
+			<div class="form-group">
+				{!! Form::label('Hasta*','',['class'=>'naranja']) !!}
+				<input wire:model="fecha2" type="date" name="fecha2" placeholder="Inserte Fecha" class="form-control" required>
+				@error ('fecha2') <span class="validacion">*Campo Obligatorio*</span> @enderror
 			</div>
 			<div class="form-group">
 				{!! Form::label('Turno*','',['class'=>'naranja']) !!}
@@ -34,8 +39,7 @@
 		</div>
 		<div class="panel-body" >
 			@if($modal['url_pdf'] != '')
-			<iframe id="iframe_id" src="{{ ($modal['url_pdf'] != '')?(url($modal['url_pdf'])):'' }}"></iframe>
-			@endif
+			<iframe id="iframe_id" src="{{ ($modal['url_pdf'] != '')?(url($modal['url_pdf'])):'' }}"></iframe>			@endif
 		</div>
 		<div class="panel-footer col-4 default-soft">
 			@if($modal['accion']=='pdf')

@@ -21,8 +21,8 @@ class RoleLivewire extends Component
 	public function render() {
 		return view(
 			'admin.role.index',[
-				'functionalities' => Auth::user()->role->functionalities,
-				'roles' => Role::where('id','>',1)->get(),
+				'functionalities' => Functionality::where('menu_id','!=',3)->where('menu_id','!=',4)->get()->unique('menu_id'),
+				'roles' => (Auth::user()->role_id == 1) ? Role::get() : Role::where('id','>',1)->get(),
 				'menus' => Menu::get(),
 			])->layout('layouts.app',['me'=>$this->me]);
 	}

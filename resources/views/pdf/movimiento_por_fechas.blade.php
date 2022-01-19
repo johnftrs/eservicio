@@ -36,12 +36,14 @@ $paginas=1;
 				<br>
 				<span><u>{{\Auth::user()->people->office->ciudad}}</u></span>
 			</div>
-			<div class="centrado fs-16 bb"><b>REOPORTE ARQUEO</b></div>
+			<div class="centrado fs-16 bb"><b>ARQUEOS POR FECHAS</b></div>
 			<table class="">
 				<tbody>
 					<tr>
-						<td class="bold">Fecha:</td>
+						<td class="bold">Desde:</td>
 						<td class="nomb">{{\Carbon\Carbon::parse($date)->format('d/m/Y')}}</td>
+						<td class="bold">Hasta:</td>
+						<td class="nomb">{{\Carbon\Carbon::parse($date2)->format('d/m/Y')}}</td>
 						<td class="bold">Turno:</td>
 						<td>{{$turno}}</td>
 					</tr>
