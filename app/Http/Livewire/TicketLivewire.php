@@ -4,9 +4,12 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Ticket;
+use App\Models\Lot;
+use App\Models\Asignation;
 use App\Models\Driver;
 use App\Models\Vehicle;
 use App\Models\Dispenser;
+use App\Models\Client;
 use Carbon\Carbon;
 use Auth;
 
@@ -14,95 +17,113 @@ class TicketLivewire extends Component
 {
 	public $modal = false;
 	public $delete = false;
-	public $actiModal = false;
 	public $accion = 'store';
+	public $page = false;
+	public $client;
+	public $grupo;
+	public $show_vales;
+	public $lote;
 	public $mensaje = '';
 	public $me = 'MTIC';
-	public $modelo_id, $codigo, $serie, $codigo_fin, $monto, $estado='Activo', $fecha_uso, $detalle, $driver_id, $vehicle_id, $dispenser_id, $turn_id;
+	public $po = 'TIC';
+	public $modelo_id, $codigo, $inicio, $fin, $serie, $monto, $office_id, $estado='Activo', $client_id, $detalle, $lot_id;
+	
 	public function render() {
+		$office_id = Auth::user()->people->office_id;
 		return view(
 			'admin.ticket.index',[
-				'tickets' => Ticket::where('office_id',Auth::user()->people->office_id)->get(),
-				'drivers' => Driver::join('clients', 'clients.id', '=', 'drivers.client_id')->select('drivers.*')->where('clients.office_id',Auth::user()->people->office_id)->get(),
-				'vehicles' => Vehicle::join('clients', 'clients.id', '=', 'vehicles.client_id')->select('vehicles.*')->where('clients.office_id',Auth::user()->people->office_id)->get(),
-				'dispensers' => Dispenser::where('office_id',Auth::user()->people->office_id)->get(),
-			])->layout('layouts.app',['me'=>$this->me]);
+				'lotes' => Lot::where('office_id',$office_id)->orderBy('id','desc')->get(),
+				'asignations' => Asignation::get(),
+				'tickets' => Ticket::get(),
+				'clients' => Client::where('office_id',$office_id)->get(),
+				'drivers' => Driver::join('clients', 'clients.id', '=', 'drivers.client_id')->select('drivers.*')->where('clients.office_id',$office_id)->get(),
+				'vehicles' => Vehicle::join('clients', 'clients.id', '=', 'vehicles.client_id')->select('vehicles.*')->where('clients.office_id',$office_id)->get(),
+				'dispensers' => Dispenser::where('office_id',$office_id)->get(),
+			])->layout('layouts.app',['me'=>$this->me,'po'=>$this->po,'tickets' => Ticket::get()]);
 	}
 	public function create() {
 		$this->accion = 'store';
 		$this->modal = true;
 	}
 	public function store() {
-		if ($this->codigo_fin == null) {
-			$this->codigo_fin = $this->codigo;
-		}
 		$this->validate([
-			'codigo' => 'required',
+			'inicio' => 'required',
+			'fin' => 'required',
+			'serie' => 'required',
 			'estado' => 'required',
 		]);
-		for ($i=intval($this->codigo); $i <= intval($this->codigo_fin); $i++) {
+		$lot = Lot::create([
+			'inicio' => $this->inicio,
+			'fin' => $this->fin,
+			'fecha' => Carbon::now(),
+			'serie' => $this->serie,
+			'office_id' => Auth::user()->people->office_id,
+		]);
+		if ($this->client_id != null) {
+			$asig = Asignation::create([
+				'inicio' => $this->inicio,
+				'fin' => $this->fin,
+				'fecha' => Carbon::now(),
+				'client_id' => $this->client_id,
+			]);
+			$asig_id = $asig->id;
+		} else { $asig_id = null; }
+		for ($i=intval($this->inicio); $i <= intval($this->fin); $i++) {
 			Ticket::create([
 				'codigo' => $i,
-				'serie' => $this->serie,
 				'monto' => $this->monto,
 				'estado' => $this->estado,
 				'user_id' => Auth::id(),
-				'office_id' => Auth::user()->people->office_id,
+				'lot_id' => $lot->id,
+				'asignation_id' => $asig_id,
 			]); 
 		}
 		$this->limpiar();
-		$this->mensaje='Ticket creado exitosamente';
-	}
-	public function activar() {
-		$this->actiModal = true;
-	}
-	public function usar() {
-		$this->validate([
-			'codigo' => 'required',
-			'driver_id' => 'required',
-			'vehicle_id' => 'required',
-			'dispenser_id' => 'required',
-			'turn_id' => 'required',
-		]);
-		$ticket = Ticket::find($this->codigo);
-		if (isset($ticket->id)) {
-			if ($ticket->estado == 'Activo') {
-				$ticket->update([
-					'codigo' => $this->codigo,
-					'serie' => $this->serie,
-					'monto' => $this->monto,
-					'estado' => 'Usado',
-					'fecha_uso' => Carbon::now(),
-					'detalle' => $this->detalle,
-					'driver_id' => $this->driver_id,
-					'vehicle_id' => $this->vehicle_id,
-					'dispenser_id' => $this->dispenser_id,
-					'turn_id' => $this->turn_id,
-					'user_id' => Auth::id(),
-				]);
-				$this->mensaje = 'Ticket '.$this->codigo.' Activado Exitosamente';
-			} else {
-				$this->mensaje = 'El ticket '.$this->codigo.' no está habilitado';
-			}
-		} else {
-			$this->mensaje = 'El ticket '.$this->codigo.' no existe';
-		}
-		$this->limpiar();
-		$this->mensaje='Ticket recibido exitosamente';
+		$this->mensaje='Vales creados exitosamente';
 	}
 	public function edit($id) {
-		$ticket = Ticket::find($id);
-		$this->modelo_id = $ticket->id;
-		$this->codigo = $ticket->codigo;
-		$this->serie = $ticket->serie;
-		$this->detalle = $ticket->detalle;
-		$this->monto = $ticket->monto;
-		$this->estado = $ticket->estado;
+		$lot = Lot::find($id);
+		$this->modelo_id = $lot->id;
+		$this->serie = $lot->serie;
+		$this->detalle = $lot->tickets->first()->detalle;
 
-		$this->accion = 'edit';
+		$this->accion = 'edit_lote';
 		$this->modal = true;
 	}
 	public function update() {
+		$lot = Lot::find($this->modelo_id);
+		$this->validate([
+			'serie' => 'required',
+			'estado' => 'required',
+		]);
+		$lot->update([
+			'serie' => $this->serie,
+			'user_id' => Auth::id(),
+		]);
+		foreach ($lot->tickets as $key => $ticket) {
+			$ticket->update([
+				'detalle' => $this->detalle,
+				'user_id' => Auth::id(),
+			]);
+		}
+		$this->limpiar();
+		$this->mensaje='Vales editados exitosamente';
+	}
+	public function vales($id) {
+		$this->lote = Lot::find($id);
+		$this->page = true;
+	}
+	public function edit_ticket($id) {
+		$this->modelo_id = $id;
+		$ticket = Ticket::find($id);
+		$this->accion = 'edit_ticket';
+		$this->codigo = $ticket->codigo;
+		$this->monto = $ticket->monto;
+		$this->estado = $ticket->estado;
+		$this->detalle = $ticket->detalle;
+		$this->modal = true;
+	}
+	public function update_ticket() {
 		$ticket = Ticket::find($this->modelo_id);
 		$this->validate([
 			'codigo' => 'required',
@@ -110,40 +131,41 @@ class TicketLivewire extends Component
 		]);
 		$ticket->update([
 			'codigo' => $this->codigo,
-			'serie' => $this->serie,
-			'monto' => $this->monto,
+			'monto' => $this->monto ? $this->monto : null,
 			'estado' => $this->estado,
 			'detalle' => $this->detalle,
 			'user_id' => Auth::id(),
 		]);
 		$this->limpiar();
-		$this->mensaje='Ticket editado exitosamente';
+		$this->mensaje='Vale editado exitosamente';
 	}
 	public function select($id) {
 		$this->modelo_id = $id;
 		$this->delete = true;
 	}
 	public function destroy() {
-		Ticket::destroy($this->modelo_id);
+		Lot::destroy($this->modelo_id);
+		$this->modelo_id = null;
 		$this->delete_id = null;
 		$this->delete = false;
-		$this->mensaje='Ticket eliminado exitosamente';
+		$this->mensaje='Vales eliminados exitosamente';
 	}
 	public function limpiar() {
-		$this->nombre = null;
+		$this->show_vales = null;
+		$this->lot_id = null;
+		$this->modelo_id = null;
+		$this->client = null;
+		$this->client_id = null;
+		$this->lote = null;
+		$this->inicio = null;
+		$this->fin = null;
 		$this->codigo = null;
-		$this->codigo_fin = null;
 		$this->serie = null;
 		$this->monto = null;
+		$this->detalle = null;
 		$this->estado = 'Activo';
-		$this->fecha_uso = null;
-		$this->driver_id = null;
-		$this->vehicle_id = null;
-		$this->dispenser_id = null;
-		$this->turn_id = null;
 
 		$this->modal = false;
 		$this->delete = false;
-		$this->actiModal = false;
 	}
 }

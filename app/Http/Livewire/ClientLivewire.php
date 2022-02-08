@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\Office;
 use App\Models\Driver;
 use App\Models\Vehicle;
+use App\Models\Ticket;
 use Auth;
 
 class ClientLivewire extends Component
@@ -21,13 +22,15 @@ class ClientLivewire extends Component
 	public $modelo_id, $nombre, $nit, $correo, $direccion, $telefono, $telefono2, $estado='Activo', $representante_legal, $representante_ci, $representante_telefono, $representante_telefono2, $representante_email, $representante_detalles;
 	public $d_modelo_id, $d_ci, $d_nombre, $d_paterno, $d_materno, $d_licencia, $d_estado='Activo';
 	public $v_modelo_id, $v_placa, $v_marca, $v_modelo, $v_anyo, $v_color, $v_estado='Activo';
+	
 	public function render() {
+		$office_id = Auth::user()->people->office_id;
 		return view(
 			'admin.client.index',[
-				'clients' => Client::where('office_id',Auth::user()->people->office_id)->orderBy('nombre','asc')->get(),
+				'clients' => Client::where('office_id',$office_id)->orderBy('nombre','asc')->get(),
 				'drivers' => Driver::get(),
 				'vehicles' => Vehicle::get(),
-			])->layout('layouts.app',['me'=>$this->me]);
+			])->layout('layouts.app',['me'=>$this->me,'tickets' => Ticket::get()]);
 	}
 	public function create() {
 		$this->accion = 'store';

@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Turn;
+use App\Models\Ticket;
 use Auth;
 
 class TurnLivewire extends Component {
@@ -13,11 +14,13 @@ class TurnLivewire extends Component {
     public $mensaje = '';
     public $me = 'MTUR';
     public $modelo_id, $nombre, $estado, $hora_inicio, $hora_fin, $office_id;
+
     public function render() {
+        $office_id = Auth::user()->people->office_id;
         return view(
             'admin.turn.index',[
-                'turns' => Turn::where('office_id',Auth::user()->people->office_id)->get(),
-            ])->layout('layouts.app',['me'=>$this->me]);
+                'turns' => Turn::where('office_id',$office_id)->get(),
+            ])->layout('layouts.app',['me'=>$this->me,'tickets' => Ticket::get()]);
     }
     public function create() {
         $this->accion = 'store';

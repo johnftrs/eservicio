@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\Functionality;
 use App\Models\Menu;
+use App\Models\Ticket;
 use Auth;
 
 class FunctionalityLivewire extends Component
@@ -15,12 +16,14 @@ class FunctionalityLivewire extends Component
 	public $mensaje = '';
 	public $me = 'MFUN';
 	public $modelo_id, $code, $label, $path, $mostrar, $menu_id;
+	
 	public function render() {
+		$office_id = Auth::user()->people->office_id;
 		return view(
 			'admin.functionality.index',[
 				'lista' => Functionality::get(),
 				'menus' => Menu::get(),
-			])->layout('layouts.app',['me'=>$this->me]);
+			])->layout('layouts.app',['me'=>$this->me,'tickets' => Ticket::get()]);
 	}
 	protected $rules = [
         'code' => 'required',

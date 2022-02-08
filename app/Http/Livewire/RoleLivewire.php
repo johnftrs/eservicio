@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\Menu;
 use App\Models\Functionality;
 use App\Models\Privilege;
+use App\Models\Ticket;
 use Auth;
 
 class RoleLivewire extends Component
@@ -18,13 +19,15 @@ class RoleLivewire extends Component
 	public $funciones;
 	public $me = 'MROL';
 	public $modelo_id, $code, $name;
+	
 	public function render() {
+		$office_id = Auth::user()->people->office_id;
 		return view(
 			'admin.role.index',[
 				'functionalities' => Functionality::where('menu_id','!=',3)->where('menu_id','!=',4)->get()->unique('menu_id'),
 				'roles' => (Auth::user()->role_id == 1) ? Role::get() : Role::where('id','>',1)->get(),
 				'menus' => Menu::get(),
-			])->layout('layouts.app',['me'=>$this->me]);
+			])->layout('layouts.app',['me'=>$this->me,'tickets' => Ticket::get()]);
 	}
 	public function create() {
 		$this->accion = 'store';

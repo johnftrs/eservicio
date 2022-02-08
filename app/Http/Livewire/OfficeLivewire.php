@@ -4,6 +4,8 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Office;
+use App\Models\Ticket;
+use Auth;
 
 class OfficeLivewire extends Component {
 	public $modal = false;
@@ -12,11 +14,13 @@ class OfficeLivewire extends Component {
 	public $mensaje = '';
 	public $me = 'MOFF';
 	public $modelo_id, $nombre, $nit, $telefono, $ciudad, $direccion;
+	
 	public function render() {
+		$office_id = Auth::user()->people->office_id;
 		return view(
 			'admin.office.index',[
 				'offices' => Office::get(),
-			])->layout('layouts.app',['me'=>$this->me]);
+			])->layout('layouts.app',['me'=>$this->me,'tickets' => Ticket::get()]);
 	}
 	public function create() {
 		$this->accion = 'store';

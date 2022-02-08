@@ -15,7 +15,6 @@
 			<table class="table table-hover">
 				<thead>
 					<th>Nombre</th>
-					<th>Nit</th>
 					<th>Dirección</th>
 					<th class="centrado">Telefono</th>
 					<th class="centrado">Telefono 2</th>
@@ -27,7 +26,6 @@
 					@foreach($clients as $client)
 					<tr>
 						<td>{{$client->nombre}}</td>
-						<td>{{$client->nit}}</td>
 						<td>{{$client->direccion}}</td>
 						<td class="centrado">{{$client->telefono}}</td>
 						<td class="centrado">{{$client->telefono2}}</td>

@@ -18,7 +18,6 @@
 </head>
 <?php if(!isset($me)){$me='';} if(!isset($po)){$po='';} ?>
 <body>
-  <div id="cortinafull" onclick="ocultar_cortina();"></div>
   <aside>
     <div class="logo">
       <a href="{{url::to('home')}}">
@@ -53,19 +52,23 @@
           <i class="mdi mdi-menu"></i>
         </a>
       </div>
+      {{--
       <div class="nav-search">
         <input type="text" value="" id="input_buscador" onclick="buscar(this);" class="form-control buscador" placeholder="Buscar..">
         <button type="button" onclick="buscar(this);">
           <i class="mdi mdi-magnify"></i>
         </button>
         <ul id="ul_est">
-          @foreach (\App\Models\Ticket::get() as $ticket)
-            <li class="{{$ticket->estado}}">
-              <a href="{!!url('admin/activar/ticket/'.$ticket->id)!!}" class="{{$ticket->codigo}}">Vale: {{$ticket->codigo}} {{$ticket->serie}}<span>{{$ticket->estado}}</span></a>
-            </li>
-            @endforeach
+          @foreach ($tickets as $ticket)
+          @if($ticket->lot->office_id == Auth::user()->people->office_id)
+          <li class="{{$ticket->estado}}">
+            <a href="{!!url('admin/activar/ticket/'.$ticket->id)!!}" class="{{$ticket->codigo}}">Vale: {{$ticket->codigo}} {{$ticket->serie}}<span>{{$ticket->estado}}</span></a>
+          </li>
+          @endif
+          @endforeach
         </ul>
       </div>
+      --}}
       <div class="nav-log">
         <a onclick="desplegar_log(this);">
           <i class="mdi mdi-account"></i>

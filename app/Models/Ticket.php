@@ -8,8 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Ticket extends Model
 {
 	use HasFactory;
-	protected $fillable = [ 'codigo', 'serie', 'monto', 'estado', 'fecha_uso', 'detalle', 'driver_id', 'vehicle_id', 'dispenser_id', 'turn_id', 'user_id', 'office_id', 'report_id' ];
-	public $timestamps = false;
+	protected $fillable = [ 'codigo', 'monto', 'estado', 'fecha_uso', 'detalle', 'driver_id', 'vehicle_id', 'dispenser_id', 'turn_id', 'user_id', 'report_id', 'lot_id', 'asignation_id' ];
 
 	public function driver() {
 		return $this->belongsTo(Driver::class);
@@ -26,7 +25,13 @@ class Ticket extends Model
 	public function report() {
 		return $this->belongsTo(Report::class);
 	}
-	public function user() {
-		return $this->belongsTo(User::class);
+	public function lot(){
+		return $this->belongsTo(Lot::class);
 	}
+	public function asignation(){
+		return $this->belongsTo(Asignation::class);
+	}
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

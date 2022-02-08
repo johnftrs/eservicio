@@ -45,32 +45,24 @@
 	<div class="modal-dialog panel primary visible">
 		<div class="panel-heading">
 			<h4 class="panel-title">
-				@if($clase == 'hosepipe')
-				<b style="color: white;">Registro de Mangueras</b>
-				@else
+				@if($clase == 'dispenser')
 				<b style="color: white;">Registro de Dispensers</b>
 				@endif
 			</h4>
 			<a class="btn-close btn danger" wire:click="limpiar">&times;</a>
 		</div>
 		<div class="panel-body" >
-			@if($clase == 'hosepipe')
-			@include('admin.dispenser.forms.hosepipe')
-			@else
+			@if($clase == 'dispenser')
 			@include('admin.dispenser.forms.form')
 			@endif
 		</div>
 		<div class="panel-footer col-4 default-soft">
 			@if($accion=='store')
-			@if($clase == 'hosepipe')
-			<button wire:click="h_store()" type="submit" class="btn btn-min primary col-1">Registrar</button>
-			@else
+			@if($clase == 'dispenser')
 			<button wire:click="store()" type="submit" class="btn btn-min primary col-1">Registrar</button>
 			@endif
 			@else
-			@if($clase == 'hosepipe')
-			<button wire:click="h_update()" type="submit" class="btn btn-min warning col-1">Guardar</button>
-			@else
+			@if($clase == 'dispenser')
 			<button wire:click="update()" type="submit" class="btn btn-min warning col-1">Guardar</button>
 			@endif
 			@endif
@@ -82,9 +74,7 @@
 	<div class="modal-alert">
 		<div>
 			<span>Seguro que desea eliminar este registro?</span>
-			@if($clase == 'hosepipe')
-			<button type="button" wire:click="h_destroy()" class="btn danger">Eliminar</button>
-			@else
+			@if($clase == 'dispenser')
 			<button type="button" wire:click="destroy()" class="btn danger">Eliminar</button>
 			@endif
 		</div>

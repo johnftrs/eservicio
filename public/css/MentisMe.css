@@ -888,6 +888,8 @@ input:-webkit-autofill {
 	background-color: #fff;
 	border-radius: 4px;
 	display: block;
+	width: 100%;
+	border: 1px solid transparent;
 }
 .panel-body {
 	overflow-y: auto;
@@ -1862,7 +1864,7 @@ ul.tab-nav>li>a>h6{
 	top: -30px;
 	left: -10px;
 	width: calc(100% + 20px);
-	min-height: calc(100vh - 70px);
+	min-height: calc(100vh);
 }
 /*.pagina{
 	animation-duration: 0.5s;

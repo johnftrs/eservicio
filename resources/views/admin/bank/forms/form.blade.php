@@ -10,7 +10,10 @@
 </div>
 <div class="form-group">
 	{!! Form::label('Moneda') !!}
-	<input wire:model="moneda" type="text" name="moneda" placeholder="Inserte Moneda" class="form-control">
+	<select wire:model="moneda" name="moneda" class="form-control">
+		<option value="">-- Seleccione una opción --</option>
+		<option value="Bs.">Bs.</option>
+	</select>
 	@error ('moneda') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
 <div class="form-group">

@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use App\Models\Fuel;
 use App\Models\Tank;
+use App\Models\Ticket;
 use Auth;
 
 class FuelLivewire extends Component
@@ -18,12 +19,14 @@ class FuelLivewire extends Component
 	public $me = 'MFUE';
 	public $modelo_id, $nombre, $precio_compra, $precio_venta, $unidad;
 	public $h_modelo_id, $h_nombre, $h_total, $h_actual;
+	
 	public function render() {
+		$office_id = Auth::user()->people->office_id;
 		return view(
 			'admin.fuel.index',[
-				'fuels' => Fuel::where('office_id',Auth::user()->people->office_id)->get(),
+				'fuels' => Fuel::where('office_id',$office_id)->get(),
 				'tanks' => Tank::get(),
-			])->layout('layouts.app',['me'=>$this->me]);
+			])->layout('layouts.app',['me'=>$this->me,'tickets' => Ticket::get()]);
 	}
 	public function create() {
 		$this->accion = 'store';

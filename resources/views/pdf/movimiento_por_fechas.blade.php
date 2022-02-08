@@ -209,7 +209,7 @@ $paginas=1;
 						<td class="derecha"></td><td class="derecha"></td>
 						<td class="derecha"></td><td class="derecha"></td>
 						<td class="derecha"><b>Egresos:</b></td>
-						<td class="derecha">-{{number_format($suma_tickets+$reports->sum('tarjeta')+$reports->sum('calibracion'), 2, ',', '.')}}</td>
+						<td class="derecha">{{number_format($suma_tickets+$reports->sum('tarjeta')+$reports->sum('calibracion'), 2, ',', '.')}}</td>
 					</tr>
 					<tr>
 						<td class="derecha"></td><td class="derecha"></td>

@@ -8,6 +8,7 @@ use App\Models\Driver;
 use App\Models\Vehicle;
 use App\Models\Dispenser;
 use App\Models\Location;
+use App\Models\Turn;
 use Auth;
 use Carbon\Carbon;
 
@@ -20,18 +21,21 @@ class ActivadorLivewire extends Component
 	public $mensaje = '';
 	public $me = 'MTIC';
 	public $ticket_id = null, $codigo, $serie, $monto, $detalle, $driver_id, $vehicle_id, $dispenser_id;
+
 	public function render() {
+		$office_id = Auth::user()->people->office_id;
 		if ($this->ticket_id != null) {
 			$this->codigo = Ticket::find($this->ticket_id)->codigo;
 			$this->serie = Ticket::find($this->ticket_id)->serie;
 		}
 		return view(
 			'admin.ticket.activador',[
-				'tickets' => Ticket::where('office_id',Auth::user()->people->office_id)->get(),
-				'drivers' => Driver::join('clients', 'clients.id', '=', 'drivers.client_id')->select('drivers.*')->where('clients.office_id',Auth::user()->people->office_id)->get(),
-				'vehicles' => Vehicle::join('clients', 'clients.id', '=', 'vehicles.client_id')->select('vehicles.*')->where('clients.office_id',Auth::user()->people->office_id)->get(),
-				'dispensers' => Dispenser::where('office_id',Auth::user()->people->office_id)->get(),
-			])->layout('layouts.app',['me'=>$this->me]);
+				'tickets' => Ticket::where('office_id',$office_id)->get(),
+				'turns' => Turn::where('office_id',$office_id)->get(),
+				'drivers' => Driver::join('clients', 'clients.id', '=', 'drivers.client_id')->select('drivers.*')->where('clients.office_id',$office_id)->get(),
+				'vehicles' => Vehicle::join('clients', 'clients.id', '=', 'vehicles.client_id')->select('vehicles.*')->where('clients.office_id',$office_id)->get(),
+				'dispensers' => Dispenser::where('office_id',$office_id)->get(),
+			])->layout('layouts.app',['me'=>$this->me,'tickets' => Ticket::get()]);
 	}
 	public function store() {
 		$this->validate([

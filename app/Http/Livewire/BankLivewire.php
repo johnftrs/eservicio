@@ -4,6 +4,8 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Bank;
+use App\Models\Ticket;
+use Auth;
 
 class BankLivewire extends Component {
     public $modal = false;
@@ -12,11 +14,13 @@ class BankLivewire extends Component {
     public $mensaje = '';
     public $me = 'MBAN';
     public $modelo_id, $nombre, $cuenta, $moneda, $monto;
+    
     public function render() {
+        $office_id = Auth::user()->people->office_id;
         return view(
             'admin.bank.index',[
-                'banks' => Bank::get(),
-            ])->layout('layouts.app',['me'=>$this->me]);
+                'banks' => Bank::where('office_id',$office_id)->get(),
+            ])->layout('layouts.app',['me'=>$this->me,'tickets' => Ticket::get()]);
     }
     public function create() {
         $this->accion = 'store';

@@ -215,7 +215,7 @@ $paginas=intval( 1+($count/30) );
 						<td class="derecha"></td><td class="derecha"></td>
 						<td class="derecha"></td><td class="derecha"></td>
 						<td class="derecha"><b>Egresos:</b></td>
-						<td class="derecha">-{{number_format($suma_tickets+$report->tarjeta+$report->calibracion, 2, ',', '.')}}</td>
+						<td class="derecha">{{number_format($suma_tickets+$report->tarjeta+$report->calibracion, 2, ',', '.')}}</td>
 					</tr>
 					<tr>
 						<td class="derecha"></td><td class="derecha"></td>

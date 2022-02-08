@@ -7,6 +7,7 @@ use App\Models\Office;
 use App\Models\User;
 use App\Models\Human;
 use App\Models\Role;
+use App\Models\Ticket;
 use Illuminate\Support\Facades\Hash;
 use Livewire\WithFileUploads;
 use Carbon\Carbon;
@@ -21,13 +22,14 @@ class UserLivewire extends Component
 	public $mensaje = '';
 	public $me = 'MUSE';
 	public $modelo_id, $name, $email, $password, $role_id, $nombre_completo, $ci, $fecha_nacimiento, $direccion, $zona, $telefono, $telefono2, $nivel_estudio, $estado_civil, $hijos, $ex_empresa, $ex_cargo, $ex_tiempo, $ex_jefe, $ex_renuncia, $ex_observaciones, $fecha_ingreso, $fecha_retiro, $casillero, $siges, $biometrico, $softcontrol, $cuenta_bmsc, $afp, $foto, $nombre_garante, $relacion_garante, $telefono_garante, $trabajo_garante, $direccion_garante, $nombre_referencia_personal, $relacion_referencia_personal, $telefono_referencia_personal, $trabajo_referencia_personal, $direccion_referencia_personal;
+
 	public function render() {
+		$office_id = Auth::user()->people->office_id;
 		return view(
 			'user.index',[
-				'users' => User::where('role_id','>',1)->get(),
-				'peoples' => Human::get(),
-				'roles' => Role::where('id','>',1)->get(),
-			])->layout('layouts.app',['me'=>$this->me]);
+				'users' => User::join('humans','humans.id','=','users.id')->where('office_id',$office_id)->where('role_id','>',1)->get(),
+				'roles' => Role::where('id','>=',Auth::user()->role_id)->get(),
+			])->layout('layouts.app',['me'=>$this->me,'tickets' => Ticket::get()]);
 	}
 	public function create() {
 		$this->modal['accion'] = 'store';
@@ -39,7 +41,6 @@ class UserLivewire extends Component
 			'name' => 'required',
 			'password' => 'required',
 			'role_id' => 'required',
-			'foto' => 'image|max:15360',
 		]);
 		$user = User::create([
 			'name' => $this->name,

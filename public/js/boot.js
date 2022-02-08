@@ -56,13 +56,13 @@ function seleccionar(clase){
 }
 function filtro(texto) {
 	var palabra = texto.toUpperCase();
-	$('.table-responsive tbody>tr').each(function(index, tr) {
+	$('.table-responsive tbody>tr>.serie').each(function(index, tr) {
 		var str = $(tr).text().toUpperCase();
 		var n = str.search(palabra);
 		if (n<0) {
-			$(tr).css('display', 'none');
+			$(tr).parent().css('display', 'none');
 		} else {
-			$(tr).removeAttr('style');
+			$(tr).parent().removeAttr('style');
 		}
 	});
 	ajustar_tamanos_thead();
@@ -103,10 +103,7 @@ $('.autocompletar').keyup(function(e) {
 	} else {
 		$(this).siblings('ul').removeClass('active');
 	}
-});
-$(".text-select").on('click', '.li_cliente', function() {
-	$('input[name="telefono"]').val($(this).attr('telefono'));
-	$('input[name="telefono2"]').val($(this).attr('telefono2'));
+	$(this).focus();
 });
 $('body').on('click','.text-select>input',function (e) {
 	if ($(this).hasClass('autocompletar')) {
@@ -126,8 +123,8 @@ $('body').on('focusout','.text-select>input',function (e) {
 	}
 });
 $('body').on('click','.text-select>ul>li>a',function (e) {
-	var ul = $(this).parent('li').parent('ul');
-	ul.siblings('input').val($(this).html());
+	/*var ul = $(this).parent('li').parent('ul');*/
+	/*ul.siblings('input').val($(this).html());*/
 	$(this).parent().parent().removeClass('active');
 
 });
@@ -165,7 +162,6 @@ function buscar(i){
 	$(i).parent().addClass('visible');
 	$(i).parent().children('input').select();
 	$(i).parent().children('input').focus();
-	$('#cortinafull').addClass('cortina');
 }
 $('#input_buscador').keyup(function(e){
 	if (e.keyCode == 13 && $(this).val().length != 0) {

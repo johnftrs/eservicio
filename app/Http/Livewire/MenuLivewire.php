@@ -4,6 +4,8 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Menu;
+use App\Models\Ticket;
+use Auth;
 
 class MenuLivewire extends Component
 {
@@ -13,12 +15,13 @@ class MenuLivewire extends Component
 	public $mensaje = '';
 	public $me = 'MMEN';
 	public $modelo_id, $code, $label, $icon, $orden, $tamanyo;
+	
 	public function render() {
+		$office_id = Auth::user()->people->office_id;
 		return view(
 			'admin.menu.index',[
 				'menus' => Menu::orderBy('orden')->get(),
-			])->layout('layouts.app',['me'=>$this->me]);
-	}
+			])->layout('layouts.app',['me'=>$this->me,'tickets' => Ticket::get()]);	}
 	protected $rules = [
         'code' => 'required',
         'label' => 'required',

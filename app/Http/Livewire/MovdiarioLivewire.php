@@ -20,10 +20,11 @@ class MovdiarioLivewire extends Component {
     public $turn_id='TODOS', $fecha;
 
     public function render() {
+        $office_id = Auth::user()->people->office_id;
         return view(
             'admin.pdf.movimiento_diario',[
-                'turns' => Turn::where('office_id',Auth::user()->people->office_id)->orderBy('id','asc')->get(),
-            ])->layout('layouts.app',['me'=>$this->me, 'po'=>$this->po]);
+                'turns' => Turn::where('office_id',$office_id)->orderBy('id','asc')->get(),
+            ])->layout('layouts.app',['me'=>$this->me, 'po'=>$this->po,'tickets' => Ticket::get()]);
     }
     public function openModalPDF($id=null,$date=null) {
         if ($id!=null) {

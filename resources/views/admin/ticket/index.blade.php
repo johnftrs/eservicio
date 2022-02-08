@@ -7,46 +7,50 @@
 	}
 	?>
 	<div class="card-header primary-low">
-		<h5 class="card-title"><i class="mdi mdi-ticket-confirmation"></i>Vales</h5>
-		{{--<button class="btn btn-min default" wire:click="activar"><i class="mdi mdi-check"></i>Usar Vale</button>--}}
+		<h5 class="card-title"><i class="mdi mdi-ticket-confirmation"></i>Lotes de Vales</h5>
+		{{--<select wire:model="client_id" name="client_id" wire:change="change_client" class="btn btn-min primary">
+			<option value="">-- Vales por Cliente --</option>
+			@foreach ($clients as $cl)
+			<option value="{{$cl->id}}">{{$cl->nombre}}</option>
+			@endforeach
+		</select>--}}
 		@if ($crear)<button class="btn btn-min default" wire:click="create"><i class="mdi mdi-plus-circle-outline"></i>agregar</button>@endif
 	</div>
 	<div class="card-body">
+		<div class="flotantes">
+			<div id="filtro">
+				<input type="search" placeholder="Filtro:">
+			</div>
+		</div>
 		<div class="table-responsive">
 			<table class="table table-hover">
 				<thead>
-					<th>Codigo</th>
-					<th>Monto</th>
-					<th>Estado</th>
-					<th>Fecha Uso</th>
-					<th>Conductor</th>
-					<th>Vehículo</th>
-					<th>Dispenser</th>
-					<th>Detalles</th>
-					<th class="centrado">Usuario</th>
-					@if ($editar)<th class="centrado">Editar</th>@endif
-					@if ($eliminar)<th class="centrado">Borrar</th>@endif
+					<th class="centrado">Lote / Serie</th>
+					<th class="centrado">Nro. Inicial</th>
+					<th class="centrado">Nro. Final</th>
+					<th class="centrado">Fecha</th>
+					<th class="centrado">Vales</th>
+					@if ($editar)<th class="centrado">Editar Lote</th>@endif
+					@if ($eliminar)<th class="centrado">Borrar Lote</th>@endif
 				</thead>
 				<tbody>
-					@foreach($tickets as $ticket)
-					<tr class="{{$ticket->estado}}">
-						<td class="centrado">{{$ticket->codigo}} {{$ticket->serie}}</td>
-						<td class="centrado">{{$ticket->monto ? number_format($ticket->monto, 2, ',', '.') : ''}}</td>
-						<td class="centrado">{{$ticket->estado}}</td>
-						<td>{{$ticket->fecha_uso}}</td>
-						<td>{{$ticket->driver_id ? $ticket->driver->nombre : null}}</td>
-						<td class="centrado">{{isset($ticket->vehicle_id)? $ticket->vehicle->placa : null}} - {{isset($ticket->vehicle_id)? $ticket->vehicle->marca : null}}</td>
-						<td>{{$ticket->dispenser_id ? $ticket->dispenser->nombre : null}}</td>
-						<td>{{$ticket->detalle}}</td>
-						<td class="centrado">{{$ticket->user->name}}</td>
+					@foreach($lotes as $lt)
+					<tr>
+						<td class="centrado serie">{{$lt->serie}}</td>
+						<td class="centrado serie">{{$lt->inicio}}</td>
+						<td class="centrado serie">{{$lt->fin}}</td>
+						<td class="centrado serie">{{\Carbon\Carbon::parse($lt->fecha)->format('d/m/Y')}}</td>
+						<td class="centrado">
+							<button class="btn btn-min info" wire:click="vales('{{$lt->id}}')"><i class="mdi mdi-check"></i>Ver Vales</button>
+						</td>
 						@if ($editar)
 						<td class="centrado">
-							<button class="btn btn-min warning" wire:click="edit({{$ticket->id}})"><i class="mdi mdi-pencil"></i>Editar</button>
+							<button class="btn btn-min warning" wire:click="edit({{$lt->id}})"><i class="mdi mdi-pencil"></i>Editar</button>
 						</td>
 						@endif
 						@if ($eliminar)
 						<td class="centrado">
-							<button type="button" wire:click="select({{$ticket->id}})" class="btn btn-min danger"><i class="mdi mdi-trash-can-outline"></i>Borrar</button>
+							<button type="button" wire:click="select('{{$lt->id}}')" class="btn btn-min danger"><i class="mdi mdi-trash-can-outline"></i>Borrar</button>
 						</td>
 						@endif
 					</tr>
@@ -62,11 +66,19 @@
 			<a class="btn-close btn danger" wire:click="limpiar">&times;</a>
 		</div>
 		<div class="panel-body" >
+			@if($accion=='edit_lote')
+			@include('admin.ticket.forms.form_lote')
+			@elseif($accion=='edit_ticket')
+			@include('admin.ticket.forms.form_ticket')
+			@else
 			@include('admin.ticket.forms.form')
+			@endif
 		</div>
 		<div class="panel-footer col-4 default-soft">
 			@if($accion=='store')
 			<button wire:click="store()" type="submit" class="btn btn-min primary col-1">Registrar</button>
+			@elseif($accion=='edit_ticket')
+			<button wire:click="update_ticket()" type="submit" class="btn btn-min warning col-1">Guardar</button>
 			@else
 			<button wire:click="update()" type="submit" class="btn btn-min warning col-1">Guardar</button>
 			@endif
@@ -83,19 +95,7 @@
 	</div>
 	<div id="cortina" wire:click="limpiar"></div>
 	@endif
-	@if( $actiModal )
-	<div class="modal-dialog panel primary visible">
-		<div class="panel-heading">
-			<h4 class="panel-title"><b style="color: white;">Usar Vale</b></h4>
-			<a class="btn-close btn danger" wire:click="limpiar">&times;</a>
-		</div>
-		<div class="panel-body" >
-			@include('admin.ticket.forms.formActivar')
-		</div>
-		<div class="panel-footer col-4 default-soft">
-			<button wire:click="usar()" type="submit" class="btn btn-min primary col-1">Recibir Vale</button>
-		</div>
-	</div>
-	<div id="cortina" wire:click="limpiar"></div>
+	@if( $page )
+	@include('admin.ticket.forms.vales')
 	@endif
 </div>

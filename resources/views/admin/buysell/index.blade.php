@@ -21,6 +21,7 @@
 					<th class="derecha">Monto</th>
 					<th class="centrado">Combustible</th>
 					<th class="centrado">Tanque</th>
+					<th class="centrado">Imprimir</th>
 					@if ($editar)<th class="centrado">Editar</th>@endif
 					@if ($eliminar)<th class="centrado">Borrar</th>@endif
 				</thead>
@@ -34,6 +35,9 @@
 						<td class="derecha">{{number_format($buysell->debito_banco, 2, ',', '.')}}</td>
 						<td class="centrado">{{$buysell->tank->fuel->nombre}}</td>
 						<td class="centrado">{{$buysell->tank->nombre}}</td>
+						<td class="centrado">
+							<button class="btn btn-min info" wire:click="openModalPDF({{ $buysell->id }})"><i class="mdi mdi-printer"></i>PDF</button>
+						</td>
 						@if ($editar)
 						<td class="centrado">
 							<button class="btn btn-min warning" wire:click="edit({{$buysell->id}})"><i class="mdi mdi-pencil"></i>Editar</button>
@@ -50,20 +54,26 @@
 			</table>
 		</div>
 	</div>
-	@if( $modal )
+	@if( $modal['active'] )
 	<div class="modal-dialog panel primary visible">
 		<div class="panel-heading">
-			<h4 class="panel-title"><b style="color: white;">Registro de Compra de Combustibles</b></h4>
+			<h4 class="panel-title"><b style="color: white;">{{$modal['title']}}</b></h4>
 			<a class="btn-close btn danger" wire:click="limpiar">&times;</a>
 		</div>
 		<div class="panel-body" >
+			@if($modal['url_pdf'] != '')
+			<iframe id="iframe_id" src="{{ ($modal['url_pdf'] != '')?(url($modal['url_pdf'])):'' }}"></iframe>
+			@else
 			@include('admin.buysell.forms.form')
+			@endif
 		</div>
 		<div class="panel-footer col-4 default-soft">
-			@if($accion=='store')
+			@if($modal['accion']=='store')
 			<button wire:click="store()" type="submit" class="btn btn-min primary col-1">Registrar</button>
-			@else
+			@elseif($modal['accion']=='edit')
 			<button wire:click="update()" type="submit" class="btn btn-min warning col-1">Guardar</button>
+			@elseif($modal['accion']=='pdf')
+			<button type="button" class="btn btn-min info col-1" onclick="imprimir()">Imprimir</button>
 			@endif
 		</div>
 	</div>
@@ -78,4 +88,15 @@
 	</div>
 	<div id="cortina" wire:click="limpiar"></div>
 	@endif
+	@section('adminjs')
+	<script type="text/javascript">
+		function imprimir() {
+			console.log('print');
+			var myIframe = document.getElementById("iframe_id").contentWindow;
+			myIframe.focus();
+			myIframe.print();
+			return false;
+		}
+	</script>
+	@endsection
 </div>

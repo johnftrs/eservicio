@@ -26,8 +26,8 @@
 					<tr>
 						<td>{{$turn->nombre}}</td>
 						<td>{{$turn->estado}}</td>
-						<td>{{$turn->hora_inicio}}</td>
-						<td>{{$turn->hora_fin}}</td>
+						<td>{{$turn->hora_inicio ? date('H:i',strtotime($turn->hora_inicio)) : null}}</td>
+						<td>{{$turn->hora_fin ? date('H:i',strtotime($turn->hora_fin)) : null}}</td>
 						@if ($editar)
 						<td class="centrado">
 							<button class="btn btn-min warning" wire:click="edit({{$turn->id}})"><i class="mdi mdi-pencil"></i>Editar</button>

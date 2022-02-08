@@ -13,4 +13,7 @@ class Fuel extends Model {
 	public function tanks() {
 		return $this->hasMany(Tank::class);
 	}
+	public function office(){
+		return $this->belongsTo(Office::class);
+	}
 }

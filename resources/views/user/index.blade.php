@@ -21,8 +21,8 @@
 					<th class="centrado">Teléfono</th>
 					<th class="centrado">Foto</th>
 					<th class="centrado">PDF</th>
-					<th class="centrado">Editar</th>
-					<th class="centrado">Borrar</th>
+					@if ($editar)<th class="centrado">Editar</th>@endif
+					@if ($eliminar)<th class="centrado">Borrar</th>@endif
 				</thead>
 				<tbody>
 					@foreach($users as $user)
@@ -31,11 +31,11 @@
 						@if(Auth::user()->role_id<3)
 						<td><i>{{$user->people->password}}</i></td>
 						@endif
-						<td>{{$user->role->name}}</td>
+						<td class="centrado">{{$user->role->name}}</td>
 						<td>{{$user->people->nombre_completo}}</td>
-						<td>{{$user->people->telefono}}</td>
-						<td class="centrado">@if($user->people->foto)<img src="{{$user->people->foto}}" alt="" height="40px">@endif</td>
-						<td><button class="btn btn-min info limpiar_iframe" wire:click="openModalPDF({{ $user->id }})"><i class="mdi mdi-printer"></i>PDF</button></td>
+						<td class="centrado">{{$user->people->telefono}}</td>
+						<td class="centrado" class="centrado">@if($user->people->foto)<img src="{{$user->people->foto}}" alt="" height="40px">@endif</td>
+						<td class="centrado"><button class="btn btn-min info limpiar_iframe" wire:click="openModalPDF({{ $user->id }})"><i class="mdi mdi-printer"></i>PDF</button></td>
 						@if ($editar)
 						<td class="centrado">
 							<button class="btn btn-min warning" wire:click="edit({{$user->id}})"><i class="mdi mdi-pencil"></i>Editar</button>

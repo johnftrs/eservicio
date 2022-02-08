@@ -33,6 +33,11 @@ class CreateBuySellsTable extends Migration
             $table->foreign('bank_id')->references('id')->on('banks')->onDelete('set null');
             $table->unsignedBigInteger('tank_id')->nullable();
             $table->foreign('tank_id')->references('id')->on('tanks')->onDelete('set null');
+            $table->unsignedBigInteger('office_id')->nullable();
+            $table->foreign('office_id')->references('id')->on('offices')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

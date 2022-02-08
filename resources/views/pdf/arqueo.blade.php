@@ -51,7 +51,7 @@ $paginas=intval( 1+($count/30) );
 						<td class="bold">Turno:</td>
 						<td class="nomb">{{$report->turn->nombre}}</td>
 						<td class="bold">Horario:</td>
-						<td>{{$report->turn->hora_inicio}} - {{$report->turn->hora_fin}}</td>
+						<td>{{date('H:i',strtotime($report->turn->hora_inicio))}} - {{date('H:i',strtotime($report->turn->hora_fin))}}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -215,7 +215,7 @@ $paginas=intval( 1+($count/30) );
 						<td class="derecha"></td><td class="derecha"></td>
 						<td class="derecha"></td><td class="derecha"></td>
 						<td class="derecha"><b>Egresos:</b></td>
-						<td class="derecha">-{{number_format($suma_tickets+$report->tarjeta+$report->calibracion, 2, ',', '.')}}</td>
+						<td class="derecha">{{number_format($suma_tickets+$report->tarjeta+$report->calibracion, 2, ',', '.')}}</td>
 					</tr>
 					<tr>
 						<td class="derecha"></td><td class="derecha"></td>

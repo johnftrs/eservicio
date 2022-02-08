@@ -6,27 +6,30 @@ use Livewire\Component;
 use App\Models\BuySell;
 use App\Models\Bank;
 use App\Models\Tank;
+use App\Models\Ticket;
 use PDF;
 use Auth;
 
 class BuySellLivewire extends Component {
-    public $modal = false;
+    public $modal = array('active'=>false,'title'=>'','accion'=>'store','url_pdf'=>'');
     public $delete = false;
-    public $accion = 'store';
     public $mensaje = '';
     public $me = 'MCOM';
     public $modelo_id, $fecha_descarga, $fecha_compra, $hora_descarga, $cantidad, $nro_compra, $factura, $papeleria, $adicional, $debito_banco, $vehiculo, $chofer, $responsable, $observaciones, $tipo, $bank_id, $tank_id;
+    
     public function render() {
+        $office_id = Auth::user()->people->office_id;
         return view(
             'admin.buysell.index',[
-                'banks' => Bank::get(),
-                'tanks' => Tank::where('office_id',Auth::user()->people->office_id)->get(),
+                'banks' => Bank::where('office_id',$office_id)->get(),
+                'tanks' => Tank::where('office_id',$office_id)->get(),
                 'buysells' => BuySell::orderBy('id','desc')->get(),
-            ])->layout('layouts.app',['me'=>$this->me]);
+            ])->layout('layouts.app',['me'=>$this->me,'tickets' => Ticket::get()]);
     }
     public function create() {
-        $this->accion = 'store';
-        $this->modal = true;
+        $this->modal['accion'] = 'store';
+        $this->modal['active'] = true;
+        $this->modal['title'] = 'Registrar Compra de Combustible';
     }
     public function store() {
         $this->validate([
@@ -36,7 +39,7 @@ class BuySellLivewire extends Component {
             'bank_id' => 'required',
             'tank_id' => 'required',
         ]);
-        BuySell::create([
+        $buysell = BuySell::create([
             'fecha_descarga' => $this->fecha_descarga,
             'fecha_compra' => $this->fecha_compra,
             'hora_descarga' => $this->hora_descarga,
@@ -53,6 +56,8 @@ class BuySellLivewire extends Component {
             'tipo' => 'Compra',
             'bank_id' => $this->bank_id,
             'tank_id' => $this->tank_id,
+            'office_id' => Auth::user()->people->office_id,
+            'user_id' => Auth::id(),
         ]);
         $tank = Tank::find($this->tank_id);
         $tank->actual += $this->cantidad;
@@ -62,6 +67,7 @@ class BuySellLivewire extends Component {
         $bank->update();
         $this->limpiar();
         $this->mensaje='Compra creada exitosamente';
+        $this->openModalPDF($buysell->id);
     }
     public function edit($id) {
         $buysell = BuySell::find($id);
@@ -82,8 +88,9 @@ class BuySellLivewire extends Component {
         $this->bank_id = $buysell->bank_id;
         $this->tank_id = $buysell->tank_id;
 
-        $this->accion = 'edit';
-        $this->modal = true;
+        $this->modal['accion'] = 'edit';
+        $this->modal['active'] = true;
+        $this->modal['title'] = 'Editar Compra';
     }
     public function update() {
         $buysell = BuySell::find($this->modelo_id);
@@ -141,16 +148,19 @@ class BuySellLivewire extends Component {
         $this->bank_id = null;
         $this->tank_id = null;
 
-        $this->modal = false;
+        $this->modal['active'] = false;
+        $this->modal['title'] = '';
+        $this->modal['url_pdf'] = '';
+        $this->modal['accion'] = '';
         $this->delete = false;
     }
-    public function openModalPDF($report_id) {
+    public function openModalPDF($buysell_id) {
         $this->modal['accion'] = 'pdf';
         $this->modal['active'] = true;
-        $this->modal['title'] = 'Imprimir Arqueo #'.$report_id;
-        $this->modal['url_pdf'] = 'admin/ARQUEO-PDF/'.$report_id;
-        $report = Report::find($report_id);
-        $pdf = PDF::loadView('pdf.arqueo', compact('report'));
-        return $pdf->setPaper('letter', 'portrait')->stream('Arqueo.pdf');
+        $this->modal['title'] = 'Imprimir Recibo de Compra #'.$buysell_id;
+        $this->modal['url_pdf'] = 'admin/COMPRA-PDF/'.$buysell_id;
+        $buysell = BuySell::find($buysell_id);
+        $pdf = PDF::loadView('pdf.compra', compact('buysell'));
+        return $pdf->setPaper('letter', 'portrait')->stream('Compra.pdf');
     }
 }

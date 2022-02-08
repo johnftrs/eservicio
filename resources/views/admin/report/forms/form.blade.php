@@ -14,6 +14,7 @@
 	</select>
 	@error ('turn_id') <span class="validacion">*Campo Obligatorio*</span> @enderror
 </div>
+{{--
 <div class="separadorNota"><span>VALES</span></div>
 <div class="col-4">
 	@foreach($tickets_list as $k=>$ticket)
@@ -24,7 +25,7 @@
 	</div>
 	@endforeach
 </div>
-<br><br>
+--}}
 <div class="separadorNota"><span>DISPENSERS</span></div>
 <div class="col-4">
 	@foreach($dispensers_list as $k=>$dispenser)
@@ -46,7 +47,11 @@
 		<div class="form-group">
 			<label>{!!'['.$dispenser->fuel->nombre.']&nbsp;&nbsp;'.$dispenser->nombre.' - Meter Inicial:'!!}</label>
 			&nbsp;&nbsp;
+			@if($modal['accion']=='store')
 			{!! Form::label($dispenser->meter,'',['class'=>'naranja']) !!}
+			@elseif($modal['accion']=='edit')
+			{!! Form::label($meter_inicial[$dispenser->id],'',['class'=>'naranja']) !!}
+			@endif
 		</div>
 	</div>
 	<div class="col-2">
@@ -59,10 +64,17 @@
 		<div class="col-1-3">
 			@if(isset($meters[$dispenser->id]))
 			@if($meters[$dispenser->id]!='')
+
+			@if($modal['accion']=='store')
 			<?php $sub_total = ($meters[$dispenser->id]-$dispenser->meter)*$dispenser->fuel->precio_venta; $suma_sub += $sub_total; ?>
+			@elseif($modal['accion']=='edit')
+			<?php $sub_total = ($meters[$dispenser->id]-$meter_inicial[$dispenser->id])*$dispenser->fuel->precio_venta; $suma_sub += $sub_total; ?>
+			@endif
+
 			Bs. {{ number_format($sub_total, 2, ',', '.') }}
 			@endif
 			@endif
+
 		</div>
 	</div>
 </div>

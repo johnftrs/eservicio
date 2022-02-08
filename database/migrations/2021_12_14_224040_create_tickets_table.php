@@ -16,7 +16,6 @@ class CreateTicketsTable extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->integer('codigo');
-            $table->string('serie',10)->nullable();
             $table->double('monto', 15, 2)->nullable();
             $table->string('estado',20)->nullable();
             $table->date('fecha_uso')->nullable();
@@ -31,10 +30,12 @@ class CreateTicketsTable extends Migration
             $table->foreign('turn_id')->references('id')->on('turns')->onDelete('cascade');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('office_id')->nullable();
-            $table->foreign('office_id')->references('id')->on('offices')->onDelete('set null');
             $table->unsignedBigInteger('report_id')->nullable();
             $table->foreign('report_id')->references('id')->on('reports')->onDelete('set null');
+            $table->unsignedBigInteger('lot_id')->nullable();
+            $table->foreign('lot_id')->references('id')->on('lots')->onDelete('cascade');
+            $table->unsignedBigInteger('asignation_id')->nullable();
+            $table->foreign('asignation_id')->references('id')->on('asignations')->onDelete('cascade');
             $table->timestamps();
         });
     }

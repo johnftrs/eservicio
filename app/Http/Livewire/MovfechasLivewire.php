@@ -20,10 +20,11 @@ class MovfechasLivewire extends Component {
     public $turn_id='TODOS', $fecha, $fecha2;
 
     public function render() {
+        $office_id = Auth::user()->people->office_id;
         return view(
             'admin.pdf.movimiento_por_fechas',[
                 'turns' => Turn::where('office_id',Auth::user()->people->office_id)->orderBy('id','asc')->get(),
-            ])->layout('layouts.app',['me'=>$this->me, 'po'=>$this->po]);
+            ])->layout('layouts.app',['me'=>$this->me, 'po'=>$this->po,'tickets' => Ticket::get()]);
     }
     public function openModalPDF($id=null,$date=null,$date2=null) {
         if ($id!=null) {

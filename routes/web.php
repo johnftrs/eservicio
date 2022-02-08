@@ -18,6 +18,12 @@ use App\Http\Livewire\MovdiarioLivewire;
 use App\Http\Livewire\MovfechasLivewire;
 use App\Http\Livewire\BuySellLivewire;
 use App\Http\Livewire\BankLivewire;
+use App\Http\Livewire\FactorLivewire;
+use App\Http\Livewire\MensurationLivewire;
+use App\Http\Livewire\ControlBoxLivewire;
+use App\Http\Livewire\ConciliationLivewire;
+use App\Http\Livewire\PadlockLivewire;
+use App\Http\Livewire\AsignationLivewire;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,19 +56,31 @@ Route::get('/admin/arching',ReportLivewire::class)->middleware('auth');
 Route::get('/admin/turn',TurnLivewire::class)->middleware('auth');
 Route::get('/admin/buysell',BuySellLivewire::class)->middleware('auth');
 Route::get('/admin/bank',BankLivewire::class)->middleware('auth');
+Route::get('/admin/factor',FactorLivewire::class)->middleware('auth');
+Route::get('/admin/lectura',MensurationLivewire::class)->middleware('auth');
+Route::get('/admin/conciliation',ConciliationLivewire::class)->middleware('auth');
+Route::get('/admin/padlock',PadlockLivewire::class)->middleware('auth');
 Route::get('/admin/activar/ticket/{variable?}',ActivadorLivewire::class)->middleware('auth');
 Route::get('/admin/ARQUEO-PDF/{report_id?}', [ReportLivewire::class, 'openModalPDF'])->middleware('auth');
 Route::get('/admin/KARDEX-PDF/{user_id?}', [UserLivewire::class, 'openModalPDF'])->middleware('auth');
+Route::get('/admin/COMPRA-PDF/{buysell_id?}', [BuySellLivewire::class, 'openModalPDF'])->middleware('auth');
+Route::get('/admin/CONCILIACION-PDF/{conciliation_id?}', [ConciliationLivewire::class, 'openModalPDF'])->middleware('auth');
 Route::get('/admin/report/movimiento_diario', MovdiarioLivewire::class)->middleware('auth');
+Route::get('/admin/asignations/ticket', AsignationLivewire::class)->middleware('auth');
 Route::get('/admin/pdf/movimiento_diario/{id?}/{date?}', [MovdiarioLivewire::class, 'openModalPDF'])->middleware('auth');
 Route::get('/admin/report/movimiento_por_fechas', MovfechasLivewire::class)->middleware('auth');
 Route::get('/admin/pdf/movimiento_por_fechas/{id}/{date}/{date2}', [MovfechasLivewire::class, 'openModalPDF'])->middleware('auth');
+Route::get('/admin/report/cuadro_de_control', ControlBoxLivewire::class)->middleware('auth');
+Route::get('/admin/pdf/cuadro_de_control/{date}/{date2}', [ControlBoxLivewire::class, 'openModalPDF'])->middleware('auth');
 
 
 /*
-Los datos son los siguientes:
-ID ANYDESK: 576372323
-Contraseña: SurdidorLotus
-Usuario Siges: ELWAR ORELLANA
+INGRESO SISTEMA
+E.S. RIOJA
+ID AnyDesk: 915335904
+Constraseña: SurtidorLotus
+Contraseña Equipo: Surtidor&Lotus
+http://server/siges/
+Usuario Siges: Elwar Orellana
 Contraseña: 7814
 */

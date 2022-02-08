@@ -19,6 +19,8 @@ class CreateBanksTable extends Migration
             $table->string('cuenta')->nullable();
             $table->string('moneda')->nullable();
             $table->double('monto', 15, 2)->nullable();
+            $table->unsignedBigInteger('office_id')->nullable();
+            $table->foreign('office_id')->references('id')->on('offices')->onDelete('cascade');
             $table->timestamps();
         });
     }
